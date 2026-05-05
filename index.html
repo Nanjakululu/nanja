@@ -18,37 +18,52 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
 
   <style>
-    /* --- CSS VARIABLES & RESET --- */
+    /* --- CSS VARIABLES & THEME MANAGEMENT --- */
     :root {
+      /* Palette */
       --primary: #4f46e5;
       --primary-dark: #4338ca;
-      --secondary: #ec4899;
-      --accent-green: #10b981;
-      --accent-orange: #f59e0b;
+      --primary-light: rgba(79, 70, 229, 0.1);
       
-      --bg-body: #f3f4f6; /* Light gray bg for dashboard feel */
-      --bg-card: #ffffff;
+      --secondary: #ec4899;
+      --secondary-light: rgba(236, 72, 153, 0.1);
+      
+      --success: #10b981;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+
+      /* Light Theme Defaults */
+      --bg-body: #f3f4f6;       /* Light gray dashboard bg */
+      --bg-card: #ffffff;       /* White widgets */
+      --bg-nav: rgba(255, 255, 255, 0.85);
+      
       --text-main: #1f2937;
       --text-muted: #6b7280;
-      --border-color: #e5e7eb;
-      --nav-height: 70px;
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --text-light: #9ca3af;
       
+      --border-color: #e5e7eb;
       --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
       --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
       --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      
+      --nav-height: 70px;
     }
 
+    /* Dark Theme Overrides */
     [data-theme="dark"] {
-      --bg-body: #0f172a;
-      --bg-card: #1e293b;
+      --bg-body: #0f172a;       /* Dark slate bg */
+      --bg-card: #1e293b;       /* Slightly lighter slate widgets */
+      --bg-nav: rgba(15, 23, 42, 0.85);
+      
       --text-main: #f1f5f9;
       --text-muted: #94a3b8;
+      --text-light: #64748b;
+      
       --border-color: #334155;
     }
 
+    /* --- RESET & BASE --- */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
     html { scroll-behavior: smooth; }
     
     body {
@@ -56,12 +71,12 @@
       background-color: var(--bg-body);
       color: var(--text-main);
       line-height: 1.5;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.3s ease, color 0.3s ease;
       overflow-x: hidden;
       padding-top: var(--nav-height);
     }
 
-    a { text-decoration: none; color: inherit; transition: var(--transition); }
+    a { text-decoration: none; color: inherit; transition: all 0.2s ease; }
     ul { list-style: none; }
     button { border: none; background: none; cursor: pointer; font-family: inherit; }
 
@@ -69,8 +84,9 @@
     .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
     .text-primary { color: var(--primary); }
     .text-secondary { color: var(--secondary); }
-    
-    /* --- NAVIGATION (Slim Dashboard Style) --- */
+    .flex-center { display: flex; align-items: center; justify-content: center; }
+
+    /* --- NAVIGATION (FULL) --- */
     nav {
       height: var(--nav-height);
       display: flex;
@@ -78,56 +94,87 @@
       justify-content: space-between;
       position: fixed;
       top: 0; width: 100%;
-      background: rgba(255,255,255, 0.9);
+      background: var(--bg-nav);
       backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       z-index: 1000;
       border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.3s;
     }
-    [data-theme="dark"] nav { background: rgba(15, 23, 42, 0.9); }
 
     .nav-brand {
       font-family: 'Playfair Display', serif;
-      font-size: 1.25rem;
+      font-size: 1.5rem;
       font-weight: 700;
+      color: var(--text-main);
       display: flex;
       align-items: center;
-      gap: 10px;
+    }
+    .logo-dot { color: var(--primary); }
+
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a {
+      font-weight: 500;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      position: relative;
+      padding: 0.5rem 0;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 2px;
+      background: var(--primary);
+      border-radius: 2px;
     }
 
     .nav-actions { display: flex; align-items: center; gap: 1rem; }
+    
     .theme-toggle { 
-      width: 40px; height: 40px; 
-      border-radius: 50%; 
-      display: flex; align-items: center; justify-content: center;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
+      font-size: 1.2rem;
       color: var(--text-main);
+      padding: 8px;
+      border-radius: 50%;
       transition: var(--transition);
     }
-    .theme-toggle:hover { transform: rotate(15deg); border-color: var(--primary); }
+    .theme-toggle:hover { background: var(--primary-light); color: var(--primary); transform: rotate(15deg); }
+
+    .mobile-menu-btn { display: none; font-size: 1.5rem; color: var(--text-main); }
+
+    /* --- SCROLL PROGRESS BAR --- */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--primary); width: 0%; z-index: 2000;
+      transition: width 0.1s;
+    }
 
     /* --- DASHBOARD HEADER --- */
     .dashboard-header {
-      padding: 2rem 0 1rem;
+      padding: 2.5rem 0 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
     }
-    .page-title h1 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 0.5rem; }
-    .page-title p { color: var(--text-muted); }
+    .page-title h1 { font-family: 'Playfair Display', serif; font-size: 2.25rem; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .page-title p { color: var(--text-muted); font-size: 1.1rem; }
     
     .status-badge {
-      background: rgba(16, 185, 129, 0.1);
-      color: var(--accent-green);
-      padding: 0.5rem 1rem;
+      background: rgba(16, 185, 129, 0.1); /* Success green with low opacity */
+      color: var(--success);
+      padding: 0.6rem 1.2rem;
       border-radius: 50px;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
-    .status-dot { width: 8px; height: 8px; background: currentColor; border-radius: 50%; box-shadow: 0 0 0 3px rgba(16,185,129,0.2); }
+    [data-theme="dark"] .status-badge { border-color: rgba(16, 185, 129, 0.3); }
+    
+    .status-dot { width: 8px; height: 8px; background: currentColor; border-radius: 50%; box-shadow: 0 0 0 3px currentColor; opacity: 0.3; }
 
     /* --- DASHBOARD GRID LAYOUT --- */
     .dashboard-grid {
@@ -137,7 +184,7 @@
       padding-bottom: 4rem;
     }
 
-    /* --- WIDGET CARD STYLES --- */
+    /* --- WIDGET COMPONENT STYLES --- */
     .widget {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -147,7 +194,7 @@
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      transition: var(--transition);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     }
     .widget:hover {
       transform: translateY(-4px);
@@ -158,28 +205,32 @@
     .widget-header {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 1.25rem;
       border-bottom: 1px solid var(--border-color);
-      padding-bottom: 0.75rem;
+      padding-bottom: 1rem;
     }
     .widget-icon {
-      width: 32px; height: 32px;
-      background: rgba(79, 70, 229, 0.1);
+      width: 36px; height: 36px;
+      background: var(--primary-light);
       color: var(--primary);
-      border-radius: 8px;
+      border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      transition: var(--transition);
     }
-    .widget-title { font-weight: 600; font-size: 1.1rem; }
+    [data-theme="dark"] .widget-icon { background: rgba(79, 70, 229, 0.2); }
+    
+    .widget-title { font-weight: 700; font-size: 1.1rem; color: var(--text-main); }
 
-    /* --- SIDEBAR WIDGETS (Left Column) --- */
+    /* --- SIDEBAR WIDGETS --- */
     .sidebar-col { display: flex; flex-direction: column; gap: 1.5rem; }
 
     /* Profile Widget */
     .profile-widget { text-align: center; }
     .profile-img-wrapper {
-      width: 120px; height: 120px;
-      margin: 0 auto 1rem;
+      width: 130px; height: 130px;
+      margin: 0 auto 1.2rem;
       border-radius: 50%;
       overflow: hidden;
       border: 4px solid var(--bg-card);
@@ -187,9 +238,10 @@
       position: relative;
     }
     .profile-img { width: 100%; height: 100%; object-fit: cover; }
-    .profile-name { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem; }
-    .profile-role { color: var(--primary); font-weight: 500; font-size: 0.95rem; margin-bottom: 0.5rem; }
-    .profile-uni { color: var(--text-muted); font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    
+    .profile-name { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--text-main); }
+    .profile-role { color: var(--primary); font-weight: 600; font-size: 1rem; margin-bottom: 0.5rem; }
+    .profile-uni { color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 6px; }
     
     .profile-stats {
       display: flex;
@@ -198,140 +250,173 @@
       padding-top: 1.5rem;
       border-top: 1px solid var(--border-color);
     }
-    .p-stat h4 { font-size: 1.2rem; font-weight: 700; color: var(--text-main); }
-    .p-stat span { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .p-stat h4 { font-size: 1.4rem; font-weight: 700; color: var(--text-main); line-height: 1; margin-bottom: 4px; }
+    .p-stat span { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
 
     /* Contact Widget */
-    .contact-list { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-list { display: flex; flex-direction: column; gap: 0.8rem; }
     .contact-item {
       display: flex;
       align-items: center;
       gap: 1rem;
-      padding: 0.75rem;
+      padding: 0.8rem;
       background: var(--bg-body);
-      border-radius: 10px;
-      font-size: 0.9rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-main);
       transition: var(--transition);
+      border: 1px solid transparent;
     }
-    .contact-item:hover { background: rgba(79, 70, 229, 0.05); color: var(--primary); }
-    .contact-item i { font-size: 1.2rem; color: var(--text-muted); }
+    .contact-item:hover { 
+      background: var(--primary-light); 
+      color: var(--primary); 
+      border-color: var(--primary);
+      transform: translateX(5px);
+    }
+    .contact-item i { font-size: 1.3rem; color: var(--text-muted); transition: var(--transition); }
+    .contact-item:hover i { color: var(--primary); }
     
     .qr-placeholder {
-      margin-top: 1rem;
+      margin-top: 1.2rem;
       width: 100%;
       aspect-ratio: 1;
       background: #fff;
-      border-radius: 10px;
+      border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
       border: 1px dashed var(--border-color);
       color: var(--text-muted);
     }
 
-    /* --- MAIN CONTENT WIDGETS (Right Column) --- */
+    /* --- MAIN CONTENT WIDGETS --- */
     .main-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
     
     .widget-full { grid-column: span 2; }
     .widget-tall { grid-row: span 2; }
 
     /* About Me */
-    .about-text { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem; }
+    .about-content { display: flex; gap: 2.5rem; flex-wrap: wrap; }
+    .about-text { color: var(--text-muted); font-size: 1rem; line-height: 1.7; margin-bottom: 1.5rem; flex: 2; min-width: 300px; }
+    
     .quote-box {
-      background: rgba(79, 70, 229, 0.05);
+      background: var(--primary-light);
       border-left: 4px solid var(--primary);
-      padding: 1rem;
-      border-radius: 0 8px 8px 0;
+      padding: 1.2rem;
+      border-radius: 0 12px 12px 0;
       font-style: italic;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       color: var(--text-main);
+      position: relative;
     }
+    .quote-box::before {
+      content: '\201C';
+      font-size: 3rem;
+      position: absolute;
+      top: -10px; left: 10px;
+      color: var(--primary);
+      opacity: 0.2;
+      font-family: serif;
+    }
+    
+    .focus-list { flex: 1; min-width: 200px; }
+    .focus-list h4 { font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .focus-list ul li { margin-bottom: 0.8rem; display: flex; align-items: center; gap: 10px; font-size: 0.95rem; font-weight: 500; }
+    .focus-list i { color: var(--primary); font-size: 1.1rem; }
 
     /* Academic Achievements */
-    .achievements-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .achievements-list { display: flex; flex-direction: column; gap: 0.8rem; }
     .achieve-item {
       display: flex;
       align-items: center;
       gap: 1rem;
-      padding: 0.75rem;
+      padding: 0.8rem;
+      background: var(--bg-body);
       border: 1px solid var(--border-color);
-      border-radius: 10px;
+      border-radius: 12px;
     }
     .achieve-icon {
-      width: 40px; height: 40px;
-      border-radius: 50%;
+      width: 44px; height: 44px;
+      border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
+      flex-shrink: 0;
     }
-    .bg-gold { background: rgba(245, 158, 11, 0.1); color: var(--accent-orange); }
-    .bg-blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+    .bg-gold { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+    .bg-blue { background: rgba(59, 130, 246, 0.15); color: var(--info); }
     
-    .achieve-info h5 { font-size: 0.95rem; font-weight: 600; }
-    .achieve-info p { font-size: 0.8rem; color: var(--text-muted); }
+    .achieve-info h5 { font-size: 1rem; font-weight: 600; margin-bottom: 2px; }
+    .achieve-info p { font-size: 0.85rem; color: var(--text-muted); }
 
-    /* GPA Circle (CSS only) */
-    .gpa-container {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center;
-    }
+    /* GPA Circle */
+    .gpa-container { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%; }
     .gpa-circle {
-      width: 80px; height: 80px;
+      width: 90px; height: 90px;
       border-radius: 50%;
-      background: conic-gradient(var(--primary) 0% 97%, #e5e7eb 97% 100%);
+      background: conic-gradient(var(--primary) 0% 97%, var(--border-color) 97% 100%);
       display: flex; align-items: center; justify-content: center;
       position: relative;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
     }
     .gpa-inner {
-      width: 65px; height: 65px;
+      width: 72px; height: 72px;
       background: var(--bg-card);
       border-radius: 50%;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
-    .gpa-val { font-size: 1.5rem; font-weight: 700; line-height: 1; color: var(--primary); }
-    .gpa-label { font-size: 0.6rem; text-transform: uppercase; color: var(--text-muted); }
+    .gpa-val { font-size: 1.7rem; font-weight: 800; line-height: 1; color: var(--primary); }
+    .gpa-label { font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
 
-    /* Skills */
-    .skill-cloud { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    /* Skills Cloud */
+    .skill-cloud { display: flex; flex-wrap: wrap; gap: 0.6rem; }
     .skill-pill {
-      padding: 0.4rem 0.8rem;
+      padding: 0.5rem 1rem;
       background: var(--bg-body);
       border: 1px solid var(--border-color);
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 0.85rem;
       font-weight: 500;
+      color: var(--text-muted);
       transition: var(--transition);
     }
-    .skill-pill:hover { border-color: var(--primary); color: var(--primary); background: rgba(79, 70, 229, 0.05); }
+    .skill-pill:hover { 
+      border-color: var(--primary); 
+      color: var(--primary); 
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
 
     /* Artifacts / Projects */
     .artifact-card {
       display: flex; gap: 1rem;
-      padding-bottom: 1rem; margin-bottom: 1rem;
+      padding-bottom: 1.2rem; margin-bottom: 1.2rem;
       border-bottom: 1px solid var(--border-color);
     }
     .artifact-card:last-child { border: none; margin: 0; padding: 0; }
     .artifact-icon {
-      width: 40px; height: 40px;
-      background: var(--secondary); opacity: 0.1;
+      width: 48px; height: 48px;
+      background: var(--secondary-light);
       color: var(--secondary);
-      border-radius: 8px;
+      border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
+      flex-shrink: 0;
     }
-    .artifact-content h5 { font-size: 1rem; font-weight: 600; margin-bottom: 0.2rem; }
-    .artifact-content p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
-    .artifact-link { font-size: 0.8rem; color: var(--primary); font-weight: 500; margin-top: 0.3rem; display: inline-block; }
+    .artifact-content h5 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; color: var(--text-main); }
+    .artifact-content p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0.5rem; }
+    .artifact-link { font-size: 0.85rem; color: var(--primary); font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+    .artifact-link:hover { text-decoration: underline; }
 
     /* Goals Timeline */
     .goal-item { display: flex; gap: 1rem; margin-bottom: 1.2rem; }
     .goal-dot {
-      min-width: 12px; height: 12px;
+      min-width: 14px; height: 14px;
       border-radius: 50%;
       background: var(--primary);
       margin-top: 6px;
-      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+      box-shadow: 0 0 0 4px var(--primary-light);
     }
-    .goal-content h6 { font-size: 0.95rem; font-weight: 600; }
-    .goal-content p { font-size: 0.85rem; color: var(--text-muted); }
+    .goal-content h6 { font-size: 1rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .goal-content p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
 
     /* CTA Box */
     .cta-box {
@@ -340,22 +425,26 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      border: none;
     }
+    .cta-box:hover { transform: translateY(-2px); box-shadow: 0 15px 30px -5px rgba(79, 70, 229, 0.4); }
     .cta-box .widget-title { color: white; }
     .cta-box .widget-icon { background: rgba(255,255,255,0.2); color: white; }
     .cta-box .widget-header { border-color: rgba(255,255,255,0.2); }
     
     .btn-launch {
       background: white; color: var(--primary);
-      padding: 0.6rem 1.2rem; border-radius: 8px;
-      font-weight: 600; font-size: 0.9rem;
+      padding: 0.8rem 1.5rem; border-radius: 10px;
+      font-weight: 700; font-size: 0.95rem;
       display: flex; align-items: center; gap: 0.5rem;
       transition: var(--transition);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    .btn-launch:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    .btn-launch:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
 
     /* --- FOOTER --- */
-    footer { margin-top: 2rem; text-align: center; color: var(--text-muted); font-size: 0.85rem; padding-bottom: 2rem; }
+    footer { margin-top: 2rem; text-align: center; color: var(--text-muted); font-size: 0.9rem; padding-bottom: 3rem; border-top: 1px solid var(--border-color); padding-top: 2rem; }
+    footer p { margin-bottom: 0.5rem; }
 
     /* --- DEBUG BOX --- */
     #debug-box {
@@ -369,26 +458,47 @@
     .dot-green { background: #22c55e; }
     .dot-red { background: #ef4444; }
 
-    /* --- RESPONSIVE --- */
+    /* --- RESPONSIVE MEDIA QUERIES --- */
     @media (max-width: 1024px) {
       .dashboard-grid { grid-template-columns: 1fr; }
       .main-col { grid-template-columns: 1fr; }
       .sidebar-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
       .profile-widget { grid-column: span 2; }
+      .widget-full { grid-column: span 1; }
     }
 
     @media (max-width: 768px) {
       .dashboard-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
       .sidebar-col { grid-template-columns: 1fr; }
-      .widget-full { grid-column: span 1; }
+      
+      /* Mobile Nav Logic */
+      .nav-links { 
+        display: none; 
+        position: absolute;
+        top: var(--nav-height); left: 0; width: 100%;
+        background: var(--bg-card);
+        flex-direction: column;
+        padding: 2rem;
+        gap: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: var(--shadow-lg);
+      }
+      .nav-links.active { display: flex; animation: slideDown 0.3s ease-out; }
+      .mobile-menu-btn { display: block; }
+      
       #debug-box { display: none; }
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
   <!-- Scroll Progress Bar -->
-  <div id="progress-bar" style="position:fixed; top:0; left:0; height:3px; background:var(--primary); width:0%; z-index:2000; transition:width 0.1s;"></div>
+  <div id="progress-bar"></div>
 
   <!-- DEBUG BOX -->
   <div id="debug-box">
@@ -396,15 +506,27 @@
     <span id="debug-text">Img Check...</span>
   </div>
 
-  <!-- Navigation -->
+  <!-- Full Navigation -->
   <nav>
-    <div class="container" style="display:flex; justify-content:space-between; width:100%;">
+    <div class="container" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
       <a href="#" class="nav-brand">
-        <i class="ri-dashboard-3-line text-primary"></i> Student Portfolio
+        Alex<span class="logo-dot">.</span>N
       </a>
+      
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#" class="active">Dashboard</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#artifacts">Artifacts</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      
       <div class="nav-actions">
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle Theme">
           <i class="ri-moon-line"></i>
+        </button>
+        <button class="mobile-menu-btn" id="menuBtn" aria-label="Open Menu">
+          <i class="ri-menu-4-line"></i>
         </button>
       </div>
     </div>
@@ -415,23 +537,22 @@
     <div class="dashboard-header" data-aos="fade-down">
       <div class="page-title">
         <h1>Welcome back, Alex! 👋</h1>
-        <p>Track your academic journey and professional growth.</p>
+        <p>Student e-Portfolio & Professional Development Tracker.</p>
       </div>
       <div class="status-badge">
         <span class="status-dot"></span> Active Student
       </div>
     </div>
 
-    <!-- Dashboard Grid -->
+    <!-- Dashboard Grid Layout -->
     <div class="dashboard-grid">
       
-      <!-- LEFT SIDEBAR COLUMN -->
+      <!-- LEFT COLUMN (Profile & Contact) -->
       <aside class="sidebar-col">
         
         <!-- 1. Profile Widget -->
         <div class="widget profile-widget" data-aos="fade-right">
           <div class="profile-img-wrapper">
-            <!-- Image loading logic handled in JS -->
             <img id="heroImage" src="https://ui-avatars.com/api/?name=Alex+Nanjakululu&background=4f46e5&color=fff" alt="Profile" class="profile-img">
           </div>
           <h2 class="profile-name">Alex Nanjakululu</h2>
@@ -442,7 +563,7 @@
 
           <div class="profile-stats">
             <div class="p-stat">
-              <h4 id="proj-count">12</h4>
+              <h4 id="proj-count" data-target="12">0</h4>
               <span>Projects</span>
             </div>
             <div class="p-stat">
@@ -476,38 +597,38 @@
               <span>GitHub Portfolio</span>
             </a>
           </div>
-          <!-- Fake QR Code Visual -->
           <div class="qr-placeholder">
-            <i class="ri-qr-code-line" style="font-size: 3rem; opacity: 0.5;"></i>
+            <i class="ri-qr-code-line" style="font-size: 3rem; opacity: 0.4;"></i>
           </div>
         </div>
 
       </aside>
 
-      <!-- MAIN CONTENT AREA (Right Column) -->
+      <!-- RIGHT COLUMN (Widgets) -->
       <div class="main-col">
         
         <!-- 3. About Me (Full Width) -->
-        <div class="widget widget-full" data-aos="fade-up">
+        <div class="widget widget-full" data-aos="fade-up" id="projects">
           <div class="widget-header">
             <div class="widget-icon"><i class="ri-user-smile-line"></i></div>
             <h3 class="widget-title">About Me</h3>
           </div>
-          <div class="about-content" style="display: flex; gap: 2rem; flex-wrap: wrap;">
-            <div style="flex: 2; min-width: 300px;">
-              <p class="about-text">
+          <div class="about-content">
+            <div class="about-text">
+              <p>
                 I am a passionate <strong>Bachelor of Technology Education (ICT Option)</strong> student at The Open University of Kenya. My mission is to bridge the gap between complex technical concepts and effective teaching strategies.
               </p>
               <div class="quote-box">
-                "Education is not just about transferring knowledge; it's about building adaptive workflows that allow students to navigate uncertainty."
+                Education is not just about transferring knowledge; it's about building adaptive workflows that allow students to navigate uncertainty.
               </div>
             </div>
-            <div style="flex: 1; min-width: 200px;">
-              <h4 style="font-size: 0.9rem; margin-bottom: 0.8rem; color: var(--text-muted);">CURRENT FOCUS</h4>
-              <ul style="font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.5rem;">
-                <li><i class="ri-check-line text-primary"></i> Curriculum Design</li>
-                <li><i class="ri-check-line text-primary"></i> EdTech Integration</li>
-                <li><i class="ri-check-line text-primary"></i> Quality Assurance</li>
+            <div class="focus-list">
+              <h4>Current Focus</h4>
+              <ul>
+                <li><i class="ri-checkbox-circle-fill"></i> Curriculum Design</li>
+                <li><i class="ri-checkbox-circle-fill"></i> EdTech Integration</li>
+                <li><i class="ri-checkbox-circle-fill"></i> Quality Assurance</li>
+                <li><i class="ri-checkbox-circle-fill"></i> STEM Research</li>
               </ul>
             </div>
           </div>
@@ -524,14 +645,14 @@
               <div class="achieve-icon bg-gold"><i class="ri-trophy-line"></i></div>
               <div class="achieve-info">
                 <h5>Dean's List</h5>
-                <p>Consistent high performance (2023 - 2024)</p>
+                <p>Consistent high performance (2023-24)</p>
               </div>
             </div>
             <div class="achieve-item">
               <div class="achieve-icon bg-blue"><i class="ri-flask-line"></i></div>
               <div class="achieve-info">
                 <h5>STEM Research Lead</h5>
-                <p>Head of Biology Dept. Research Project</p>
+                <p>Head of Biology Dept. Project</p>
               </div>
             </div>
           </div>
@@ -550,31 +671,31 @@
               </div>
             </div>
             <div>
-              <h5 style="font-weight: 600;">Current GPA</h5>
-              <span style="font-size: 0.8rem; color: var(--accent-green);">Top 5% of Class</span>
+              <h5 style="font-weight: 700;">Current GPA</h5>
+              <span style="font-size: 0.85rem; color: var(--success); font-weight: 500;">Top 5% of Class</span>
             </div>
           </div>
         </div>
 
         <!-- 6. Teaching & Learning Artifacts -->
-        <div class="widget widget-full" data-aos="fade-up" data-aos-delay="200">
+        <div class="widget widget-full" data-aos="fade-up" data-aos-delay="200" id="artifacts">
           <div class="widget-header">
             <div class="widget-icon"><i class="ri-presentation-line"></i></div>
             <h3 class="widget-title">Teaching Artifacts</h3>
           </div>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
             <div class="artifact-card">
               <div class="artifact-icon"><i class="ri-file-list-3-line"></i></div>
               <div class="artifact-content">
-                <h5>Lesson Plans</h5>
-                <p>Competency Based Curriculum (CBC) aligned lesson plans for ICT and Biology.</p>
+                <h5>CBC Lesson Plans</h5>
+                <p>Competency Based Curriculum aligned lesson plans for ICT and Biology modules.</p>
                 <a href="#" class="artifact-link">View Repository <i class="ri-arrow-right-line"></i></a>
               </div>
             </div>
             <div class="artifact-card">
               <div class="artifact-icon"><i class="ri-computer-line"></i></div>
               <div class="artifact-content">
-                <h5>EdTech Tools</h5>
+                <h5>EdTech Tool Suite</h5>
                 <p>Collection of digital tools and software utilized for remote learning.</p>
                 <a href="#" class="artifact-link">Explore Tools <i class="ri-arrow-right-line"></i></a>
               </div>
@@ -583,15 +704,15 @@
         </div>
 
         <!-- 7. Professional Skills -->
-        <div class="widget" data-aos="fade-up" data-aos-delay="250">
+        <div class="widget" data-aos="fade-up" data-aos-delay="250" id="skills">
           <div class="widget-header">
             <div class="widget-icon"><i class="ri-tools-line"></i></div>
-            <h3 class="widget-title">Skills</h3>
+            <h3 class="widget-title">Professional Skills</h3>
           </div>
           <div class="skill-cloud">
             <span class="skill-pill">Flutter</span>
             <span class="skill-pill">Firebase</span>
-            <span class="skill-pill">HTML/CSS</span>
+            <span class="skill-pill">HTML5 & CSS3</span>
             <span class="skill-pill">JavaScript</span>
             <span class="skill-pill">Python</span>
             <span class="skill-pill">Curriculum Dev</span>
@@ -609,13 +730,13 @@
           <div class="artifact-card">
             <div class="artifact-content">
               <h5>Biology Case Study</h5>
-              <p>Interactive learning module for Form 2 Biology.</p>
+              <p>Interactive learning module for Form 2 Biology students.</p>
             </div>
           </div>
           <div class="artifact-card" style="border:none; margin:0;">
             <div class="artifact-content">
               <h5>Student TP Portal</h5>
-              <p>App for tracking Teaching Practice progress.</p>
+              <p>App for tracking Teaching Practice progress in real-time.</p>
               <a href="https://tp-management.vercel.app" target="_blank" class="artifact-link">Launch App <i class="ri-external-link-line"></i></a>
             </div>
           </div>
@@ -630,23 +751,23 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
             <!-- Reflections -->
             <div>
-              <h4 style="font-size: 0.95rem; margin-bottom: 1rem; color: var(--primary);">Latest Reflection</h4>
-              <p style="font-size: 0.9rem; color: var(--text-muted); font-style: italic;">
-                "Integrating technology in the classroom has shifted my perspective on student engagement. It's not just about screens, but interactivity."
+              <h4 style="font-size: 1rem; margin-bottom: 1rem; color: var(--primary);">Latest Reflection</h4>
+              <p style="font-size: 0.95rem; color: var(--text-muted); font-style: italic; line-height: 1.6;">
+                "Integrating technology in the classroom has shifted my perspective on student engagement. It's not just about screens, but interactivity and personalized feedback loops."
               </p>
             </div>
             <!-- Goals -->
             <div>
-              <h4 style="font-size: 0.95rem; margin-bottom: 1rem; color: var(--primary);">Future Goals</h4>
+              <h4 style="font-size: 1rem; margin-bottom: 1rem; color: var(--primary);">Future Goals</h4>
               <div class="goal-item">
                 <div class="goal-dot"></div>
                 <div class="goal-content">
                   <h6>Short Term</h6>
-                  <p>Improve student participation rates by 20% using new gamified tools.</p>
+                  <p>Improve student participation rates by 20% using gamified tools.</p>
                 </div>
               </div>
               <div class="goal-item">
-                <div class="goal-dot" style="background: var(--secondary); box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.1);"></div>
+                <div class="goal-dot" style="background: var(--secondary); box-shadow: 0 0 0 4px var(--secondary-light);"></div>
                 <div class="goal-content">
                   <h6>Long Term</h6>
                   <p>Lead a national EdTech initiative to modernize TVET training.</p>
@@ -657,13 +778,13 @@
         </div>
 
         <!-- 10. Strategic CTA Widget -->
-        <div class="widget widget-full cta-box" data-aos="zoom-in" data-aos-delay="400">
+        <div class="widget widget-full cta-box" data-aos="zoom-in" data-aos-delay="400" id="contact">
           <div>
             <div class="widget-header" style="border-color: rgba(255,255,255,0.2);">
               <div class="widget-icon"><i class="ri-rocket-2-fill"></i></div>
               <h3 class="widget-title">Ready to collaborate?</h3>
             </div>
-            <p style="opacity: 0.9; margin-top: 0.5rem;">Explore my full Teaching Portal or get in touch for consulting.</p>
+            <p style="opacity: 0.9; margin-top: 0.5rem; max-width: 500px;">Explore my full Teaching Portal or get in touch for consulting opportunities.</p>
           </div>
           <a href="https://tp-management.vercel.app/student/home" target="_blank" class="btn-launch">
             Launch App <i class="ri-arrow-right-up-line"></i>
@@ -676,17 +797,23 @@
 
   <footer>
     <div class="container">
-      <p>&copy; 2026 Alex Nanjakululu. Student e-Portfolio Dashboard.</p>
+      <p>&copy; 2026 Alex Nanjakululu. All Rights Reserved.</p>
+      <p style="font-size: 0.85rem;">Technical Educator & Innovator</p>
     </div>
   </footer>
 
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // Init AOS
-    AOS.init({ duration: 600, once: true, offset: 50 });
+    // --- 1. ANIMATION ON SCROLL ---
+    AOS.init({ 
+      duration: 700, 
+      once: true, 
+      offset: 50,
+      easing: 'ease-out-cubic'
+    });
 
-    // --- IMAGE DEBUG LOGIC ---
+    // --- 2. IMAGE DEBUG LOGIC (ROBUST FIX) ---
     const debugText = document.getElementById('debug-text');
     const debugDot = document.getElementById('debug-dot');
     const heroImage = document.getElementById('heroImage');
@@ -697,20 +824,22 @@
     }
 
     function checkImage() {
+      // 1. Check Root
       const testImg = new Image();
       testImg.onload = function() {
-        updateDebug("Local OK", "dot-green");
+        updateDebug("Loaded: profile.jpg", "dot-green");
         heroImage.src = "profile.jpg"; 
       };
       testImg.onerror = function() {
-        updateDebug("Local Fail. Trying assets...", "dot-red");
+        updateDebug("Root Fail. Trying assets...", "dot-red");
+        // 2. Check Assets
         const testImg2 = new Image();
         testImg2.onload = function() {
-          updateDebug("Assets OK", "dot-green");
+          updateDebug("Loaded: assets/profile.jpg", "dot-green");
           heroImage.src = "assets/profile.jpg";
         };
         testImg2.onerror = function() {
-          updateDebug("Using Avatar", "dot-red");
+          updateDebug("Using Online Avatar", "dot-red");
           heroImage.src = "https://ui-avatars.com/api/?name=Alex+Nanjakululu&background=4f46e5&color=fff";
         };
         testImg2.src = "assets/profile.jpg";
@@ -719,11 +848,12 @@
     }
     checkImage();
 
-    // --- THEME TOGGLE ---
+    // --- 3. THEME TOGGLE & PERSISTENCE ---
     const themeToggle = document.getElementById('themeToggle');
     const htmlElement = document.documentElement;
     const icon = themeToggle.querySelector('i');
 
+    // Check local storage
     const savedTheme = localStorage.getItem('theme') || 'light';
     htmlElement.setAttribute('data-theme', savedTheme);
     updateIcon(savedTheme);
@@ -731,6 +861,7 @@
     themeToggle.addEventListener('click', () => {
       const currentTheme = htmlElement.getAttribute('data-theme');
       const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
       htmlElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
       updateIcon(newTheme);
@@ -740,7 +871,29 @@
       icon.className = theme === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
     }
 
-    // --- SCROLL PROGRESS ---
+    // --- 4. MOBILE MENU LOGIC ---
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('nav-links');
+    
+    menuBtn.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      const icon = menuBtn.querySelector('i');
+      if(navLinks.classList.contains('active')) {
+        icon.className = 'ri-close-line';
+      } else {
+        icon.className = 'ri-menu-4-line';
+      }
+    });
+
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        menuBtn.querySelector('i').className = 'ri-menu-4-line';
+      });
+    });
+
+    // --- 5. SCROLL PROGRESS BAR ---
     window.onscroll = function() {
       let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
       let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -748,39 +901,31 @@
       document.getElementById("progress-bar").style.width = scrolled + "%";
     };
 
-    // --- INTERACTIVE NUMBER COUNTER (GPA & Projects) ---
-    const stats = [
-      { id: 'proj-count', target: 12 },
-    ];
+    // --- 6. INTERACTIVE NUMBER COUNTER (Projects) ---
+    const projectCounter = document.getElementById('proj-count');
     
-    // Simple animation for the stat number
-    const animateValue = (obj, start, end, duration) => {
-      let startTimestamp = null;
-      const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        obj.innerHTML = Math.floor(progress * (end - start) + start);
-        if (progress < 1) {
-          window.requestAnimationFrame(step);
-        }
-      };
-      window.requestAnimationFrame(step);
-    }
-
-    // Trigger animation when visible
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          const target = entry.target;
-          const endVal = parseInt(target.getAttribute('data-target'));
-          animateValue(target, 0, endVal, 1500);
-          observer.unobserve(target);
+          const target = +entry.target.getAttribute('data-target');
+          let count = 0;
+          const updateCount = () => {
+            const increment = target / 40; 
+            if(count < target) {
+              count += increment;
+              projectCounter.innerText = Math.ceil(count);
+              setTimeout(updateCount, 30);
+            } else {
+              projectCounter.innerText = target;
+            }
+          };
+          updateCount();
+          observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.5 });
 
-    document.getElementById('proj-count').setAttribute('data-target', '12');
-    observer.observe(document.getElementById('proj-count'));
+    observer.observe(projectCounter);
 
   </script>
 </body>

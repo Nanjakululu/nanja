@@ -11,7 +11,7 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
   <style>
-    /* --- CSS VARIABLES (Modern Palette) --- */
+    /* --- CSS VARIABLES --- */
     :root {
       --primary: #4f46e5;
       --primary-dark: #4338ca;
@@ -21,7 +21,7 @@
       --assessment: #0d9488; /* Teal for Assessments */
       --assessment-light: rgba(13, 148, 136, 0.1);
       
-      /* Modern Backgrounds */
+      /* Backgrounds */
       --bg-body: #f8fafc;
       --bg-glass: rgba(255, 255, 255, 0.75);
       --bg-card: #ffffff;
@@ -33,7 +33,7 @@
       --nav-height: 70px;
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       
-      /* Soft Shadows */
+      /* Shadows */
       --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
       --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
       --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -61,13 +61,7 @@
     }
 
     /* --- BACKGROUND BLOBS --- */
-    .bg-blob {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      z-index: -1;
-      opacity: 0.5;
-    }
+    .bg-blob { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.5; }
     .blob-1 { top: -100px; right: -100px; width: 400px; height: 400px; background: var(--primary); }
     .blob-2 { bottom: 10%; left: -100px; width: 300px; height: 300px; background: var(--secondary); }
 
@@ -82,7 +76,6 @@
     .text-secondary { color: var(--secondary); }
     .text-muted { color: var(--text-muted); font-size: 0.9rem; }
     
-    /* Modern Card Style */
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -131,7 +124,6 @@
       transition: var(--transition);
     }
     .theme-toggle:hover { background: var(--primary-light); }
-    
     .mobile-menu-btn { display: none; font-size: 1.5rem; color: var(--text-main); background: transparent; }
 
     /* --- HERO --- */
@@ -167,7 +159,6 @@
     .section-header h2 { font-size: 2.5rem; margin-bottom: 0.5rem; }
     .section-header p { color: var(--text-muted); font-size: 1.1rem; }
     
-    /* Add Button */
     .btn-add {
       background: var(--primary); color: white; padding: 0.6rem 1.2rem;
       border-radius: 8px; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;
@@ -175,7 +166,7 @@
     }
     .btn-add:hover { background: var(--primary-dark); transform: translateY(-2px); }
 
-    /* --- TIMETABLE WEEK NAVIGATION --- */
+    /* --- TIMETABLE --- */
     .week-nav-container {
       margin-bottom: 2rem;
       display: flex;
@@ -227,7 +218,6 @@
     }
     .view-btn.active { background: var(--bg-body); color: var(--text-main); box-shadow: var(--shadow-sm); font-weight: 600; }
 
-    /* --- TIMETABLE GRID STYLES --- */
     .timetable-wrapper {
       display: grid;
       grid-template-columns: 80px repeat(5, 1fr); 
@@ -264,13 +254,9 @@
     .timetable-empty { grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted); }
 
     /* --- RECORD OF WORK TABLE --- */
-    .row-view {
-        display: none; /* Hidden by default */
-    }
+    .row-view { display: none; }
     .row-view.active { display: block; animation: fadeIn 0.5s ease; }
-    .row-table {
-        width: 100%; border-collapse: collapse; font-size: 0.9rem;
-    }
+    .row-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
     .row-table th, .row-table td {
         text-align: left; padding: 1rem; border-bottom: 1px solid var(--border-color);
     }
@@ -280,7 +266,7 @@
     .row-table tr:last-child td { border-bottom: none; }
     .row-week-col { color: var(--primary); font-weight: 700; }
 
-    /* --- TIMELINE (Modern Feed Style) --- */
+    /* --- LOG --- */
     .schedule-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 2.5rem; }
     .activity-grid { display: flex; flex-direction: column; gap: 1.5rem; }
     .activity-card { padding: 1.5rem; }
@@ -315,15 +301,9 @@
     .widget-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; }
     .calendar-container { background: var(--bg-body); border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); flex-grow: 1; }
 
-    /* --- ASSESSMENT CARD STYLES --- */
-    .assessment-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem;
-    }
-    .assessment-card {
-      border-top: 4px solid var(--assessment);
-      display: flex;
-      flex-direction: column;
-    }
+    /* --- ASSESSMENT --- */
+    .assessment-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; }
+    .assessment-card { border-top: 4px solid var(--assessment); display: flex; flex-direction: column; }
     .assessment-card h3 { font-family: 'Inter', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem; }
     .competency-statement {
       background: var(--assessment-light);
@@ -359,7 +339,7 @@
     .ass-type-observation { background: #f59e0b; }
     .ass-type-written { background: #6366f1; }
 
-    /* --- ARTIFACTS GRID --- */
+    /* --- ARTIFACTS --- */
     .filter-container { display: flex; gap: 0.8rem; margin-bottom: 2.5rem; overflow-x: auto; padding-bottom: 0.5rem; }
     .filter-btn { padding: 0.6rem 1.5rem; border-radius: 50px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-weight: 500; white-space: nowrap; transition: var(--transition); }
     .filter-btn.active, .filter-btn:hover { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); transform: translateY(-1px); }
@@ -377,16 +357,13 @@
     }
     .artifact-delete-btn:hover { background: #ef4444; color: white; }
 
-    /* Lesson Specific Styles */
-    .lesson-meta-row {
-        display: flex; justify-content: space-between; margin-bottom: 0.5rem;
-    }
+    .lesson-meta-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
     .lesson-meta-item {
         font-size: 0.8rem; font-weight: 600; color: var(--primary); background: var(--primary-light);
         padding: 4px 8px; border-radius: 4px; display: flex; align-items: center; gap: 4px;
     }
 
-    /* --- FAB & MODALS --- */
+    /* --- MODALS --- */
     .supervisor-fab {
       position: fixed; bottom: 30px; right: 30px;
       background: var(--text-main); color: var(--bg-card);
@@ -440,7 +417,6 @@
     }
     .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
 
-    /* File Upload Area Styling */
     .file-upload-group { display: flex; gap: 10px; align-items: center; margin-bottom: 5px; }
     .file-upload-btn {
         background: var(--bg-body); border: 1px dashed var(--border-color); padding: 0.6rem 1rem;
@@ -530,7 +506,7 @@
     <div class="container">
       <h1 data-aos="fade-up">Teaching Practice</h1>
       <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
-        Systematic documentation of pedagogical activities in the Department of Computing and Informatics.
+        Systematic documentation of pedagogical activities in Department of Computing and Informatics.
       </p>
       <div class="breadcrumb" data-aos="fade-up" data-aos-delay="200">
         <a href="index.html">Home</a> <span>/</span> <span>Portfolio</span>
@@ -549,18 +525,14 @@
       </div>
 
       <div class="card" data-aos="fade-up">
-        <!-- Week Navigation & View Toggle -->
         <div class="week-nav-container">
-          <div class="week-tabs" id="week-tabs-container">
-            <!-- Tabs injected by JS -->
-          </div>
+          <div class="week-tabs" id="week-tabs-container"></div>
           <div class="view-toggle">
             <button class="view-btn active" id="view-grid-btn" onclick="switchView('grid')"><i class="ri-calendar-view"></i> Grid</button>
             <button class="view-btn" id="view-row-btn" onclick="switchView('row')"><i class="ri-list-check"></i> Record of Work</button>
           </div>
         </div>
 
-        <!-- VIEW: Weekly Grid -->
         <div class="timetable-view" id="grid-view">
             <div class="timetable-wrapper" id="timetable-grid">
               <div class="time-column">
@@ -583,7 +555,6 @@
             </div>
         </div>
 
-        <!-- VIEW: Record of Work (Table) -->
         <div class="row-view" id="row-view">
             <div style="overflow-x: auto;">
                 <table class="row-table" id="record-of-work-table">
@@ -598,9 +569,7 @@
                             <th class="admin-only" style="display:none">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- Rows injected by JS -->
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -617,9 +586,7 @@
 
       <div class="schedule-layout">
         <div class="activity-column">
-          <div id="log-container" class="activity-grid">
-            <!-- Dynamic Items -->
-          </div>
+          <div id="log-container" class="activity-grid"></div>
         </div>
         <div class="calendar-column" data-aos="fade-left">
           <div class="calendar-widget card">
@@ -642,12 +609,10 @@
         <p>Rubrics, checklists, and marking guides aligned with competency units.</p>
         <button class="btn-add admin-only" onclick="openAddAssessmentModal()"><i class="ri-add-line"></i> Add Instrument</button>
       </div>
-      <div id="assessments-render" class="assessment-grid">
-        <!-- Dynamic Assessments -->
-      </div>
+      <div id="assessments-render" class="assessment-grid"></div>
     </section>
 
-    <!-- SECTION 3: ARTIFACTS GRID (Lesson Design Management) -->
+    <!-- SECTION 3: ARTIFACTS GRID -->
     <section class="content-section artifact-section" aria-labelledby="artifacts-heading">
         <div class="section-header" data-aos="fade-up">
           <h2 id="artifacts-heading">Major Artifacts & Innovations</h2>
@@ -670,7 +635,6 @@
   </a>
 
   <!-- MODALS -->
-
   <!-- 1. ADD NEW ACTIVITY -->
   <div class="modal-overlay" id="addActivityModal" aria-hidden="true">
     <div class="modal-content">
@@ -718,12 +682,10 @@
     <div class="modal-content">
       <button class="close-btn" onclick="closeAddAssessmentModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add Assessment Instrument</h3>
-      
       <div class="instruction-box" style="border-color: var(--assessment); background: rgba(13, 148, 136, 0.05);">
         <strong><i class="ri-cursor-line"></i> CBET Focus:</strong><br>
-        Ensure this tool assesses specific Performance Criteria for the chosen competency.
+        Ensure this tool assesses specific Performance Criteria for chosen competency.
       </div>
-
       <form id="assessmentForm">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div class="form-group">
@@ -739,17 +701,14 @@
             </select>
           </div>
         </div>
-
         <div class="form-group">
           <label for="ass-title">Instrument Title</label>
           <input type="text" id="ass-title" class="form-input" placeholder="e.g. Database Design Rubric" required>
         </div>
-
         <div class="form-group">
           <label for="ass-competency">Competency Statement</label>
           <textarea id="ass-competency" class="form-textarea" rows="2" placeholder="e.g. Design a normalized database schema to 3NF..." required></textarea>
         </div>
-
         <div class="form-group">
           <label for="ass-file">Instrument File (Rubric/Checklist)</label>
           <div class="file-upload-group">
@@ -759,18 +718,17 @@
           </div>
           <input type="text" id="ass-file" class="form-input" placeholder="assets/rubric.pdf" required style="margin-top: 5px;">
         </div>
-
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Instrument</button>
       </form>
     </div>
   </div>
 
-  <!-- 4. ADD NEW ARTIFACT (Dynamic for Lesson Plans) -->
+  <!-- 4. ADD NEW ARTIFACT (Persistence Optimized) -->
   <div class="modal-overlay" id="addArtifactModal" aria-hidden="true">
     <div class="modal-content">
       <button class="close-btn" onclick="closeAddArtifactModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add New Artifact</h3>
-      <div class="instruction-box"><strong><i class="ri-information-line"></i> Important:</strong><br>Since this is a static site, you must move the selected file to your <code>assets</code> folder manually after saving.</div>
+      <div class="instruction-box"><strong><i class="ri-information-line"></i> Saving Files:</strong><br>Thumbnails are saved automatically. For PDFs/Videos, please place the file in your <code>assets</code> folder.</div>
       <form id="artifactForm">
         <div class="form-group"><label for="art-title">Artifact Title</label><input type="text" id="art-title" class="form-input" placeholder="e.g. Full Stack Curriculum" required></div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -797,7 +755,15 @@
             </div>
         </div>
 
-        <div class="form-group"><label for="art-thumb-input">Thumbnail Image</label><div class="file-upload-group"><label class="file-upload-btn" for="art-thumb-input"><i class="ri-image-add-line"></i> Choose Image</label><input type="file" id="art-thumb-input" accept="image/*" style="display: none;"><span class="file-name-display" id="art-thumb-name">No file chosen</span></div><input type="text" id="art-thumb" class="form-input" placeholder="assets/thumbnail.jpg" required style="margin-top: 5px;"></div>
+        <div class="form-group">
+            <label for="art-thumb-input">Thumbnail Image (Auto-saved)</label>
+            <div class="file-upload-group">
+                <label class="file-upload-btn" for="art-thumb-input"><i class="ri-image-add-line"></i> Choose Image</label>
+                <input type="file" id="art-thumb-input" accept="image/*" style="display: none;">
+                <span class="file-name-display" id="art-thumb-name">No file chosen</span>
+            </div>
+            <input type="text" id="art-thumb" class="form-input" placeholder="assets/thumbnail.jpg" required style="margin-top: 5px;">
+        </div>
         <div class="form-group"><label for="art-desc">Description</label><textarea id="art-desc" class="form-textarea" rows="3" placeholder="Brief description of project..." required></textarea></div>
         <div class="form-group"><label for="art-link-input">Resource File (PDF/Video)</label><div class="file-upload-group"><label class="file-upload-btn" for="art-link-input"><i class="ri-file-upload-line"></i> Choose File</label><input type="file" id="art-link-input" accept=".pdf,.mp4,.jpg,.png,.jpeg" style="display: none;"><span class="file-name-display" id="art-link-name">No file chosen</span></div><input type="text" id="art-link" class="form-input" placeholder="assets/document.pdf" required style="margin-top: 5px;"></div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Artifact</button>
@@ -865,6 +831,14 @@
     menuBtn.addEventListener('click', () => {
       navLinks.classList.toggle('active');
       menuBtn.querySelector('i').className = navLinks.classList.contains('active') ? 'ri-close-line' : 'ri-menu-line';
+    });
+
+    // --- HELPER: Convert Image to Base64 (Persistent) ---
+    const fileToBase64 = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
     });
 
     // --- ADMIN LOGIN ---
@@ -1195,13 +1169,12 @@
         if(!file) return;
         document.getElementById('ass-file-name').textContent = file.name;
         document.getElementById('ass-file').value = `assets/${file.name}`;
-        assFileInput.dataset.blobUrl = URL.createObjectURL(file);
     });
 
     assessmentForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const fileUrl = assFileInput.dataset.blobUrl || document.getElementById('ass-file').value;
-      if(assFileInput.files.length > 0) showToast('File selected! Move files to "assets" folder.', 'success');
+      const fileUrl = document.getElementById('ass-file').value;
+      showToast('Instrument saved!', 'success');
 
       const newAssessment = {
         id: Date.now().toString(),
@@ -1209,7 +1182,7 @@
         type: document.getElementById('ass-type').value,
         title: document.getElementById('ass-title').value,
         competency: document.getElementById('ass-competency').value,
-        file: fileUrl
+        file: fileUrl // Always use path for PDFs
       };
 
       assessments.unshift(newAssessment);
@@ -1227,11 +1200,10 @@
       }
     }
 
-    // --- ARTIFACTS (With Lesson Management) ---
+    // --- ARTIFACTS (Persisted) ---
     let artifacts = JSON.parse(localStorage.getItem('artifacts')) || [];
     function saveArtifacts() { localStorage.setItem('artifacts', JSON.stringify(artifacts)); }
 
-    // Handle Category Change in Modal (Show/Hide Lesson Fields)
     function handleCategoryChange() {
         const category = document.getElementById('art-category').value;
         const lessonFields = document.getElementById('lesson-specific-fields');
@@ -1239,12 +1211,10 @@
             lessonFields.style.display = 'block';
         } else {
             lessonFields.style.display = 'none';
-            // Optional: clear values
             document.getElementById('art-unit').value = '';
             document.getElementById('art-duration').value = '';
         }
     }
-    // Initialize state
     handleCategoryChange();
 
     function handleFileSelect(inputId, displayId) {
@@ -1256,7 +1226,6 @@
         display.textContent = file.name;
         const pathInput = document.getElementById(inputId.replace('-input', ''));
         if(!pathInput.value.startsWith('http')) pathInput.value = `assets/${file.name}`;
-        input.dataset.blobUrl = URL.createObjectURL(file);
       });
     }
     handleFileSelect('art-thumb-input', 'art-thumb-name');
@@ -1279,12 +1248,10 @@
         if(item.linkType === 'image') { btnIcon = 'ri-image-line'; btnText = 'View Gallery'; }
         const deleteBtn = isAdmin ? `<button class="artifact-delete-btn admin-only" onclick="deleteArtifact('${item.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
 
-        // Specific Metadata for Lesson Plans
         let lessonMetaHtml = '';
         if(item.category === 'lesson') {
             const durationBadge = item.duration ? `<span class="lesson-meta-item"><i class="ri-time-line"></i> ${item.duration}</span>` : '';
             const unitBadge = item.unit ? `<span class="lesson-meta-item" style="background: var(--secondary-light); color: var(--secondary);"><i class="ri-booklet-line"></i> ${item.unit}</span>` : '';
-            
             lessonMetaHtml = `
                 <div class="lesson-meta-row">
                     ${unitBadge}
@@ -1313,7 +1280,6 @@
     const artifactForm = document.getElementById('artifactForm');
 
     function openAddArtifactModal() { 
-        // Default to lesson fields visible
         handleCategoryChange();
         addArtifactModal.classList.add('active'); 
     }
@@ -1325,13 +1291,27 @@
       handleCategoryChange();
     }
 
-    artifactForm.addEventListener('submit', (e) => {
+    artifactForm.addEventListener('submit', async (e) => { // Make async for Base64 conversion
       e.preventDefault();
       const thumbInput = document.getElementById('art-thumb-input');
       const linkInput = document.getElementById('art-link-input');
-      const thumbUrl = thumbInput.dataset.blobUrl || document.getElementById('art-thumb').value;
-      const linkUrl = linkInput.dataset.blobUrl || document.getElementById('art-link').value;
-      if(thumbInput.files.length > 0 || linkInput.files.length > 0) showToast('File selected! Move files to "assets" folder.', 'success');
+      const thumbUrlPath = document.getElementById('art-thumb').value;
+      const linkUrlPath = document.getElementById('art-link').value;
+
+      // 1. Convert Thumbnail to Base64 for Persistence
+      let finalThumb = thumbUrlPath;
+      if (thumbInput.files.length > 0) {
+          try {
+              showToast('Converting image for auto-save...', 'success');
+              finalThumb = await fileToBase64(thumbInput.files[0]);
+          } catch (error) {
+              console.error(error);
+              showToast('Image too large. Using path instead.', 'error');
+          }
+      }
+
+      // 2. Use Path for Link (PDF/Video are too big for LocalStorage)
+      showToast('Artifact saved! Note: Ensure files are in the assets folder.', 'success');
 
       const category = document.getElementById('art-category').value;
 
@@ -1340,10 +1320,9 @@
         title: document.getElementById('art-title').value,
         category: category,
         linkType: document.getElementById('art-link-type').value,
-        thumb: thumbUrl,
+        thumb: finalThumb, // This is now Base64 (persistable)
         description: document.getElementById('art-desc').value,
-        link: linkUrl,
-        // Save lesson fields if category is lesson
+        link: linkUrlPath, // This is the file path
         unit: category === 'lesson' ? document.getElementById('art-unit').value : '',
         duration: category === 'lesson' ? document.getElementById('art-duration').value : ''
       };
@@ -1351,7 +1330,6 @@
       saveArtifacts();
       renderArtifacts();
       closeAddArtifactModal();
-      showToast('Artifact saved!');
     });
 
     function deleteArtifact(id) {

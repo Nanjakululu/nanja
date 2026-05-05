@@ -172,6 +172,130 @@
     }
     .btn-add:hover { background: var(--primary-dark); transform: translateY(-2px); }
 
+    /* --- TIMETABLE GRID STYLES --- */
+    .timetable-wrapper {
+      display: grid;
+      grid-template-columns: 80px repeat(5, 1fr); /* Time column + 5 Days */
+      gap: 1rem;
+      overflow-x: auto; /* Allow scroll on small screens */
+    }
+
+    .time-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .time-slot-label {
+      height: 60px; /* Matches card height roughly */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+    .day-column {
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      padding: 1rem;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .day-header {
+      text-align: center;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--bg-body);
+    }
+
+    .session-card {
+      background: var(--bg-body);
+      border-left: 3px solid var(--secondary);
+      border-radius: 8px;
+      padding: 1rem;
+      position: relative;
+      transition: var(--transition);
+    }
+    .session-card:hover {
+      transform: translateX(5px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .session-time {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .session-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+      color: var(--text-main);
+    }
+
+    .session-details {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .session-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .class-tag {
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .delete-session-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 1rem;
+      opacity: 0; 
+      transition: opacity 0.2s;
+    }
+    
+    .session-card:hover .delete-session-btn {
+      opacity: 1;
+    }
+    .delete-session-btn:hover {
+      color: #ef4444;
+    }
+
+    /* Empty State for Timetable */
+    .timetable-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+    }
+
     /* --- TIMELINE (Modern Feed Style) --- */
     .schedule-layout {
       display: grid; grid-template-columns: 1.6fr 1fr; gap: 2.5rem;
@@ -410,6 +534,12 @@
     /* Responsive */
     @media (max-width: 900px) {
       .schedule-layout { grid-template-columns: 1fr; }
+      .timetable-wrapper {
+        grid-template-columns: 60px repeat(5, 1fr);
+        gap: 0.5rem;
+      }
+      .day-header { font-size: 0.8rem; }
+      .session-card { padding: 0.8rem; }
       .nav-links { display: none; }
       .mobile-menu-btn { display: block; }
       .nav-links.active {
@@ -479,7 +609,53 @@
 
   <main class="container">
     
-    <!-- SECTION 1: DYNAMIC TIMELINE LOG -->
+    <!-- NEW SECTION: TEACHING TIMETABLE (CBET Aligned) -->
+    <section class="content-section" aria-labelledby="timetable-heading">
+      <div class="section-header" data-aos="fade-up">
+        <h2 id="timetable-heading">Teaching Timetable</h2>
+        <p>Weekly schedule of modules and training sessions.</p>
+        <!-- ADD BUTTON (Protected) -->
+        <button class="btn-add admin-only" onclick="openTimetableModal()">
+          <i class="ri-add-line"></i> Add Lesson
+        </button>
+      </div>
+
+      <div class="timetable-wrapper" id="timetable-grid">
+        <!-- Time Column Labels -->
+        <div class="time-column">
+           <div class="time-slot-label">08:00</div>
+           <div class="time-slot-label">09:00</div>
+           <div class="time-slot-label">10:00</div>
+           <div class="time-slot-label">11:00</div>
+           <div class="time-slot-label">12:00</div>
+           <div class="time-slot-label">13:00</div>
+           <div class="time-slot-label">14:00</div>
+           <div class="time-slot-label">15:00</div>
+           <div class="time-slot-label">16:00</div>
+           <div class="time-slot-label">17:00</div>
+        </div>
+
+        <!-- Day Columns (Mon-Fri) -->
+        <div class="day-column" id="day-mon">
+          <div class="day-header">MON</div>
+          <!-- Dynamic Lessons will be injected here -->
+        </div>
+        <div class="day-column" id="day-tue">
+          <div class="day-header">TUE</div>
+        </div>
+        <div class="day-column" id="day-wed">
+          <div class="day-header">WED</div>
+        </div>
+        <div class="day-column" id="day-thu">
+          <div class="day-header">THU</div>
+        </div>
+        <div class="day-column" id="day-fri">
+          <div class="day-header">FRI</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: DYNAMIC TIMELINE LOG -->
     <section class="content-section" aria-labelledby="daily-log-heading">
       <div class="section-header" data-aos="fade-up">
         <h2 id="daily-log-heading">Daily Teaching Log</h2>
@@ -522,7 +698,7 @@
       </div>
     </section>
 
-    <!-- SECTION 2: ARTIFACTS GRID -->
+    <!-- SECTION 3: ARTIFACTS GRID -->
     <section class="content-section artifact-section" aria-labelledby="artifacts-heading">
         <div class="section-header" data-aos="fade-up">
           <h2 id="artifacts-heading">Major Artifacts & Innovations</h2>
@@ -594,7 +770,65 @@
     </div>
   </div>
 
-  <!-- MODAL 2: ADD NEW ARTIFACT (Updated with File Inputs) -->
+  <!-- MODAL 2: ADD NEW LESSON (TIMETABLE / CBET) -->
+  <div class="modal-overlay" id="timetableModal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeTimetableModal()">&times;</button>
+      <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Schedule Lesson</h3>
+      
+      <form id="timetableForm">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label for="tt-day">Day</label>
+            <select id="tt-day" class="form-select" required>
+              <option value="Mon">Monday</option>
+              <option value="Tue">Tuesday</option>
+              <option value="Wed">Wednesday</option>
+              <option value="Thu">Thursday</option>
+              <option value="Fri">Friday</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="tt-time">Start Time</label>
+            <input type="time" id="tt-time" class="form-input" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label for="tt-end">End Time</label>
+            <input type="time" id="tt-end" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label for="tt-class">Class / Group</label>
+            <input type="text" id="tt-class" class="form-input" placeholder="e.g. 3B" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="tt-subject">Subject / Module</label>
+          <input type="text" id="tt-subject" class="form-input" placeholder="e.g. Math / Unit 3.1" required>
+        </div>
+
+        <div class="form-group">
+          <label for="tt-topic">Topic / Title</label>
+          <input type="text" id="tt-topic" class="form-input" placeholder="e.g. Intro to Logic" required>
+        </div>
+
+        <div class="form-group">
+          <label for="tt-enrollment">Class Size (Enrollment)</label>
+          <input type="number" id="tt-enrollment" class="form-input" placeholder="e.g. 25" min="1">
+          <small style="color: var(--text-muted)">Helps monitor trainee attendance.</small>
+        </div>
+
+        <button type="submit" class="btn-primary">
+          <i class="ri-calendar-check-line"></i> Save Lesson
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ADD NEW ARTIFACT (Updated with File Inputs) -->
   <div class="modal-overlay" id="addArtifactModal" aria-hidden="true">
     <div class="modal-content">
       <button class="close-btn" onclick="closeAddArtifactModal()">&times;</button>
@@ -672,7 +906,7 @@
     </div>
   </div>
 
-  <!-- MODAL 3: Smart Viewer -->
+  <!-- MODAL 4: Smart Viewer -->
   <div class="modal-overlay" id="smartViewerModal" aria-hidden="true" role="dialog">
     <div class="modal-content">
       <button class="close-btn" onclick="closeSmartViewer()" aria-label="Close modal">&times;</button>
@@ -688,7 +922,7 @@
     </div>
   </div>
 
-  <!-- MODAL 4: Supervisor Feedback -->
+  <!-- MODAL 5: Supervisor Feedback -->
   <div class="modal-overlay" id="feedbackModal" aria-hidden="true" role="dialog">
     <div class="modal-content">
       <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
@@ -769,6 +1003,7 @@
         showToast('Admin Mode Activated');
         renderLog();
         renderArtifacts();
+        renderTimetable();
       } else {
         showToast('Incorrect Password', 'error');
       }
@@ -777,7 +1012,98 @@
     checkAdminStatus();
 
     /* -------------------------------------------------------------------
-       3. DYNAMIC TEACHING LOG SYSTEM
+       3. TIMETABLE SYSTEM (NEW)
+    ------------------------------------------------------------------- */
+    let timetable = JSON.parse(localStorage.getItem('timetable')) || [];
+
+    function saveTimetable() {
+      localStorage.setItem('timetable', JSON.stringify(timetable));
+    }
+
+    function renderTimetable() {
+      // Clear columns
+      const days = ['mon', 'tue', 'wed', 'thu', 'fri'];
+      days.forEach(day => {
+        const container = document.getElementById(`day-${day}`);
+        // Keep header, remove cards
+        const header = container.querySelector('.day-header');
+        container.innerHTML = '';
+        if(header) container.appendChild(header);
+      });
+
+      if(timetable.length === 0) {
+        // Show empty state in Monday
+        const mon = document.getElementById('day-mon');
+        mon.innerHTML = `<div class="day-header">MON</div><div class="timetable-empty">No lessons scheduled.</div>`;
+        return;
+      }
+
+      const isAdmin = document.body.classList.contains('is-admin');
+
+      timetable.forEach((lesson) => {
+        const container = document.getElementById(`day-${lesson.day}`);
+        if(!container) return; // Safety check
+
+        const deleteBtn = isAdmin ? `<button class="delete-session-btn admin-only" onclick="deleteLesson('${lesson.id}')" title="Delete"><i class="ri-delete-bin-line"></i></button>` : '';
+
+        const enrollmentBadge = lesson.enrollment ? `<span class="class-tag"><i class="ri-user-follow-line"></i> ${lesson.enrollment} Trainees</span>` : '';
+
+        const html = `
+          <div class="session-card" data-aos="fade-up">
+            <div class="session-time">
+               <i class="ri-time-line"></i> ${lesson.startTime} - ${lesson.endTime}
+            </div>
+            <h4 class="session-title">${lesson.topic}</h4>
+            <div class="session-details">${lesson.subject}</div>
+            <div class="session-meta">
+               <span class="class-tag">${lesson.classGroup}</span>
+               ${enrollmentBadge}
+               ${deleteBtn}
+            </div>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+      });
+    }
+
+    // Timetable Modal Logic
+    const timetableModal = document.getElementById('timetableModal');
+    const timetableForm = document.getElementById('timetableForm');
+
+    function openTimetableModal() { timetableModal.classList.add('active'); }
+    function closeTimetableModal() { timetableModal.classList.remove('active'); timetableForm.reset(); }
+
+    timetableForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const newLesson = {
+        id: Date.now().toString(),
+        day: document.getElementById('tt-day').value,
+        startTime: document.getElementById('tt-time').value,
+        endTime: document.getElementById('tt-end').value,
+        subject: document.getElementById('tt-subject').value,
+        topic: document.getElementById('tt-topic').value,
+        classGroup: document.getElementById('tt-class').value,
+        enrollment: document.getElementById('tt-enrollment').value
+      };
+
+      timetable.unshift(newLesson);
+      saveTimetable();
+      renderTimetable();
+      closeTimetableModal();
+      showToast('Lesson scheduled successfully!');
+    });
+
+    function deleteLesson(id) {
+      if(confirm('Remove this lesson?')) {
+        timetable = timetable.filter(item => item.id !== id);
+        saveTimetable();
+        renderTimetable();
+      }
+    }
+
+    /* -------------------------------------------------------------------
+       4. DYNAMIC TEACHING LOG SYSTEM
     ------------------------------------------------------------------- */
     
     let teachingLog = JSON.parse(localStorage.getItem('teachingLog')) || [];
@@ -795,7 +1121,7 @@
           <div class="empty-state">
             <i class="ri-clipboard-line"></i>
             <h3>No Teaching Activities Yet</h3>
-            <p>Your daily log is currently empty. Click the "Add New Activity" button above.</p>
+            <p>Your daily log is currently empty. Click "Add New Activity" button above.</p>
           </div>
         `;
         return;
@@ -891,7 +1217,7 @@
     }
 
     /* -------------------------------------------------------------------
-       4. DYNAMIC ARTIFACTS SYSTEM (With File Handling)
+       5. DYNAMIC ARTIFACTS SYSTEM (With File Handling)
     ------------------------------------------------------------------- */
 
     let artifacts = JSON.parse(localStorage.getItem('artifacts')) || [];
@@ -912,7 +1238,7 @@
         // 1. Show filename
         display.textContent = file.name;
 
-        // 2. Auto-fill the path into the URL input for persistence (Simulating upload)
+        // 2. Auto-fill the path into URL input for persistence (Simulating upload)
         // Note: This path must actually exist in the 'assets' folder for it to work for others!
         const pathInput = document.getElementById(inputId.replace('-input', ''));
         
@@ -956,6 +1282,7 @@
         if(item.linkType === 'image') { btnIcon = 'ri-image-line'; btnText = 'View Gallery'; }
         if(item.linkType === 'external') { btnIcon = 'ri-external-link-line'; btnText = 'Visit Link'; }
 
+        // ONLY render delete button HTML if isAdmin is TRUE (Security Layer 2)
         const deleteBtn = isAdmin ? 
           `<button class="artifact-delete-btn admin-only" onclick="deleteArtifact('${item.id}')" title="Delete Artifact"><i class="ri-delete-bin-line"></i></button>` : '';
 
@@ -1037,7 +1364,7 @@
     }
 
     /* -------------------------------------------------------------------
-       5. ARTIFACT FILTERING
+       6. ARTIFACT FILTERING
     ------------------------------------------------------------------- */
     const filterBtns = document.querySelectorAll('.filter-btn');
 
@@ -1073,8 +1400,8 @@
     });
 
     /* -------------------------------------------------------------------
-       6. SMART VIEWER & MODAL LOGIC
-       ------------------------------------------------------------------- */
+       7. SMART VIEWER & MODAL LOGIC
+    ------------------------------------------------------------------- */
     const viewerModal = document.getElementById('smartViewerModal');
     const viewerTitle = document.getElementById('viewer-title');
     const viewerContainer = document.getElementById('viewer-container');
@@ -1138,11 +1465,13 @@
       if (event.target == feedbackModal) closeModal();
       if (event.target == addActivityModal) closeAddActivityModal();
       if (event.target == addArtifactModal) closeAddArtifactModal();
+      if (event.target == timetableModal) closeTimetableModal();
     }
 
     // Initialize on Load
     renderLog();
     renderArtifacts();
+    renderTimetable();
 
   </script>
 </body>

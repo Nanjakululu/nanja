@@ -198,7 +198,7 @@
       background: var(--bg-body);
       border-radius: 20px;
       color: var(--text-muted);
-      grid-column: 1 / -1; /* Span full width in grid */
+      grid-column: 1 / -1;
     }
     .empty-state i { font-size: 3rem; display: block; margin-bottom: 1rem; opacity: 0.5; }
     .empty-state h3 { font-family: 'Inter', sans-serif; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
@@ -351,6 +351,49 @@
     }
     .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
 
+    /* File Upload Area Styling */
+    .file-upload-group {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+    .file-upload-btn {
+        background: var(--bg-body);
+        border: 1px dashed var(--border-color);
+        padding: 0.6rem 1rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: var(--transition);
+        text-align: center;
+        flex-grow: 1;
+    }
+    .file-upload-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: var(--primary-light);
+    }
+    .file-name-display {
+        font-size: 0.85rem;
+        color: var(--primary);
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .instruction-box {
+        background: rgba(79, 70, 229, 0.05);
+        border-left: 3px solid var(--primary);
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+        color: var(--text-main);
+        border-radius: 0 8px 8px 0;
+    }
+
     /* Toast Notifications */
     .toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 3000; display: flex; flex-direction: column; gap: 10px; }
     .toast {
@@ -379,13 +422,9 @@
     }
 
     /* --- ADMIN PROTECTION CSS --- */
-    /* 1. STRICT HIDE: By default, hide all elements with class .admin-only */
-    /* Using !important ensures no other styles can accidentally show them */
     .admin-only { 
       display: none !important; 
     }
-
-    /* 2. UNLOCK: Only show .admin-only elements if body has .is-admin class */
     body.is-admin .admin-only { 
       display: flex !important; 
     }
@@ -555,11 +594,17 @@
     </div>
   </div>
 
-  <!-- MODAL 2: ADD NEW ARTIFACT -->
+  <!-- MODAL 2: ADD NEW ARTIFACT (Updated with File Inputs) -->
   <div class="modal-overlay" id="addArtifactModal" aria-hidden="true">
     <div class="modal-content">
       <button class="close-btn" onclick="closeAddArtifactModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add New Artifact</h3>
+
+      <!-- INSTRUCTIONS -->
+      <div class="instruction-box">
+        <strong><i class="ri-information-line"></i> Important:</strong><br>
+        Since this is a static site, you must move the selected file to your <code>assets</code> folder manually after saving.
+      </div>
       
       <form id="artifactForm">
         <div class="form-group">
@@ -587,10 +632,18 @@
           </div>
         </div>
 
+        <!-- THUMBNAIL UPLOAD -->
         <div class="form-group">
-          <label for="art-thumb">Thumbnail Image URL</label>
-          <input type="text" id="art-thumb" class="form-input" placeholder="https://source.unsplash.com/..." required>
-          <small style="color: var(--text-muted); font-size: 0.8rem;">Recommended: Use Unsplash or your own hosted image URL.</small>
+          <label for="art-thumb-input">Thumbnail Image</label>
+          <div class="file-upload-group">
+            <label class="file-upload-btn" for="art-thumb-input">
+              <i class="ri-image-add-line"></i> Choose Image
+            </label>
+            <input type="file" id="art-thumb-input" accept="image/*" style="display: none;">
+            <span class="file-name-display" id="art-thumb-name">No file chosen</span>
+          </div>
+          <!-- Hidden input to store the generated path -->
+          <input type="text" id="art-thumb" class="form-input" placeholder="assets/thumbnail.jpg" required style="margin-top: 5px;">
         </div>
 
         <div class="form-group">
@@ -598,9 +651,18 @@
           <textarea id="art-desc" class="form-textarea" rows="3" placeholder="Brief description of the project..." required></textarea>
         </div>
 
+        <!-- RESOURCE UPLOAD -->
         <div class="form-group">
-            <label for="art-link">Resource Link (URL)</label>
-            <input type="text" id="art-link" class="form-input" placeholder="Link to PDF, Video, or Repo" required>
+            <label for="art-link-input">Resource File (PDF/Video)</label>
+            <div class="file-upload-group">
+              <label class="file-upload-btn" for="art-link-input">
+                <i class="ri-file-upload-line"></i> Choose File
+              </label>
+              <input type="file" id="art-link-input" accept=".pdf,.mp4,.jpg,.png,.jpeg" style="display: none;">
+              <span class="file-name-display" id="art-link-name">No file chosen</span>
+            </div>
+            <!-- Hidden input to store the generated path -->
+            <input type="text" id="art-link" class="form-input" placeholder="assets/document.pdf" required style="margin-top: 5px;">
         </div>
 
         <button type="submit" class="btn-primary">
@@ -756,7 +818,6 @@
           </button>`;
         }).join('');
 
-        // ONLY render delete button HTML if isAdmin is TRUE (Security Layer 2)
         const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteActivity('${item.id}')" title="Delete Activity"><i class="ri-delete-bin-line"></i></button>` : '';
 
         const html = `
@@ -830,7 +891,7 @@
     }
 
     /* -------------------------------------------------------------------
-       4. DYNAMIC ARTIFACTS SYSTEM
+       4. DYNAMIC ARTIFACTS SYSTEM (With File Handling)
     ------------------------------------------------------------------- */
 
     let artifacts = JSON.parse(localStorage.getItem('artifacts')) || [];
@@ -838,6 +899,37 @@
     function saveArtifacts() {
       localStorage.setItem('artifacts', JSON.stringify(artifacts));
     }
+
+    // Helper: Handle File Selection
+    function handleFileSelect(inputId, displayId) {
+      const input = document.getElementById(inputId);
+      const display = document.getElementById(displayId);
+      
+      input.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // 1. Show filename
+        display.textContent = file.name;
+
+        // 2. Auto-fill the path into the URL input for persistence (Simulating upload)
+        // Note: This path must actually exist in the 'assets' folder for it to work for others!
+        const pathInput = document.getElementById(inputId.replace('-input', ''));
+        
+        // Check if the user is typing a manual URL, if not, auto-fill assets path
+        if(!pathInput.value.startsWith('http')) {
+             pathInput.value = `assets/${file.name}`;
+        }
+
+        // 3. Create a temporary blob URL for immediate preview (Session only)
+        // We store this on the input element for the submit handler to use
+        input.dataset.blobUrl = URL.createObjectURL(file);
+      });
+    }
+
+    // Initialize File Listeners
+    handleFileSelect('art-thumb-input', 'art-thumb-name');
+    handleFileSelect('art-link-input', 'art-link-name');
 
     function renderArtifacts() {
       const container = document.getElementById('artifacts-render');
@@ -864,7 +956,6 @@
         if(item.linkType === 'image') { btnIcon = 'ri-image-line'; btnText = 'View Gallery'; }
         if(item.linkType === 'external') { btnIcon = 'ri-external-link-line'; btnText = 'Visit Link'; }
 
-        // ONLY render delete button HTML if isAdmin is TRUE (Security Layer 2)
         const deleteBtn = isAdmin ? 
           `<button class="artifact-delete-btn admin-only" onclick="deleteArtifact('${item.id}')" title="Delete Artifact"><i class="ri-delete-bin-line"></i></button>` : '';
 
@@ -894,26 +985,47 @@
     const artifactForm = document.getElementById('artifactForm');
 
     function openAddArtifactModal() { addArtifactModal.classList.add('active'); }
-    function closeAddArtifactModal() { addArtifactModal.classList.remove('active'); artifactForm.reset(); }
+    function closeAddArtifactModal() { 
+      addArtifactModal.classList.remove('active'); 
+      artifactForm.reset(); 
+      // Reset file displays
+      document.getElementById('art-thumb-name').textContent = "No file chosen";
+      document.getElementById('art-link-name').textContent = "No file chosen";
+    }
 
     artifactForm.addEventListener('submit', (e) => {
       e.preventDefault();
       
+      const thumbInput = document.getElementById('art-thumb-input');
+      const linkInput = document.getElementById('art-link-input');
+
+      // Use Blob URL for immediate preview if file was selected, otherwise use the text path
+      const thumbUrl = thumbInput.dataset.blobUrl || document.getElementById('art-thumb').value;
+      const linkUrl = linkInput.dataset.blobUrl || document.getElementById('art-link').value;
+
+      // If user selected a file, warn them to move it
+      if(thumbInput.files.length > 0 || linkInput.files.length > 0) {
+        showToast('File selected! Move files to "assets" folder.', 'success');
+        setTimeout(() => {
+            alert("IMPORTANT:\n\nTo make this file visible to your supervisor, you MUST drag the file(s) you selected into your project's 'assets' folder in your code editor.");
+        }, 1000);
+      }
+
       const newArtifact = {
         id: Date.now().toString(),
         title: document.getElementById('art-title').value,
         category: document.getElementById('art-category').value,
         linkType: document.getElementById('art-link-type').value,
-        thumb: document.getElementById('art-thumb').value,
+        thumb: thumbUrl,
         description: document.getElementById('art-desc').value,
-        link: document.getElementById('art-link').value
+        link: linkUrl
       };
 
       artifacts.unshift(newArtifact);
       saveArtifacts();
       renderArtifacts();
       closeAddArtifactModal();
-      showToast('Artifact added successfully!');
+      showToast('Artifact saved! (Ensure files are in assets folder)');
     });
 
     function deleteArtifact(id) {
@@ -962,7 +1074,7 @@
 
     /* -------------------------------------------------------------------
        6. SMART VIEWER & MODAL LOGIC
-    ------------------------------------------------------------------- */
+       ------------------------------------------------------------------- */
     const viewerModal = document.getElementById('smartViewerModal');
     const viewerTitle = document.getElementById('viewer-title');
     const viewerContainer = document.getElementById('viewer-container');
@@ -979,7 +1091,7 @@
         viewerContainer.innerHTML = `
           <video controls autoplay>
             <source src="${src}" type="video/mp4">
-            Your browser does not support the video tag.
+            Your browser does not support video tag.
           </video>`;
       } else {
         viewerContainer.innerHTML = `<p style="color:var(--text-muted)">This content is hosted externally. <a href="${src}" target="_blank" style="color:var(--primary)">Click here to open it in a new tab.</a></p>`;

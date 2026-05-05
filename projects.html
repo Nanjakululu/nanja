@@ -162,6 +162,7 @@
     .section-header { 
       margin-bottom: 2.5rem; 
       display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
     }
     .section-header h2 { font-size: 2.5rem; margin-bottom: 0.5rem; }
     .section-header p { color: var(--text-muted); font-size: 1.1rem; }
@@ -173,6 +174,146 @@
       transition: var(--transition); font-size: 0.9rem;
     }
     .btn-add:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+    /* --- TIMETABLE WEEK NAVIGATION --- */
+    .week-nav-container {
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .week-tabs {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 5px;
+      flex-grow: 1;
+    }
+    .week-tab {
+      padding: 0.6rem 1.2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-weight: 500;
+      color: var(--text-muted);
+      white-space: nowrap;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .week-tab:hover { border-color: var(--primary); color: var(--primary); }
+    .week-tab.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .view-toggle {
+      display: flex;
+      background: var(--bg-card);
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+    .view-btn {
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .view-btn.active { background: var(--bg-body); color: var(--text-main); box-shadow: var(--shadow-sm); font-weight: 600; }
+
+    /* --- TIMETABLE GRID STYLES --- */
+    .timetable-wrapper {
+      display: grid;
+      grid-template-columns: 80px repeat(5, 1fr); 
+      gap: 1rem;
+      overflow-x: auto; 
+    }
+    .time-column { display: flex; flex-direction: column; gap: 1rem; }
+    .time-slot-label {
+      height: 60px; display: flex; align-items: center; justify-content: center;
+      font-weight: 600; color: var(--text-muted); font-size: 0.85rem;
+      border-bottom: 1px dashed var(--border-color);
+    }
+    .day-column {
+      background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border-color);
+      padding: 1rem; min-height: 400px; display: flex; flex-direction: column; gap: 1rem;
+    }
+    .day-header { text-align: center; font-weight: 700; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--bg-body); }
+    .session-card {
+      background: var(--bg-body); border-left: 3px solid var(--secondary);
+      border-radius: 8px; padding: 1rem; position: relative; transition: var(--transition);
+    }
+    .session-card:hover { transform: translateX(5px); box-shadow: var(--shadow-sm); }
+    .session-time { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .session-title { font-weight: 600; font-size: 1rem; margin-bottom: 0.2rem; color: var(--text-main); }
+    .session-details { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .session-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border-color); }
+    .class-tag { background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .delete-session-btn {
+      position: absolute; top: 5px; right: 5px; background: transparent; color: var(--text-muted);
+      font-size: 1rem; opacity: 0; transition: opacity 0.2s;
+    }
+    .session-card:hover .delete-session-btn { opacity: 1; }
+    .delete-session-btn:hover { color: #ef4444; }
+    .timetable-empty { grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted); }
+
+    /* --- RECORD OF WORK TABLE --- */
+    .row-view {
+        display: none; /* Hidden by default */
+    }
+    .row-view.active { display: block; animation: fadeIn 0.5s ease; }
+    .row-table {
+        width: 100%; border-collapse: collapse; font-size: 0.9rem;
+    }
+    .row-table th, .row-table td {
+        text-align: left; padding: 1rem; border-bottom: 1px solid var(--border-color);
+    }
+    .row-table th {
+        background: var(--bg-body); font-weight: 700; color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem;
+    }
+    .row-table tr:last-child td { border-bottom: none; }
+    .row-week-col { color: var(--primary); font-weight: 700; }
+
+    /* --- TIMELINE (Modern Feed Style) --- */
+    .schedule-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 2.5rem; }
+    .activity-grid { display: flex; flex-direction: column; gap: 1.5rem; }
+    .activity-card { padding: 1.5rem; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .day-badge {
+      background: var(--primary); color: white; padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .empty-state {
+      text-align: center; padding: 4rem 2rem; border: 2px dashed var(--border-color);
+      background: var(--bg-body); border-radius: 20px; color: var(--text-muted); grid-column: 1 / -1;
+    }
+    .empty-state i { font-size: 3rem; display: block; margin-bottom: 1rem; opacity: 0.5; }
+    .empty-state h3 { font-family: 'Inter', sans-serif; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
+    .tag-group { display: flex; gap: 0.6rem; margin: 1rem 0; flex-wrap: wrap; }
+    .tag { background: var(--bg-body); border: 1px solid var(--border-color); padding: 0.4rem 0.8rem; border-radius: 50px; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+    .tag button { background: transparent; border: none; color: var(--text-muted); font-size: 0.8rem; margin-left: 0.5rem; cursor: pointer; }
+    .tag button:hover { color: #ef4444; }
+    .project-links { display: flex; gap: 0.8rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .btn-sm { padding: 0.6rem 1rem; font-size: 0.85rem; border-radius: 8px; display: flex; align-items: center; gap: 0.4rem; font-weight: 500; transition: var(--transition); }
+    .btn-outline { border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); transform: translateY(-2px); }
+    .delete-btn {
+      background: rgba(239, 68, 68, 0.1); color: #ef4444; border: none;
+      padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.8rem;
+      display: flex; align-items: center; gap: 0.4rem; transition: var(--transition);
+    }
+    .delete-btn:hover { background: #ef4444; color: white; }
+
+    /* Calendar Widget */
+    .calendar-widget { padding: 1.5rem; overflow: hidden; display: flex; flex-direction: column; height: 100%; }
+    .widget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .widget-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; }
+    .calendar-container { background: var(--bg-body); border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); flex-grow: 1; }
 
     /* --- ASSESSMENT CARD STYLES --- */
     .assessment-grid {
@@ -217,77 +358,6 @@
     .ass-type-project { background: #10b981; }
     .ass-type-observation { background: #f59e0b; }
     .ass-type-written { background: #6366f1; }
-
-    /* --- TIMETABLE GRID STYLES --- */
-    .timetable-wrapper {
-      display: grid;
-      grid-template-columns: 80px repeat(5, 1fr); 
-      gap: 1rem;
-      overflow-x: auto; 
-    }
-    .time-column { display: flex; flex-direction: column; gap: 1rem; }
-    .time-slot-label {
-      height: 60px; display: flex; align-items: center; justify-content: center;
-      font-weight: 600; color: var(--text-muted); font-size: 0.85rem;
-      border-bottom: 1px dashed var(--border-color);
-    }
-    .day-column {
-      background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border-color);
-      padding: 1rem; min-height: 400px; display: flex; flex-direction: column; gap: 1rem;
-    }
-    .day-header { text-align: center; font-weight: 700; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--bg-body); }
-    .session-card {
-      background: var(--bg-body); border-left: 3px solid var(--secondary);
-      border-radius: 8px; padding: 1rem; position: relative; transition: var(--transition);
-    }
-    .session-card:hover { transform: translateX(5px); box-shadow: var(--shadow-sm); }
-    .session-time { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
-    .session-title { font-weight: 600; font-size: 1rem; margin-bottom: 0.2rem; color: var(--text-main); }
-    .session-details { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; }
-    .session-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border-color); }
-    .class-tag { background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
-    .delete-session-btn {
-      position: absolute; top: 5px; right: 5px; background: transparent; color: var(--text-muted);
-      font-size: 1rem; opacity: 0; transition: opacity 0.2s;
-    }
-    .session-card:hover .delete-session-btn { opacity: 1; }
-    .delete-session-btn:hover { color: #ef4444; }
-    .timetable-empty { grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted); }
-
-    /* --- TIMELINE (Modern Feed Style) --- */
-    .schedule-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 2.5rem; }
-    .activity-grid { display: flex; flex-direction: column; gap: 1.5rem; }
-    .activity-card { padding: 1.5rem; }
-    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-    .day-badge {
-      background: var(--primary); color: white; padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    .empty-state {
-      text-align: center; padding: 4rem 2rem; border: 2px dashed var(--border-color);
-      background: var(--bg-body); border-radius: 20px; color: var(--text-muted); grid-column: 1 / -1;
-    }
-    .empty-state i { font-size: 3rem; display: block; margin-bottom: 1rem; opacity: 0.5; }
-    .empty-state h3 { font-family: 'Inter', sans-serif; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
-    .tag-group { display: flex; gap: 0.6rem; margin: 1rem 0; flex-wrap: wrap; }
-    .tag { background: var(--bg-body); border: 1px solid var(--border-color); padding: 0.4rem 0.8rem; border-radius: 50px; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
-    .tag button { background: transparent; border: none; color: var(--text-muted); font-size: 0.8rem; margin-left: 0.5rem; cursor: pointer; }
-    .tag button:hover { color: #ef4444; }
-    .project-links { display: flex; gap: 0.8rem; margin-top: 1.5rem; flex-wrap: wrap; }
-    .btn-sm { padding: 0.6rem 1rem; font-size: 0.85rem; border-radius: 8px; display: flex; align-items: center; gap: 0.4rem; font-weight: 500; transition: var(--transition); }
-    .btn-outline { border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main); }
-    .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); transform: translateY(-2px); }
-    .delete-btn {
-      background: rgba(239, 68, 68, 0.1); color: #ef4444; border: none;
-      padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.8rem;
-      display: flex; align-items: center; gap: 0.4rem; transition: var(--transition);
-    }
-    .delete-btn:hover { background: #ef4444; color: white; }
-
-    /* Calendar Widget */
-    .calendar-widget { padding: 1.5rem; overflow: hidden; display: flex; flex-direction: column; height: 100%; }
-    .widget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-    .widget-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; }
-    .calendar-container { background: var(--bg-body); border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); flex-grow: 1; }
 
     /* --- ARTIFACTS GRID --- */
     .filter-container { display: flex; gap: 0.8rem; margin-bottom: 2.5rem; overflow-x: auto; padding-bottom: 0.5rem; }
@@ -385,6 +455,7 @@
     .toast.success i { color: #10b981; }
     .toast.error i { color: #ef4444; }
     @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     .site-footer { text-align: center; padding: 3rem 0; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; margin-top: 4rem; }
 
@@ -406,6 +477,9 @@
     /* --- ADMIN PROTECTION CSS --- */
     .admin-only { display: none !important; }
     body.is-admin .admin-only { display: flex !important; }
+    body.is-admin .admin-only.btn-add { display: inline-flex !important; }
+    body.is-admin .admin-only.delete-btn { display: inline-flex !important; }
+    body.is-admin .admin-only.delete-session-btn { display: block !important; }
   </style>
   
   <!-- Script to check admin status IMMEDIATELY -->
@@ -457,32 +531,70 @@
 
   <main class="container">
     
-    <!-- SECTION 1: TEACHING TIMETABLE -->
+    <!-- SECTION 1: TEACHING TIMETABLE & RECORD OF WORK -->
     <section class="content-section" aria-labelledby="timetable-heading">
       <div class="section-header" data-aos="fade-up">
         <h2 id="timetable-heading">Teaching Timetable</h2>
-        <p>Weekly schedule of modules and training sessions.</p>
+        <p>Weekly schedule and master Record of Work.</p>
         <button class="btn-add admin-only" onclick="openTimetableModal()"><i class="ri-add-line"></i> Add Lesson</button>
       </div>
 
-      <div class="timetable-wrapper" id="timetable-grid">
-        <div class="time-column">
-           <div class="time-slot-label">08:00</div>
-           <div class="time-slot-label">09:00</div>
-           <div class="time-slot-label">10:00</div>
-           <div class="time-slot-label">11:00</div>
-           <div class="time-slot-label">12:00</div>
-           <div class="time-slot-label">13:00</div>
-           <div class="time-slot-label">14:00</div>
-           <div class="time-slot-label">15:00</div>
-           <div class="time-slot-label">16:00</div>
-           <div class="time-slot-label">17:00</div>
+      <div class="card" data-aos="fade-up">
+        <!-- Week Navigation & View Toggle -->
+        <div class="week-nav-container">
+          <div class="week-tabs" id="week-tabs-container">
+            <!-- Tabs injected by JS -->
+          </div>
+          <div class="view-toggle">
+            <button class="view-btn active" id="view-grid-btn" onclick="switchView('grid')"><i class="ri-calendar-view"></i> Grid</button>
+            <button class="view-btn" id="view-row-btn" onclick="switchView('row')"><i class="ri-list-check"></i> Record of Work</button>
+          </div>
         </div>
-        <div class="day-column" id="day-mon"><div class="day-header">MON</div></div>
-        <div class="day-column" id="day-tue"><div class="day-header">TUE</div></div>
-        <div class="day-column" id="day-wed"><div class="day-header">WED</div></div>
-        <div class="day-column" id="day-thu"><div class="day-header">THU</div></div>
-        <div class="day-column" id="day-fri"><div class="day-header">FRI</div></div>
+
+        <!-- VIEW: Weekly Grid -->
+        <div class="timetable-view" id="grid-view">
+            <div class="timetable-wrapper" id="timetable-grid">
+              <div class="time-column">
+                 <div class="time-slot-label">08:00</div>
+                 <div class="time-slot-label">09:00</div>
+                 <div class="time-slot-label">10:00</div>
+                 <div class="time-slot-label">11:00</div>
+                 <div class="time-slot-label">12:00</div>
+                 <div class="time-slot-label">13:00</div>
+                 <div class="time-slot-label">14:00</div>
+                 <div class="time-slot-label">15:00</div>
+                 <div class="time-slot-label">16:00</div>
+                 <div class="time-slot-label">17:00</div>
+              </div>
+              <div class="day-column" id="day-mon"><div class="day-header">MON</div></div>
+              <div class="day-column" id="day-tue"><div class="day-header">TUE</div></div>
+              <div class="day-column" id="day-wed"><div class="day-header">WED</div></div>
+              <div class="day-column" id="day-thu"><div class="day-header">THU</div></div>
+              <div class="day-column" id="day-fri"><div class="day-header">FRI</div></div>
+            </div>
+        </div>
+
+        <!-- VIEW: Record of Work (Table) -->
+        <div class="row-view" id="row-view">
+            <div style="overflow-x: auto;">
+                <table class="row-table" id="record-of-work-table">
+                    <thead>
+                        <tr>
+                            <th>Week</th>
+                            <th>Day</th>
+                            <th>Time</th>
+                            <th>Unit / Module</th>
+                            <th>Topic</th>
+                            <th>Class</th>
+                            <th class="admin-only" style="display:none">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
       </div>
     </section>
 
@@ -568,13 +680,20 @@
     </div>
   </div>
 
-  <!-- 2. ADD NEW LESSON -->
+  <!-- 2. ADD NEW LESSON (Updated with Week) -->
   <div class="modal-overlay" id="timetableModal" aria-hidden="true">
     <div class="modal-content">
       <button class="close-btn" onclick="closeTimetableModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Schedule Lesson</h3>
       <form id="timetableForm">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <!-- NEW: Week Selector -->
+          <div class="form-group">
+            <label for="tt-week">Week Number</label>
+            <select id="tt-week" class="form-select" required>
+                <!-- Populated via JS -->
+            </select>
+          </div>
           <div class="form-group"><label for="tt-day">Day</label><select id="tt-day" class="form-select" required><option value="mon">Monday</option><option value="tue">Tuesday</option><option value="wed">Wednesday</option><option value="thu">Thursday</option><option value="fri">Friday</option></select></div>
           <div class="form-group"><label for="tt-time">Start Time</label><input type="time" id="tt-time" class="form-input" required></div>
           <div class="form-group"><label for="tt-end">End Time</label><input type="time" id="tt-end" class="form-input" required></div>
@@ -741,11 +860,55 @@
     });
     checkAdminStatus();
 
-    // --- TIMETABLE ---
+    // --- TIMETABLE & RECORD OF WORK ---
     let timetable = JSON.parse(localStorage.getItem('timetable')) || [];
+    let currentWeek = 1; // Default to Week 1
+
     function saveTimetable() { localStorage.setItem('timetable', JSON.stringify(timetable)); }
 
-    function renderTimetable() {
+    // Helper to get unique weeks sorted
+    function getWeeks() {
+        const weeks = timetable.map(l => parseInt(l.week));
+        // Ensure at least 1 exists
+        if(weeks.length === 0) return [1];
+        return [...new Set(weeks)].sort((a,b) => a - b);
+    }
+
+    // Render Week Tabs
+    function renderWeekTabs() {
+        const container = document.getElementById('week-tabs-container');
+        const weeks = getWeeks();
+        
+        // If the current selected week isn't in the list (e.g. deleted), reset to first
+        if(!weeks.includes(currentWeek)) currentWeek = weeks[0];
+
+        container.innerHTML = '';
+        weeks.forEach(w => {
+            const btn = document.createElement('button');
+            btn.className = `week-tab ${w === currentWeek ? 'active' : ''}`;
+            btn.textContent = `Week ${w}`;
+            btn.onclick = () => {
+                currentWeek = w;
+                renderWeekTabs();
+                renderTimetableGrid();
+            };
+            container.appendChild(btn);
+        });
+
+        // Populate Modal Week Selector as well
+        const modalSelect = document.getElementById('tt-week');
+        modalSelect.innerHTML = '';
+        for(let i=1; i<=16; i++) { // Support up to 16 weeks
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.text = `Week ${i}`;
+            if(i === currentWeek) opt.selected = true;
+            modalSelect.appendChild(opt);
+        }
+    }
+
+    // Render Visual Grid
+    function renderTimetableGrid() {
       const days = ['mon', 'tue', 'wed', 'thu', 'fri'];
       days.forEach(day => {
         const container = document.getElementById(`day-${day}`);
@@ -754,23 +917,27 @@
         if(header) container.appendChild(header);
       });
 
-      if(timetable.length === 0) {
+      const weekLessons = timetable.filter(l => parseInt(l.week) === currentWeek);
+
+      if(weekLessons.length === 0) {
         const mon = document.getElementById('day-mon');
-        mon.innerHTML = `<div class="day-header">MON</div><div class="timetable-empty">No lessons scheduled.</div>`;
+        mon.innerHTML = `<div class="day-header">MON</div><div class="timetable-empty">No lessons for Week ${currentWeek}.</div>`;
         return;
       }
 
       const isAdmin = document.body.classList.contains('is-admin');
       const dayOrder = { 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5 };
-      timetable.sort((a, b) => (dayOrder[a.day] || 99) - (dayOrder[b.day] || 99));
+      
+      // Sort by time for grid
+      weekLessons.sort((a, b) => a.startTime.localeCompare(b.startTime));
 
-      timetable.forEach((lesson) => {
+      weekLessons.forEach((lesson) => {
         const container = document.getElementById(`day-${lesson.day}`);
         if(!container.querySelector('.day-header')) {
              container.innerHTML = `<div class="day-header">${lesson.day.toUpperCase()}</div>`;
         }
         const deleteBtn = isAdmin ? `<button class="delete-session-btn admin-only" onclick="deleteLesson('${lesson.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
-        const enrollmentBadge = lesson.enrollment ? `<span class="class-tag"><i class="ri-user-follow-line"></i> ${lesson.enrollment} Trainees</span>` : '';
+        const enrollmentBadge = lesson.enrollment ? `<span class="class-tag"><i class="ri-user-follow-line"></i> ${lesson.enrollment}</span>` : '';
 
         const html = `
           <div class="session-card" data-aos="fade-up">
@@ -783,16 +950,80 @@
       });
     }
 
+    // Render Record of Work (Table)
+    function renderRecordOfWork() {
+        const tbody = document.querySelector('#record-of-work-table tbody');
+        tbody.innerHTML = '';
+
+        if(timetable.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem;">No records available.</td></tr>';
+            return;
+        }
+
+        const isAdmin = document.body.classList.contains('is-admin');
+
+        // Sort: Week -> Day -> Time
+        const dayOrder = { 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5 };
+        const sorted = [...timetable].sort((a,b) => {
+            if(parseInt(a.week) !== parseInt(b.week)) return parseInt(a.week) - parseInt(b.week);
+            if(dayOrder[a.day] !== dayOrder[b.day]) return dayOrder[a.day] - dayOrder[b.day];
+            return a.startTime.localeCompare(b.startTime);
+        });
+
+        sorted.forEach(lesson => {
+            const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteLesson('${lesson.id}')" style="padding:0.2rem 0.5rem;"><i class="ri-delete-bin-line"></i></button>` : '';
+            const row = `
+                <tr>
+                    <td class="row-week-col">Week ${lesson.week}</td>
+                    <td style="text-transform: capitalize;">${lesson.day}</td>
+                    <td>${lesson.startTime} - ${lesson.endTime}</td>
+                    <td>${lesson.subject}</td>
+                    <td>${lesson.topic}</td>
+                    <td>${lesson.classGroup} ${lesson.enrollment ? `(${lesson.enrollment})` : ''}</td>
+                    <td class="admin-only" style="display:none">${deleteBtn}</td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', row);
+        });
+    }
+
+    function switchView(view) {
+        const gridBtn = document.getElementById('view-grid-btn');
+        const rowBtn = document.getElementById('view-row-btn');
+        const gridView = document.getElementById('grid-view');
+        const rowView = document.getElementById('row-view');
+
+        if(view === 'grid') {
+            gridBtn.classList.add('active');
+            rowBtn.classList.remove('active');
+            gridView.style.display = 'block';
+            rowView.classList.remove('active');
+        } else {
+            gridBtn.classList.remove('active');
+            rowBtn.classList.add('active');
+            gridView.style.display = 'none';
+            rowView.classList.add('active');
+            renderRecordOfWork(); // Refresh table
+        }
+    }
+
     const timetableModal = document.getElementById('timetableModal');
     const timetableForm = document.getElementById('timetableForm');
 
-    function openTimetableModal() { timetableModal.classList.add('active'); }
+    function openTimetableModal() { 
+        // Ensure weeks are generated
+        renderWeekTabs();
+        // Set select value to current viewing week
+        document.getElementById('tt-week').value = currentWeek;
+        timetableModal.classList.add('active'); 
+    }
     function closeTimetableModal() { timetableModal.classList.remove('active'); timetableForm.reset(); }
 
     timetableForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const newLesson = {
         id: Date.now().toString(),
+        week: parseInt(document.getElementById('tt-week').value),
         day: document.getElementById('tt-day').value,
         startTime: document.getElementById('tt-time').value,
         endTime: document.getElementById('tt-end').value,
@@ -801,9 +1032,15 @@
         classGroup: document.getElementById('tt-class').value,
         enrollment: document.getElementById('tt-enrollment').value
       };
-      timetable.unshift(newLesson);
+      timetable.push(newLesson); // Use push to append, or unshift to prepend
       saveTimetable();
-      renderTimetable();
+      
+      // Switch to the new week
+      currentWeek = newLesson.week;
+      
+      renderWeekTabs();
+      renderTimetableGrid();
+      renderRecordOfWork();
       closeTimetableModal();
       showToast('Lesson scheduled successfully!');
     });
@@ -812,7 +1049,9 @@
       if(confirm('Remove this lesson?')) {
         timetable = timetable.filter(item => item.id !== id);
         saveTimetable();
-        renderTimetable();
+        renderWeekTabs();
+        renderTimetableGrid();
+        renderRecordOfWork();
       }
     }
 
@@ -897,7 +1136,7 @@
       }
     }
 
-    // --- ASSESSMENT INSTRUMENTS (New) ---
+    // --- ASSESSMENT INSTRUMENTS ---
     let assessments = JSON.parse(localStorage.getItem('assessments')) || [];
     function saveAssessments() { localStorage.setItem('assessments', JSON.stringify(assessments)); }
 
@@ -940,7 +1179,6 @@
     function openAddAssessmentModal() { assessmentModal.classList.add('active'); }
     function closeAddAssessmentModal() { assessmentModal.classList.remove('active'); assessmentForm.reset(); }
 
-    // Init File Listener for Assessment
     const assFileInput = document.getElementById('ass-file-input');
     assFileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -1154,8 +1392,10 @@
     function renderAll() {
       renderLog();
       renderArtifacts();
-      renderTimetable();
+      renderWeekTabs();
+      renderTimetableGrid();
       renderAssessments();
+      renderRecordOfWork();
     }
     renderAll();
 

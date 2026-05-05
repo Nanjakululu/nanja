@@ -112,10 +112,10 @@
       display: flex; align-items: center; justify-content: space-between;
     }
 
-    .logo { font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+    .logo { font-size: 1.5rem; font-weight:  700; display: flex; align-items: center; gap: 5px; }
     
     .nav-links { display: flex; gap: 2.5rem; }
-    .nav-links a { font-weight: 500; color: var(--text-muted); font-size: 0.95rem; position: relative; }
+    .nav-links a { font-weight:  500; color: var(--text-muted); font-size: 0.95rem; position: relative; }
     .nav-links a:hover, .nav-links a.active { color: var(--primary); }
     .nav-links a.active::after {
       content: ''; position: absolute; bottom: -24px; left: 0;
@@ -236,7 +236,7 @@
       margin-bottom: 0.5rem;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 0.5rem;
     }
 
     .session-title {
@@ -314,7 +314,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* Empty State Styling */
     .empty-state {
       text-align: center;
       padding: 4rem 2rem;
@@ -389,7 +388,7 @@
       height: 200px; width: 100%; background-color: var(--bg-body);
       position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
     }
-    .artifact-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .artifact-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform: 0.6s ease; }
     .artifact-card:hover .artifact-thumb img { transform: scale(1.08); }
     
     .artifact-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
@@ -515,7 +514,7 @@
         margin-bottom: 1.5rem;
         font-size: 0.9rem;
         color: var(--text-main);
-        border-radius: 0 8px 8px 0;
+        border-radius: 0.8px 8px 0;
     }
 
     /* Toast Notifications */
@@ -781,29 +780,28 @@
           <div class="form-group">
             <label for="tt-day">Day</label>
             <select id="tt-day" class="form-select" required>
-              <option value="Mon">Monday</option>
-              <option value="Tue">Tuesday</option>
-              <option value="Wed">Wednesday</option>
-              <option value="Thu">Thursday</option>
-              <option value="Fri">Friday</option>
+              <!-- VALUES MUST MATCH THE IDs IN THE HTML GRID (day-mon, day-tue...) -->
+              <option value="mon">Monday</option>
+              <option value="tue">Tuesday</option>
+              <option value="wed">Wednesday</option>
+              <option value="thu">Thursday</option>
+              <option value="fri">Friday</option>
             </select>
           </div>
           <div class="form-group">
             <label for="tt-time">Start Time</label>
             <input type="time" id="tt-time" class="form-input" required>
           </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div class="form-group">
             <label for="tt-end">End Time</label>
             <input type="time" id="tt-end" class="form-input" required>
           </div>
-          <div class="form-group">
-            <label for="tt-class">Class / Group</label>
+        </div>
+
+        <div class="form-group">
+          <label for="tt-class">Class / Group</label>
             <input type="text" id="tt-class" class="form-input" placeholder="e.g. 3B" required>
           </div>
-        </div>
 
         <div class="form-group">
           <label for="tt-subject">Subject / Module</label>
@@ -882,7 +880,7 @@
 
         <div class="form-group">
           <label for="art-desc">Description</label>
-          <textarea id="art-desc" class="form-textarea" rows="3" placeholder="Brief description of the project..." required></textarea>
+          <textarea id="art-desc" class="form-textarea" rows="3" placeholder="Brief description of project..." required></textarea>
         </div>
 
         <!-- RESOURCE UPLOAD -->
@@ -1012,7 +1010,7 @@
     checkAdminStatus();
 
     /* -------------------------------------------------------------------
-       3. TIMETABLE SYSTEM (NEW)
+       3. TIMETABLE SYSTEM (FIXED)
     ------------------------------------------------------------------- */
     let timetable = JSON.parse(localStorage.getItem('timetable')) || [];
 
@@ -1021,10 +1019,11 @@
     }
 
     function renderTimetable() {
-      // Clear columns
+      // 1. Clear all columns first (to prevent duplicates or artifacts)
       const days = ['mon', 'tue', 'wed', 'thu', 'fri'];
       days.forEach(day => {
         const container = document.getElementById(`day-${day}`);
+        
         // Keep header, remove cards
         const header = container.querySelector('.day-header');
         container.innerHTML = '';
@@ -1032,7 +1031,7 @@
       });
 
       if(timetable.length === 0) {
-        // Show empty state in Monday
+        // If no lessons, show empty state in Monday column
         const mon = document.getElementById('day-mon');
         mon.innerHTML = `<div class="day-header">MON</div><div class="timetable-empty">No lessons scheduled.</div>`;
         return;
@@ -1040,9 +1039,29 @@
 
       const isAdmin = document.body.classList.contains('is-admin');
 
+      // 2. Sort by Day Order (Mon, Tue, Wed, Thu, Fri)
+      const dayOrder = { 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5 };
+      timetable.sort((a, b) => {
+        return (dayOrder[a.day] || 99) - (dayOrder[b.day] || 99);
+      });
+
+      // 3. Render Lessons
       timetable.forEach((lesson) => {
-        const container = document.getElementById(`day-${lesson.day}`);
-        if(!container) return; // Safety check
+        // The 'day' value from the form is 'mon', 'tue' etc.
+        // This must match the ID pattern 'day-mon', 'day-tue' using lowercase logic
+        const targetId = `day-${lesson.day}`;
+        const container = document.getElementById(targetId);
+
+        if(!container) {
+            console.warn(`Container ${targetId} not found for lesson:`, lesson);
+            return; 
+        }
+
+        // If container is empty (header missing), add it back
+        if(!container.querySelector('.day-header')) {
+             const dayName = lesson.day.charAt(0).toUpperCase() + lesson.day.slice(1);
+             container.innerHTML = `<div class="day-header">${dayName}</div>`;
+        }
 
         const deleteBtn = isAdmin ? `<button class="delete-session-btn admin-only" onclick="deleteLesson('${lesson.id}')" title="Delete"><i class="ri-delete-bin-line"></i></button>` : '';
 
@@ -1078,7 +1097,7 @@
       
       const newLesson = {
         id: Date.now().toString(),
-        day: document.getElementById('tt-day').value,
+        day: document.getElementById('tt-day').value, // 'mon', 'tue', etc.
         startTime: document.getElementById('tt-time').value,
         endTime: document.getElementById('tt-end').value,
         subject: document.getElementById('tt-subject').value,
@@ -1121,7 +1140,7 @@
           <div class="empty-state">
             <i class="ri-clipboard-line"></i>
             <h3>No Teaching Activities Yet</h3>
-            <p>Your daily log is currently empty. Click "Add New Activity" button above.</p>
+            <p>Your daily log is currently empty. Click the "Add New Activity" button above.</p>
           </div>
         `;
         return;
@@ -1326,7 +1345,7 @@
       const thumbInput = document.getElementById('art-thumb-input');
       const linkInput = document.getElementById('art-link-input');
 
-      // Use Blob URL for immediate preview if file was selected, otherwise use the text path
+      // Use Blob URL for immediate preview if file was selected, otherwise use text path
       const thumbUrl = thumbInput.dataset.blobUrl || document.getElementById('art-thumb').value;
       const linkUrl = linkInput.dataset.blobUrl || document.getElementById('art-link').value;
 
@@ -1334,7 +1353,7 @@
       if(thumbInput.files.length > 0 || linkInput.files.length > 0) {
         showToast('File selected! Move files to "assets" folder.', 'success');
         setTimeout(() => {
-            alert("IMPORTANT:\n\nTo make this file visible to your supervisor, you MUST drag the file(s) you selected into your project's 'assets' folder in your code editor.");
+            alert("IMPORTANT:\n\nTo make this file visible to your supervisor, you MUST drag& file(s) you selected into your project's 'assets' folder in your code editor.");
         }, 1000);
       }
 

@@ -198,6 +198,7 @@
       background: var(--bg-body);
       border-radius: 20px;
       color: var(--text-muted);
+      grid-column: 1 / -1; /* Span full width in grid */
     }
     .empty-state i { font-size: 3rem; display: block; margin-bottom: 1rem; opacity: 0.5; }
     .empty-state h3 { font-family: 'Inter', sans-serif; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
@@ -259,7 +260,7 @@
       display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;
     }
     
-    .artifact-card { padding: 0; height: 100%; display: flex; flex-direction: column; }
+    .artifact-card { padding: 0; height: 100%; display: flex; flex-direction: column; position: relative; }
     .artifact-thumb {
       height: 200px; width: 100%; background-color: var(--bg-body);
       position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
@@ -270,6 +271,26 @@
     .artifact-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
     .artifact-content h3 { font-size: 1.3rem; margin-bottom: 0.5rem; font-family: 'Inter', sans-serif; font-weight: 700; }
     .artifact-content p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem; flex-grow: 1; }
+
+    /* Delete button specifically for artifact cards */
+    .artifact-delete-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #ef4444;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        display: flex; 
+        align-items: center; justify-content: center;
+        z-index: 10;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .artifact-delete-btn:hover {
+        background: #ef4444;
+        color: white;
+    }
     
     /* --- FAB & MODALS --- */
     .supervisor-fab {
@@ -313,7 +334,7 @@
     .viewer-container iframe { width: 100%; height: 100%; border: none; }
     .viewer-container video { width: 100%; height: 100%; outline: none; }
 
-    /* Form Styles (Add Activity) */
+    /* Form Styles */
     .form-group { margin-bottom: 1.2rem; }
     .form-group label { display: block; margin-bottom: 0.6rem; font-size: 0.9rem; font-weight: 600; color: var(--text-main); }
     .form-input, .form-select, .form-textarea {
@@ -329,19 +350,6 @@
       transition: var(--transition);
     }
     .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
-
-    /* File Upload Styles */
-    .upload-area {
-      border: 2px dashed var(--border-color); border-radius: 16px; padding: 3rem 1rem;
-      text-align: center; cursor: pointer; transition: var(--transition);
-      background: var(--bg-body); margin-bottom: 1.5rem; position: relative;
-    }
-    .upload-area:hover, .upload-area.dragover { border-color: var(--primary); background: var(--primary-light); }
-    .upload-area i { font-size: 2.5rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem; }
-    .upload-area p { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem; }
-    .upload-area input[type="file"] {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;
-    }
 
     /* Toast Notifications */
     .toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 3000; display: flex; flex-direction: column; gap: 10px; }
@@ -374,7 +382,6 @@
     .admin-only { 
       display: none !important; 
     }
-    /* Only show admin elements when body has this class */
     body.is-admin .admin-only { 
       display: flex !important; 
     }
@@ -427,7 +434,7 @@
       <div class="section-header" data-aos="fade-up">
         <h2 id="daily-log-heading">Daily Teaching Log</h2>
         <p>Chronological record of instructional delivery and curriculum coverage.</p>
-        <!-- ADD BUTTON (Hidden by default via .admin-only) -->
+        <!-- ADD BUTTON -->
         <button class="btn-add admin-only" onclick="openAddActivityModal()">
           <i class="ri-add-line"></i> Add New Activity
         </button>
@@ -470,6 +477,10 @@
         <div class="section-header" data-aos="fade-up">
           <h2 id="artifacts-heading">Major Artifacts & Innovations</h2>
           <p>Digital tools, lesson designs, and assessment mechanisms developed during practice.</p>
+          <!-- ADD ARTIFACT BUTTON (Admin Only) -->
+          <button class="btn-add admin-only" onclick="openAddArtifactModal()">
+            <i class="ri-add-line"></i> Add Artifact
+          </button>
         </div>
 
         <!-- Filters -->
@@ -480,45 +491,9 @@
           <button class="filter-btn" data-filter="assessment" role="tab" aria-selected="false">Assessment</button>
         </div>
 
-        <!-- Grid -->
-        <div id="projects-render" class="project-grid" role="tabpanel">
-           
-           <!-- Item 1: Lesson -->
-           <div class="card artifact-card" data-category="lesson" data-aos="zoom-in">
-              <div class="artifact-thumb">
-                 <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Curriculum">
-              </div>
-              <div class="artifact-content">
-                 <h3>Full Stack Curriculum</h3>
-                 <p>A comprehensive 12-week roadmap for MERN stack development tailored for vocational students.</p>
-                 <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center" onclick="openSmartViewer('assets/full-stack-curriculum.pdf', 'Curriculum Map', 'pdf')">View Syllabus</button>
-              </div>
-           </div>
-
-           <!-- Item 2: Media -->
-           <div class="card artifact-card" data-category="media" data-aos="zoom-in" data-aos-delay="100">
-              <div class="artifact-thumb">
-                 <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Video">
-              </div>
-              <div class="artifact-content">
-                 <h3>Recorded Lecture: Data Structures</h3>
-                 <p>Screen recording and audio explanation of Binary Search Trees implementation.</p>
-                 <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center" onclick="openSmartViewer('assets/data-structures-lecture.mp4', 'Video Lecture', 'video')"><i class="ri-play-circle-line"></i> Watch Video</button>
-              </div>
-           </div>
-
-           <!-- Item 3: Assessment -->
-           <div class="card artifact-card" data-category="assessment" data-aos="zoom-in" data-aos-delay="200">
-              <div class="artifact-thumb">
-                 <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Quiz">
-              </div>
-              <div class="artifact-content">
-                 <h3>Automated Grading Script</h3>
-                 <p>Python script to automatically grade student SQL assignments against a test database.</p>
-                 <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center" onclick="openSmartViewer('https://github.com', 'GitHub Repo', 'external')"><i class="ri-github-line"></i> View Code</button>
-              </div>
-           </div>
-
+        <!-- Grid (Dynamic Container) -->
+        <div id="artifacts-render" class="project-grid" role="tabpanel">
+           <!-- Dynamic Content Rendered by JS -->
         </div>
     </section>
   </main>
@@ -529,7 +504,7 @@
     <span class="fab-text">Supervisor</span>
   </a>
 
-  <!-- MODAL 1: ADD NEW ACTIVITY (New) -->
+  <!-- MODAL 1: ADD NEW ACTIVITY -->
   <div class="modal-overlay" id="addActivityModal" aria-hidden="true">
     <div class="modal-content">
       <button class="close-btn" onclick="closeAddActivityModal()">&times;</button>
@@ -569,7 +544,62 @@
     </div>
   </div>
 
-  <!-- 2. Smart Viewer Modal -->
+  <!-- MODAL 2: ADD NEW ARTIFACT -->
+  <div class="modal-overlay" id="addArtifactModal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeAddArtifactModal()">&times;</button>
+      <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add New Artifact</h3>
+      
+      <form id="artifactForm">
+        <div class="form-group">
+          <label for="art-title">Artifact Title</label>
+          <input type="text" id="art-title" class="form-input" placeholder="e.g. Full Stack Curriculum" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label for="art-category">Category</label>
+            <select id="art-category" class="form-select" required>
+              <option value="lesson">Lesson Design</option>
+              <option value="media">Instructional Media</option>
+              <option value="assessment">Assessment</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="art-link-type">Link Type</label>
+            <select id="art-link-type" class="form-select" required>
+              <option value="pdf">PDF Document</option>
+              <option value="video">Video File</option>
+              <option value="image">Image Gallery</option>
+              <option value="external">External Website</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="art-thumb">Thumbnail Image URL</label>
+          <input type="text" id="art-thumb" class="form-input" placeholder="https://source.unsplash.com/..." required>
+          <small style="color: var(--text-muted); font-size: 0.8rem;">Recommended: Use Unsplash or your own hosted image URL.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="art-desc">Description</label>
+          <textarea id="art-desc" class="form-textarea" rows="3" placeholder="Brief description of the project..." required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="art-link">Resource Link (URL)</label>
+            <input type="text" id="art-link" class="form-input" placeholder="Link to the PDF, Video, or Repo" required>
+        </div>
+
+        <button type="submit" class="btn-primary">
+          <i class="ri-save-line"></i> Save Artifact
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Smart Viewer -->
   <div class="modal-overlay" id="smartViewerModal" aria-hidden="true" role="dialog">
     <div class="modal-content">
       <button class="close-btn" onclick="closeSmartViewer()" aria-label="Close modal">&times;</button>
@@ -585,7 +615,7 @@
     </div>
   </div>
 
-  <!-- 3. Supervisor Feedback Modal -->
+  <!-- MODAL 4: Supervisor Feedback -->
   <div class="modal-overlay" id="feedbackModal" aria-hidden="true" role="dialog">
     <div class="modal-content">
       <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
@@ -656,64 +686,55 @@
       }
     }
 
-    // Handle the Admin Link Click in Footer
     document.getElementById('admin-trigger').addEventListener('click', function(e) {
       e.preventDefault();
       const pass = prompt("Enter Admin Password:");
       
-      // CHANGE PASSWORD HERE
       if(pass === "admin123") {
         localStorage.setItem('isAdmin', 'true');
         document.body.classList.add('is-admin');
         showToast('Admin Mode Activated');
-        renderLog(); // Re-render to show delete buttons if they exist
+        renderLog();
+        renderArtifacts();
       } else {
         showToast('Incorrect Password', 'error');
       }
     });
 
-    // Check on page load
     checkAdminStatus();
 
     /* -------------------------------------------------------------------
        3. DYNAMIC TEACHING LOG SYSTEM
     ------------------------------------------------------------------- */
     
-    // Initialize empty array if storage is empty
     let teachingLog = JSON.parse(localStorage.getItem('teachingLog')) || [];
 
     function saveTeachingLog() {
       localStorage.setItem('teachingLog', JSON.stringify(teachingLog));
     }
 
-    // Render Function
     function renderLog() {
       const container = document.getElementById('log-container');
       container.innerHTML = '';
 
-      // CHECK FOR EMPTY STATE
       if (teachingLog.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
             <i class="ri-clipboard-line"></i>
             <h3>No Teaching Activities Yet</h3>
-            <p>Your daily log is currently empty. Click the "Add New Activity" button above to document your first session.</p>
+            <p>Your daily log is currently empty. Click the "Add New Activity" button above.</p>
           </div>
         `;
         return;
       }
 
-      // Check if we are in admin mode for rendering delete buttons
       const isAdmin = document.body.classList.contains('is-admin');
 
-      // If not empty, render items
-      teachingLog.forEach((item, index) => {
-        // Generate Tags HTML (Only show remove tag button if admin)
+      teachingLog.forEach((item) => {
         const tagsHtml = item.tags.map(tag => 
           `<span class="tag">${tag} ${isAdmin ? `<button onclick="removeTag('${item.id}', '${tag}')" title="Remove tag">&times;</button>` : ''}</span>`
         ).join('');
 
-        // Generate Links HTML
         const linksHtml = item.links.map(link => {
           let icon = '';
           if(link.type === 'pdf') icon = 'ri-file-pdf-line';
@@ -724,16 +745,14 @@
           </button>`;
         }).join('');
 
-        // Delete button HTML string (conditional)
-        const deleteButtonHtml = isAdmin ? 
-          `<button class="delete-btn admin-only" onclick="deleteActivity('${item.id}')" title="Delete Activity"><i class="ri-delete-bin-line"></i></button>` : '';
+        const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteActivity('${item.id}')" title="Delete Activity"><i class="ri-delete-bin-line"></i></button>` : '';
 
         const html = `
           <article class="card activity-card" data-aos="fade-up">
             <div class="card-header">
               <span class="day-badge">${item.dayLabel}</span>
               <span class="text-muted">${item.time}</span>
-              ${deleteButtonHtml}
+              ${deleteBtn}
             </div>
             <h3>${item.title}</h3>
             <p class="text-muted">${item.description}</p>
@@ -745,22 +764,15 @@
       });
     }
 
-    // Add New Activity Logic
+    // --- Activity Modal Logic ---
     const addActivityModal = document.getElementById('addActivityModal');
     const activityForm = document.getElementById('activityForm');
 
-    function openAddActivityModal() {
-      addActivityModal.classList.add('active');
-    }
-
-    function closeAddActivityModal() {
-      addActivityModal.classList.remove('active');
-      activityForm.reset();
-    }
+    function openAddActivityModal() { addActivityModal.classList.add('active'); }
+    function closeAddActivityModal() { addActivityModal.classList.remove('active'); activityForm.reset(); }
 
     activityForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      
       const dayNum = teachingLog.length + 1;
       
       const newActivity = {
@@ -778,7 +790,6 @@
         let type = 'external';
         if(newActivity.fileLink.toLowerCase().includes('.pdf')) type = 'pdf';
         else if(newActivity.fileLink.match(/\.(jpeg|jpg|png|webp)$/)) type = 'image';
-        
         newActivity.links.push({ label: 'Resource', src: newActivity.fileLink, type: type });
       }
 
@@ -786,7 +797,6 @@
       saveTeachingLog();
       renderLog();
       closeAddActivityModal();
-      
       showToast('Activity added successfully!');
     });
 
@@ -808,10 +818,124 @@
     }
 
     /* -------------------------------------------------------------------
-       4. ARTIFACT FILTERING & RENDERING
-       ------------------------------------------------------------------- */
+       4. DYNAMIC ARTIFACTS SYSTEM
+    ------------------------------------------------------------------- */
+
+    let artifacts = JSON.parse(localStorage.getItem('artifacts')) || [];
+
+    function saveArtifacts() {
+      localStorage.setItem('artifacts', JSON.stringify(artifacts));
+    }
+
+    function renderArtifacts() {
+      const container = document.getElementById('artifacts-render');
+      container.innerHTML = '';
+
+      if (artifacts.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="ri-folder-open-line"></i>
+            <h3>No Artifacts Yet</h3>
+            <p>Upload your projects and innovations to showcase your work.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const isAdmin = document.body.classList.contains('is-admin');
+
+      artifacts.forEach((item) => {
+        // Determine Button Icon based on type
+        let btnIcon = '';
+        let btnText = 'View Artifact';
+        if(item.linkType === 'pdf') { btnIcon = 'ri-file-pdf-line'; btnText = 'View PDF'; }
+        if(item.linkType === 'video') { btnIcon = 'ri-play-circle-line'; btnText = 'Watch Video'; }
+        if(item.linkType === 'image') { btnIcon = 'ri-image-line'; btnText = 'View Gallery'; }
+        if(item.linkType === 'external') { btnIcon = 'ri-external-link-line'; btnText = 'Visit Link'; }
+
+        const deleteBtn = isAdmin ? 
+          `<button class="artifact-delete-btn admin-only" onclick="deleteArtifact('${item.id}')" title="Delete Artifact"><i class="ri-delete-bin-line"></i></button>` : '';
+
+        const html = `
+          <div class="card artifact-card" data-category="${item.category}" data-aos="zoom-in">
+            ${deleteBtn}
+            <div class="artifact-thumb">
+               <img src="${item.thumb}" alt="${item.title}">
+            </div>
+            <div class="artifact-content">
+               <h3>${item.title}</h3>
+               <p>${item.description}</p>
+               <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center" onclick="openSmartViewer('${item.link}', '${item.title}', '${item.linkType}')">
+                 <i class="${btnIcon}"></i> ${btnText}
+               </button>
+            </div>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+      });
+      
+      // Re-apply filters
+      applyFilters();
+    }
+
+    // --- Artifact Modal Logic ---
+    const addArtifactModal = document.getElementById('addArtifactModal');
+    const artifactForm = document.getElementById('artifactForm');
+
+    function openAddArtifactModal() { addArtifactModal.classList.add('active'); }
+    function closeAddArtifactModal() { addArtifactModal.classList.remove('active'); artifactForm.reset(); }
+
+    artifactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const newArtifact = {
+        id: Date.now().toString(),
+        title: document.getElementById('art-title').value,
+        category: document.getElementById('art-category').value,
+        linkType: document.getElementById('art-link-type').value,
+        thumb: document.getElementById('art-thumb').value,
+        description: document.getElementById('art-desc').value,
+        link: document.getElementById('art-link').value
+      };
+
+      artifacts.unshift(newArtifact);
+      saveArtifacts();
+      renderArtifacts();
+      closeAddArtifactModal();
+      showToast('Artifact added successfully!');
+    });
+
+    function deleteArtifact(id) {
+      if(confirm('Delete this artifact?')) {
+        artifacts = artifacts.filter(item => item.id !== id);
+        saveArtifacts();
+        renderArtifacts();
+      }
+    }
+
+    /* -------------------------------------------------------------------
+       5. ARTIFACT FILTERING
+    ------------------------------------------------------------------- */
     const filterBtns = document.querySelectorAll('.filter-btn');
-    const artifacts = document.querySelectorAll('.artifact-card');
+
+    function applyFilters() {
+        const activeBtn = document.querySelector('.filter-btn.active');
+        if(!activeBtn) return;
+        
+        const filter = activeBtn.getAttribute('data-filter');
+        // Re-select cards to include dynamically added ones
+        const cards = document.querySelectorAll('.artifact-card');
+        
+        cards.forEach(card => {
+          if(filter === 'all' || card.getAttribute('data-category') === filter) {
+            card.style.display = 'flex';
+            setTimeout(() => card.style.opacity = '1', 50);
+          } else {
+            card.style.display = 'none';
+            card.style.opacity = '0';
+          }
+        });
+    }
 
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -822,21 +946,12 @@
         btn.classList.add('active');
         btn.setAttribute('aria-selected', 'true');
 
-        const filter = btn.getAttribute('data-filter');
-        artifacts.forEach(card => {
-          if(filter === 'all' || card.getAttribute('data-category') === filter) {
-            card.style.display = 'flex';
-            setTimeout(() => card.style.opacity = '1', 50);
-          } else {
-            card.style.display = 'none';
-            card.style.opacity = '0';
-          }
-        });
+        applyFilters();
       });
     });
 
     /* -------------------------------------------------------------------
-       5. SMART VIEWER & MODAL LOGIC
+       6. SMART VIEWER & MODAL LOGIC
        ------------------------------------------------------------------- */
     const viewerModal = document.getElementById('smartViewerModal');
     const viewerTitle = document.getElementById('viewer-title');
@@ -854,7 +969,7 @@
         viewerContainer.innerHTML = `
           <video controls autoplay>
             <source src="${src}" type="video/mp4">
-            Your browser does not support video tag.
+            Your browser does not support the video tag.
           </video>`;
       } else {
         viewerContainer.innerHTML = `<p style="color:var(--text-muted)">This content is hosted externally. <a href="${src}" target="_blank" style="color:var(--primary)">Click here to open it in a new tab.</a></p>`;
@@ -900,10 +1015,12 @@
       if (event.target == viewerModal) closeSmartViewer();
       if (event.target == feedbackModal) closeModal();
       if (event.target == addActivityModal) closeAddActivityModal();
+      if (event.target == addArtifactModal) closeAddArtifactModal();
     }
 
-    // Initialize Log on Load
+    // Initialize on Load
     renderLog();
+    renderArtifacts();
 
   </script>
 </body>

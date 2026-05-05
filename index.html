@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- SEO & Meta Tags -->
-  <title>Alex Nanjakululu | Technical Educator & Innovator</title>
-  <meta name="description" content="Professional portfolio of Alex Nanjakululu. Expert in Technical Education, Curriculum Innovation, and EdTech solutions.">
+  <title>Student e-Portfolio | Alex Nanjakululu</title>
+  <meta name="description" content="Student e-Portfolio Dashboard for Alex Nanjakululu. showcasing academic achievements, teaching artifacts, and professional skills.">
   <meta name="theme-color" content="#4f46e5">
   
   <!-- Fonts & Icons -->
@@ -23,13 +23,17 @@
       --primary: #4f46e5;
       --primary-dark: #4338ca;
       --secondary: #ec4899;
-      --bg-body: #ffffff;
-      --bg-card: #f8fafc;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --border-color: #e2e8f0;
-      --nav-height: 80px;
-      --transition: all 0.3s ease;
+      --accent-green: #10b981;
+      --accent-orange: #f59e0b;
+      
+      --bg-body: #f3f4f6; /* Light gray bg for dashboard feel */
+      --bg-card: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      --border-color: #e5e7eb;
+      --nav-height: 70px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
       --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
       --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
       --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -51,9 +55,10 @@
       font-family: 'Inter', sans-serif;
       background-color: var(--bg-body);
       color: var(--text-main);
-      line-height: 1.6;
+      line-height: 1.5;
       transition: background-color 0.3s, color 0.3s;
       overflow-x: hidden;
+      padding-top: var(--nav-height);
     }
 
     a { text-decoration: none; color: inherit; transition: var(--transition); }
@@ -61,41 +66,11 @@
     button { border: none; background: none; cursor: pointer; font-family: inherit; }
 
     /* --- UTILITIES --- */
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
     .text-primary { color: var(--primary); }
     .text-secondary { color: var(--secondary); }
-    .flex-center { display: flex; align-items: center; justify-content: center; }
-
-    /* --- SCROLL PROGRESS BAR --- */
-    #progress-bar {
-      position: fixed;
-      top: 0; left: 0; height: 4px;
-      background: var(--primary);
-      width: 0%;
-      z-index: 2000;
-      transition: width 0.1s;
-    }
-
-    /* --- BACKGROUND SHAPES --- */
-    .bg-shape {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      z-index: -1;
-      opacity: 0.4;
-    }
-    .shape-1 {
-      top: -100px; right: -100px;
-      width: 400px; height: 400px;
-      background: var(--primary);
-    }
-    .shape-2 {
-      bottom: 100px; left: -100px;
-      width: 300px; height: 300px;
-      background: var(--secondary);
-    }
-
-    /* --- NAVIGATION --- */
+    
+    /* --- NAVIGATION (Slim Dashboard Style) --- */
     nav {
       height: var(--nav-height);
       display: flex;
@@ -103,255 +78,309 @@
       justify-content: space-between;
       position: fixed;
       top: 0; width: 100%;
-      background: rgba(255,255,255, 0.8);
-      backdrop-filter: blur(10px);
+      background: rgba(255,255,255, 0.9);
+      backdrop-filter: blur(12px);
       z-index: 1000;
       border-bottom: 1px solid var(--border-color);
     }
-    [data-theme="dark"] nav { background: rgba(15, 23, 42, 0.8); }
+    [data-theme="dark"] nav { background: rgba(15, 23, 42, 0.9); }
 
-    .logo {
+    .nav-brand {
       font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 700;
-      color: var(--text-main);
-    }
-    .logo-dot { color: var(--primary); }
-
-    .nav-links { display: flex; gap: 2rem; }
-    .nav-links a {
-      font-weight: 500;
-      color: var(--text-muted);
-      position: relative;
-    }
-    .nav-links a:hover, .nav-links a.active { color: var(--primary); }
-    .nav-links a.active::after {
-      content: '';
-      position: absolute;
-      bottom: -5px; left: 0;
-      width: 100%; height: 2px;
-      background: var(--primary);
-    }
-
-    .nav-actions { display: flex; align-items: center; gap: 1rem; }
-    .theme-toggle { font-size: 1.2rem; color: var(--text-main); }
-    .mobile-menu-btn { display: none; font-size: 1.5rem; color: var(--text-main); }
-
-    /* --- HERO SECTION --- */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding-top: var(--nav-height);
-    }
-    .hero-content {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: rgba(79, 70, 229, 0.1);
-      color: var(--primary);
-      border-radius: 50px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      width: fit-content;
-    }
-    .status-dot {
-      width: 8px; height: 8px;
-      background: #22c55e;
-      border-radius: 50%;
-      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
-    }
-
-    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; line-height: 1.2; margin-bottom: 1rem; }
-    .hero-subtitle { font-size: 1.5rem; font-weight: 300; margin-bottom: 1.5rem; }
-    .hero-description { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2rem; max-width: 500px; }
-
-    .hero-actions { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-    
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.8rem 1.8rem;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: var(--transition);
-    }
-    .btn-primary { background: var(--primary); color: white; box-shadow: var(--shadow-md); }
-    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-    
-    .btn-outline { border: 2px solid var(--border-color); color: var(--text-main); }
-    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
-
-    .btn-white {
-        background: white;
-        color: var(--primary);
-        font-size: 0.9rem;
-        padding: 0.6rem 1.2rem;
-        box-shadow: var(--shadow-md);
-    }
-    .btn-white:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-lg);
-    }
-
-    .hero-meta { display: flex; gap: 1.5rem; }
-    .meta-link { display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-weight: 500; }
-    .meta-link:hover { color: var(--primary); }
-    .meta-link i { font-size: 1.2rem; }
-
-    .hero-img { position: relative; display: flex; justify-content: center; }
-    .image-wrapper {
-        position: relative;
-        width: 350px; height: 400px;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: var(--shadow-lg);
-    }
-    .hero-avatar { width: 100%; height: 100%; object-fit: cover; }
-    .image-decoration {
-        position: absolute;
-        bottom: -20px; right: -20px;
-        width: 150px; height: 150px;
-        background: var(--secondary);
-        border-radius: 50%;
-        z-index: -1;
-        opacity: 0.2;
-    }
-
-    /* --- BENTO GRID SECTION --- */
-    .content { padding: 100px 0; }
-    .section-header { margin-bottom: 3rem; }
-    .section-header h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 1rem; }
-
-    .bento-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      grid-auto-rows: minmax(250px, auto);
-    }
-
-    .bento-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-    .bento-item:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--primary); }
-
-    .bento-large { grid-column: span 2; }
-    .bento-wide { grid-column: span 2; }
-    .bento-tall { grid-row: span 2; }
-
-    .bento-content h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 1rem; }
-    .bento-content p { color: var(--text-muted); margin-bottom: 1rem; }
-    .bento-content .lead { font-size: 1.2rem; color: var(--text-main); font-weight: 500; }
-
-    .bento-stat { text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%; }
-    .stat-number { font-size: 3rem; font-weight: 700; color: var(--primary); line-height: 1; margin-bottom: 0.5rem; }
-    .stat-label { color: var(--text-muted); font-weight: 500; }
-
-    .bento-icon-box { text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%; }
-    .bento-icon-box i { font-size: 3rem; color: var(--secondary); margin-bottom: 1rem; }
-    .bento-icon-box h4 { font-size: 1.2rem; margin-bottom: 0.5rem; }
-
-    .bento-title { margin-bottom: 1rem; font-size: 1.3rem; }
-    .tags-container { display: flex; flex-wrap: wrap; gap: 0.8rem; }
-    .skill-tag {
-        background: rgba(79, 70, 229, 0.1);
-        color: var(--primary);
-        padding: 0.5rem 1rem;
-        border-radius: 50px;
-        font-size: 0.9rem;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    /* --- STRATEGIC BUTTON CARD STYLES --- */
-    .bento-cta {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-        color: white;
-        border: none;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        min-height: 280px;
-    }
-    .bento-cta:hover { transform: scale(1.02); box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4); border: none; }
-    
-    .cta-icon { font-size: 3rem; margin-bottom: 1rem; color: rgba(255,255,255,0.9); }
-    .bento-cta h3 { font-size: 1.5rem; margin-bottom: 0.5rem; font-family: 'Playfair Display', serif; }
-    .bento-cta p { color: rgba(255,255,255,0.8); margin-bottom: 1.5rem; max-width: 250px; margin-left: auto; margin-right: auto; }
-    
-    /* --- DEBUG BOX (NEW) --- */
-    #debug-box {
-      position: fixed;
-      bottom: 20px; right: 20px;
-      background: rgba(0,0,0,0.8);
-      color: white;
-      padding: 10px 15px;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      font-family: monospace;
-      z-index: 3000;
-      pointer-events: none;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    .debug-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .dot-green { background: #22c55e; }
-    .dot-yellow { background: #eab308; }
-    .dot-red { background: #ef4444; }
+
+    .nav-actions { display: flex; align-items: center; gap: 1rem; }
+    .theme-toggle { 
+      width: 40px; height: 40px; 
+      border-radius: 50%; 
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      transition: var(--transition);
+    }
+    .theme-toggle:hover { transform: rotate(15deg); border-color: var(--primary); }
+
+    /* --- DASHBOARD HEADER --- */
+    .dashboard-header {
+      padding: 2rem 0 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .page-title h1 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 0.5rem; }
+    .page-title p { color: var(--text-muted); }
+    
+    .status-badge {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--accent-green);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .status-dot { width: 8px; height: 8px; background: currentColor; border-radius: 50%; box-shadow: 0 0 0 3px rgba(16,185,129,0.2); }
+
+    /* --- DASHBOARD GRID LAYOUT --- */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 1.5rem;
+      padding-bottom: 4rem;
+    }
+
+    /* --- WIDGET CARD STYLES --- */
+    .widget {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .widget:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+    }
+    
+    .widget-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+    }
+    .widget-icon {
+      width: 32px; height: 32px;
+      background: rgba(79, 70, 229, 0.1);
+      color: var(--primary);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .widget-title { font-weight: 600; font-size: 1.1rem; }
+
+    /* --- SIDEBAR WIDGETS (Left Column) --- */
+    .sidebar-col { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    /* Profile Widget */
+    .profile-widget { text-align: center; }
+    .profile-img-wrapper {
+      width: 120px; height: 120px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid var(--bg-card);
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+    .profile-img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-name { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .profile-role { color: var(--primary); font-weight: 500; font-size: 0.95rem; margin-bottom: 0.5rem; }
+    .profile-uni { color: var(--text-muted); font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    
+    .profile-stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    .p-stat h4 { font-size: 1.2rem; font-weight: 700; color: var(--text-main); }
+    .p-stat span { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Contact Widget */
+    .contact-list { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem;
+      background: var(--bg-body);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+    .contact-item:hover { background: rgba(79, 70, 229, 0.05); color: var(--primary); }
+    .contact-item i { font-size: 1.2rem; color: var(--text-muted); }
+    
+    .qr-placeholder {
+      margin-top: 1rem;
+      width: 100%;
+      aspect-ratio: 1;
+      background: #fff;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px dashed var(--border-color);
+      color: var(--text-muted);
+    }
+
+    /* --- MAIN CONTENT WIDGETS (Right Column) --- */
+    .main-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    
+    .widget-full { grid-column: span 2; }
+    .widget-tall { grid-row: span 2; }
+
+    /* About Me */
+    .about-text { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem; }
+    .quote-box {
+      background: rgba(79, 70, 229, 0.05);
+      border-left: 4px solid var(--primary);
+      padding: 1rem;
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    /* Academic Achievements */
+    .achievements-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .achieve-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+    }
+    .achieve-icon {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .bg-gold { background: rgba(245, 158, 11, 0.1); color: var(--accent-orange); }
+    .bg-blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+    
+    .achieve-info h5 { font-size: 0.95rem; font-weight: 600; }
+    .achieve-info p { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* GPA Circle (CSS only) */
+    .gpa-container {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+    }
+    .gpa-circle {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: conic-gradient(var(--primary) 0% 97%, #e5e7eb 97% 100%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      margin-bottom: 0.5rem;
+    }
+    .gpa-inner {
+      width: 65px; height: 65px;
+      background: var(--bg-card);
+      border-radius: 50%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .gpa-val { font-size: 1.5rem; font-weight: 700; line-height: 1; color: var(--primary); }
+    .gpa-label { font-size: 0.6rem; text-transform: uppercase; color: var(--text-muted); }
+
+    /* Skills */
+    .skill-cloud { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .skill-pill {
+      padding: 0.4rem 0.8rem;
+      background: var(--bg-body);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+    .skill-pill:hover { border-color: var(--primary); color: var(--primary); background: rgba(79, 70, 229, 0.05); }
+
+    /* Artifacts / Projects */
+    .artifact-card {
+      display: flex; gap: 1rem;
+      padding-bottom: 1rem; margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .artifact-card:last-child { border: none; margin: 0; padding: 0; }
+    .artifact-icon {
+      width: 40px; height: 40px;
+      background: var(--secondary); opacity: 0.1;
+      color: var(--secondary);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+    }
+    .artifact-content h5 { font-size: 1rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .artifact-content p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
+    .artifact-link { font-size: 0.8rem; color: var(--primary); font-weight: 500; margin-top: 0.3rem; display: inline-block; }
+
+    /* Goals Timeline */
+    .goal-item { display: flex; gap: 1rem; margin-bottom: 1.2rem; }
+    .goal-dot {
+      min-width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--primary);
+      margin-top: 6px;
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+    }
+    .goal-content h6 { font-size: 0.95rem; font-weight: 600; }
+    .goal-content p { font-size: 0.85rem; color: var(--text-muted); }
+
+    /* CTA Box */
+    .cta-box {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cta-box .widget-title { color: white; }
+    .cta-box .widget-icon { background: rgba(255,255,255,0.2); color: white; }
+    .cta-box .widget-header { border-color: rgba(255,255,255,0.2); }
+    
+    .btn-launch {
+      background: white; color: var(--primary);
+      padding: 0.6rem 1.2rem; border-radius: 8px;
+      font-weight: 600; font-size: 0.9rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      transition: var(--transition);
+    }
+    .btn-launch:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
     /* --- FOOTER --- */
-    footer { padding: 3rem 0; border-top: 1px solid var(--border-color); margin-top: 4rem; }
-    .footer-content { display: flex; justify-content: space-between; align-items: center; }
-    .footer-left h3 { font-family: 'Playfair Display', serif; margin-bottom: 0.2rem; }
-    .footer-left p { color: var(--text-muted); font-size: 0.9rem; }
-    .footer-right { color: var(--text-muted); font-size: 0.9rem; }
+    footer { margin-top: 2rem; text-align: center; color: var(--text-muted); font-size: 0.85rem; padding-bottom: 2rem; }
 
-    /* --- RESPONSIVE DESIGN --- */
-    @media (max-width: 900px) {
-      .hero-content { grid-template-columns: 1fr; text-align: center; gap: 3rem; }
-      .hero-actions, .hero-meta { justify-content: center; }
-      .hero-img { order: -1; }
-      
-      .bento-grid { grid-template-columns: 1fr; }
-      .bento-large, .bento-wide { grid-column: span 1; }
-      .nav-links { display: none; }
-      .mobile-menu-btn { display: block; }
-      
-      /* Mobile Nav Drawer */
-      .nav-links.active {
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        top: var(--nav-height); left: 0; width: 100%;
-        background: var(--bg-card);
-        padding: 2rem;
-        box-shadow: var(--shadow-lg);
-        border-bottom: 1px solid var(--border-color);
-      }
-      /* Hide debug box on mobile to avoid clutter */
+    /* --- DEBUG BOX --- */
+    #debug-box {
+      position: fixed; bottom: 20px; right: 20px;
+      background: rgba(0,0,0,0.8); color: white;
+      padding: 8px 12px; border-radius: 6px;
+      font-size: 0.75rem; font-family: monospace;
+      z-index: 3000; pointer-events: none; display: flex; align-items: center; gap: 8px;
+    }
+    .debug-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-green { background: #22c55e; }
+    .dot-red { background: #ef4444; }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 1024px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .main-col { grid-template-columns: 1fr; }
+      .sidebar-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+      .profile-widget { grid-column: span 2; }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .sidebar-col { grid-template-columns: 1fr; }
+      .widget-full { grid-column: span 1; }
       #debug-box { display: none; }
     }
   </style>
@@ -359,178 +388,305 @@
 <body>
 
   <!-- Scroll Progress Bar -->
-  <div id="progress-bar"></div>
+  <div id="progress-bar" style="position:fixed; top:0; left:0; height:3px; background:var(--primary); width:0%; z-index:2000; transition:width 0.1s;"></div>
 
-  <!-- DEBUG BOX (Visible to help you fix the file path) -->
+  <!-- DEBUG BOX -->
   <div id="debug-box">
     <div id="debug-dot" class="debug-dot"></div>
-    <span id="debug-text">Checking image...</span>
+    <span id="debug-text">Img Check...</span>
   </div>
-
-  <!-- Background Decorative Shapes -->
-  <div class="bg-shape shape-1"></div>
-  <div class="bg-shape shape-2"></div>
 
   <!-- Navigation -->
   <nav>
-    <a href="index.html" class="logo">Alex<span class="logo-dot">.</span>N</a>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="reflections.html">Reflections</a></li>
-      <li><a href="skills.html">Skills</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-    <div class="nav-actions">
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle Theme"><i class="ri-moon-line"></i></button>
-      <button class="mobile-menu-btn" id="menuBtn" aria-label="Open Menu"><i class="ri-menu-line"></i></button>
+    <div class="container" style="display:flex; justify-content:space-between; width:100%;">
+      <a href="#" class="nav-brand">
+        <i class="ri-dashboard-3-line text-primary"></i> Student Portfolio
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle Theme">
+          <i class="ri-moon-line"></i>
+        </button>
+      </div>
     </div>
   </nav>
 
-  <main>
-    <!-- Hero Section -->
-    <section id="hero-section" class="hero-section hero">
-      <div class="container">
-        <div class="hero-content">
-          <div class="hero-text" data-aos="fade-right">
-            <div class="hero-tag">
-              <span class="status-dot"></span> Available for Consulting
-            </div>
-            
-            <!-- Typewriter Title -->
-            <h1 id="typed-title"></h1> 
-            
-            <h2 class="hero-subtitle">
-              Technical <span class="text-primary">Educator</span> & <span class="text-secondary">Innovator</span>
-            </h2>
-            
-            <p class="hero-description">
-                Currently pursuing a <strong>Bachelor of Technology Education (ICT Option)</strong> at The Open University of Kenya. 
-                I build bridges between complex technical concepts and effective teaching strategies. Specializing in <strong>Curriculum Design</strong>, <strong>EdTech Integration</strong>, and <strong>Quality Assurance</strong>.
-            </p>
-            
-            <div class="hero-actions">
-              <a href="projects.html" class="btn btn-primary"><i class="ri-folder-line"></i> View Projects</a>
-              <a href="contact.html" class="btn btn-outline"><i class="ri-mail-line"></i> Get in Touch</a>
-            </div>
+  <main class="container">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header" data-aos="fade-down">
+      <div class="page-title">
+        <h1>Welcome back, Alex! 👋</h1>
+        <p>Track your academic journey and professional growth.</p>
+      </div>
+      <div class="status-badge">
+        <span class="status-dot"></span> Active Student
+      </div>
+    </div>
 
-            <div class="hero-meta">
-              <a href="https://github.com/Nanjakululu" target="_blank" rel="noopener noreferrer" class="meta-link">
-                <i class="ri-github-fill"></i> GitHub
-              </a>
-              <a href="https://linkedin.com/in/alex-michar" target="_blank" rel="noopener noreferrer" class="meta-link">
-                <i class="ri-linkedin-box-fill"></i> LinkedIn
-              </a>
-            </div>
+    <!-- Dashboard Grid -->
+    <div class="dashboard-grid">
+      
+      <!-- LEFT SIDEBAR COLUMN -->
+      <aside class="sidebar-col">
+        
+        <!-- 1. Profile Widget -->
+        <div class="widget profile-widget" data-aos="fade-right">
+          <div class="profile-img-wrapper">
+            <!-- Image loading logic handled in JS -->
+            <img id="heroImage" src="https://ui-avatars.com/api/?name=Alex+Nanjakululu&background=4f46e5&color=fff" alt="Profile" class="profile-img">
           </div>
-          
-          <div class="hero-img" data-aos="fade-left" data-aos-delay="100">
-            <div class="image-wrapper">
-                <!-- We use a placeholder src first. JS will replace it immediately -->
-                <img id="heroImage" 
-                     src="https://ui-avatars.com/api/?name=Alex+Nanjakululu&background=4f46e5&color=fff" 
-                     alt="Alex Nanjakululu Portrait" 
-                     class="hero-avatar">
-                <div class="image-decoration"></div>
+          <h2 class="profile-name">Alex Nanjakululu</h2>
+          <p class="profile-role">Technical Educator</p>
+          <div class="profile-uni">
+            <i class="ri-building-4-line"></i> The Open University of Kenya
+          </div>
+
+          <div class="profile-stats">
+            <div class="p-stat">
+              <h4 id="proj-count">12</h4>
+              <span>Projects</span>
+            </div>
+            <div class="p-stat">
+              <h4>3.9</h4>
+              <span>GPA</span>
+            </div>
+            <div class="p-stat">
+              <h4>5+</h4>
+              <span>Years</span>
             </div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- Bento Grid "About" Section -->
-    <section id="about-section" class="content">
-      <div class="container">
-        <div class="bento-grid">
-          
-          <!-- Main Intro Card -->
-          <div class="bento-item bento-large" data-aos="fade-up">
-            <div class="bento-content">
-              <h2>Philosophy</h2>
-              <p class="lead">Education is not just about transferring knowledge; it's about building adaptive workflows that allow students to navigate uncertainty.</p>
-              <p>I focus on creating reproducible, ethical, and accessible educational tools that prepare students for the modern workforce. My approach blends technical precision with pedagogical empathy.</p>
-            </div>
+        <!-- 2. Contact Widget -->
+        <div class="widget" data-aos="fade-right" data-aos-delay="100">
+          <div class="widget-header">
+            <div class="widget-icon"><i class="ri-contacts-book-line"></i></div>
+            <h3 class="widget-title">Contact Me</h3>
           </div>
-
-          <!-- Stats Card (Dynamic Counter) -->
-          <div class="bento-item" data-aos="fade-up" data-aos-delay="100">
-            <div class="bento-stat">
-              <h3 class="stat-number"><span id="counter">0</span>+</h3>
-              <p class="stat-label">Years Experience</p>
-            </div>
+          <div class="contact-list">
+            <a href="mailto:alex@example.com" class="contact-item">
+              <i class="ri-mail-send-line"></i>
+              <span>alex.nanjakululu@ouk.ac.ke</span>
+            </a>
+            <a href="#" class="contact-item">
+              <i class="ri-linkedin-box-fill"></i>
+              <span>LinkedIn Profile</span>
+            </a>
+            <a href="#" class="contact-item">
+              <i class="ri-github-fill"></i>
+              <span>GitHub Portfolio</span>
+            </a>
           </div>
-
-          <!-- Role Card -->
-          <div class="bento-item" data-aos="fade-up" data-aos-delay="150">
-            <div class="bento-icon-box">
-              <i class="ri-award-line"></i>
-              <h4>Current Role</h4>
-              <p>Quality Assurance Chair</p>
-              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.2rem;">Shieywe VTC</p>
-            </div>
+          <!-- Fake QR Code Visual -->
+          <div class="qr-placeholder">
+            <i class="ri-qr-code-line" style="font-size: 3rem; opacity: 0.5;"></i>
           </div>
-
-          <!-- NEW: Education Card -->
-          <div class="bento-item" data-aos="fade-up" data-aos-delay="200">
-            <div class="bento-icon-box">
-              <i class="ri-graduation-cap-fill"></i>
-              <h4>Education</h4>
-              <p>The Open University of Kenya</p>
-              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.2rem;">B.Tech Ed (ICT Option)</p>
-            </div>
-          </div>
-
-          <!-- Focus Areas -->
-          <div class="bento-item bento-wide" data-aos="fade-up" data-aos-delay="250">
-             <h3 class="bento-title">Current Focus</h3>
-             <div class="tags-container">
-                <span class="skill-tag"><i class="ri-book-line"></i> Curriculum Reform</span>
-                <span class="skill-tag"><i class="ri-check-double-line"></i> CBC Alignment</span>
-                <span class="skill-tag"><i class="ri-tools-line"></i> EdTech Tools</span>
-                <span class="skill-tag"><i class="ri-bar-chart-line"></i> Automated Grading</span>
-             </div>
-          </div>
-
-          <!-- STRATEGIC BUTTON CARD: TP Management Portal -->
-          <div class="bento-item bento-cta" data-aos="zoom-in" data-aos-delay="300">
-             <div class="cta-content">
-                <i class="ri-rocket-2-fill cta-icon"></i>
-                <h3>Student Portal</h3>
-                <p>Launch the TP Management System to access resources and tracking.</p>
-                <a href="https://tp-management.vercel.app/student/home" target="_blank" rel="noopener noreferrer" class="btn btn-white">
-                   Launch App <i class="ri-arrow-right-up-line"></i>
-                </a>
-             </div>
-          </div>
-
         </div>
+
+      </aside>
+
+      <!-- MAIN CONTENT AREA (Right Column) -->
+      <div class="main-col">
+        
+        <!-- 3. About Me (Full Width) -->
+        <div class="widget widget-full" data-aos="fade-up">
+          <div class="widget-header">
+            <div class="widget-icon"><i class="ri-user-smile-line"></i></div>
+            <h3 class="widget-title">About Me</h3>
+          </div>
+          <div class="about-content" style="display: flex; gap: 2rem; flex-wrap: wrap;">
+            <div style="flex: 2; min-width: 300px;">
+              <p class="about-text">
+                I am a passionate <strong>Bachelor of Technology Education (ICT Option)</strong> student at The Open University of Kenya. My mission is to bridge the gap between complex technical concepts and effective teaching strategies.
+              </p>
+              <div class="quote-box">
+                "Education is not just about transferring knowledge; it's about building adaptive workflows that allow students to navigate uncertainty."
+              </div>
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+              <h4 style="font-size: 0.9rem; margin-bottom: 0.8rem; color: var(--text-muted);">CURRENT FOCUS</h4>
+              <ul style="font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                <li><i class="ri-check-line text-primary"></i> Curriculum Design</li>
+                <li><i class="ri-check-line text-primary"></i> EdTech Integration</li>
+                <li><i class="ri-check-line text-primary"></i> Quality Assurance</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Academic Achievements -->
+        <div class="widget" data-aos="fade-up" data-aos-delay="100">
+          <div class="widget-header">
+            <div class="widget-icon"><i class="ri-medal-line"></i></div>
+            <h3 class="widget-title">Achievements</h3>
+          </div>
+          <div class="achievements-list">
+            <div class="achieve-item">
+              <div class="achieve-icon bg-gold"><i class="ri-trophy-line"></i></div>
+              <div class="achieve-info">
+                <h5>Dean's List</h5>
+                <p>Consistent high performance (2023 - 2024)</p>
+              </div>
+            </div>
+            <div class="achieve-item">
+              <div class="achieve-icon bg-blue"><i class="ri-flask-line"></i></div>
+              <div class="achieve-info">
+                <h5>STEM Research Lead</h5>
+                <p>Head of Biology Dept. Research Project</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. GPA Widget -->
+        <div class="widget" data-aos="fade-up" data-aos-delay="150">
+          <div class="widget-header">
+            <div class="widget-icon"><i class="ri-pie-chart-line"></i></div>
+            <h3 class="widget-title">Academic Stats</h3>
+          </div>
+          <div class="gpa-container">
+            <div class="gpa-circle">
+              <div class="gpa-inner">
+                <span class="gpa-val">3.9</span>
+              </div>
+            </div>
+            <div>
+              <h5 style="font-weight: 600;">Current GPA</h5>
+              <span style="font-size: 0.8rem; color: var(--accent-green);">Top 5% of Class</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Teaching & Learning Artifacts -->
+        <div class="widget widget-full" data-aos="fade-up" data-aos-delay="200">
+          <div class="widget-header">
+            <div class="widget-icon"><i class="ri-presentation-line"></i></div>
+            <h3 class="widget-title">Teaching Artifacts</h3>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <div class="artifact-card">
+              <div class="artifact-icon"><i class="ri-file-list-3-line"></i></div>
+              <div class="artifact-content">
+                <h5>Lesson Plans</h5>
+                <p>Competency Based Curriculum (CBC) aligned lesson plans for ICT and Biology.</p>
+                <a href="#" class="artifact-link">View Repository <i class="ri-arrow-right-line"></i></a>
+              </div>
+            </div>
+            <div class="artifact-card">
+              <div class="artifact-icon"><i class="ri-computer-line"></i></div>
+              <div class="artifact-content">
+                <h5>EdTech Tools</h5>
+                <p>Collection of digital tools and software utilized for remote learning.</p>
+                <a href="#" class="artifact-link">Explore Tools <i class="ri-arrow-right-line"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. Professional Skills -->
+        <div class="widget" data-aos="fade-up" data-aos-delay="250">
+          <div class="widget-header">
+            <div class="widget-icon"><i class="ri-tools-line"></i></div>
+            <h3 class="widget-title">Skills</h3>
+          </div>
+          <div class="skill-cloud">
+            <span class="skill-pill">Flutter</span>
+            <span class="skill-pill">Firebase</span>
+            <span class="skill-pill">HTML/CSS</span>
+            <span class="skill-pill">JavaScript</span>
+            <span class="skill-pill">Python</span>
+            <span class="skill-pill">Curriculum Dev</span>
+            <span class="skill-pill">Classroom Mgmt</span>
+            <span class="skill-pill">Mentorship</span>
+          </div>
+        </div>
+
+        <!-- 8. Portfolio Samples -->
+        <div class="widget" data-aos="fade-up" data-aos-delay="300">
+          <div class="widget-header">
+            <div class="widget-icon"><i class="ri-folder-image-line"></i></div>
+            <h3 class="widget-title">Portfolio</h3>
+          </div>
+          <div class="artifact-card">
+            <div class="artifact-content">
+              <h5>Biology Case Study</h5>
+              <p>Interactive learning module for Form 2 Biology.</p>
+            </div>
+          </div>
+          <div class="artifact-card" style="border:none; margin:0;">
+            <div class="artifact-content">
+              <h5>Student TP Portal</h5>
+              <p>App for tracking Teaching Practice progress.</p>
+              <a href="https://tp-management.vercel.app" target="_blank" class="artifact-link">Launch App <i class="ri-external-link-line"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. Reflections & Goals -->
+        <div class="widget widget-full" data-aos="fade-up" data-aos-delay="350">
+          <div class="widget-header">
+            <div class="widget-icon"><i class="ri-lightbulb-flash-line"></i></div>
+            <h3 class="widget-title">Reflections & Future Goals</h3>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <!-- Reflections -->
+            <div>
+              <h4 style="font-size: 0.95rem; margin-bottom: 1rem; color: var(--primary);">Latest Reflection</h4>
+              <p style="font-size: 0.9rem; color: var(--text-muted); font-style: italic;">
+                "Integrating technology in the classroom has shifted my perspective on student engagement. It's not just about screens, but interactivity."
+              </p>
+            </div>
+            <!-- Goals -->
+            <div>
+              <h4 style="font-size: 0.95rem; margin-bottom: 1rem; color: var(--primary);">Future Goals</h4>
+              <div class="goal-item">
+                <div class="goal-dot"></div>
+                <div class="goal-content">
+                  <h6>Short Term</h6>
+                  <p>Improve student participation rates by 20% using new gamified tools.</p>
+                </div>
+              </div>
+              <div class="goal-item">
+                <div class="goal-dot" style="background: var(--secondary); box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.1);"></div>
+                <div class="goal-content">
+                  <h6>Long Term</h6>
+                  <p>Lead a national EdTech initiative to modernize TVET training.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10. Strategic CTA Widget -->
+        <div class="widget widget-full cta-box" data-aos="zoom-in" data-aos-delay="400">
+          <div>
+            <div class="widget-header" style="border-color: rgba(255,255,255,0.2);">
+              <div class="widget-icon"><i class="ri-rocket-2-fill"></i></div>
+              <h3 class="widget-title">Ready to collaborate?</h3>
+            </div>
+            <p style="opacity: 0.9; margin-top: 0.5rem;">Explore my full Teaching Portal or get in touch for consulting.</p>
+          </div>
+          <a href="https://tp-management.vercel.app/student/home" target="_blank" class="btn-launch">
+            Launch App <i class="ri-arrow-right-up-line"></i>
+          </a>
+        </div>
+
       </div>
-    </section>
+    </div>
   </main>
 
   <footer>
-    <div class="container footer-content">
-       <div class="footer-left">
-           <h3>Alex.N</h3>
-           <p>Technical Educator & Innovator</p>
-       </div>
-       <div class="footer-right">
-           <p>&copy; 2026 AMW. All Rights Reserved.</p>
-       </div>
+    <div class="container">
+      <p>&copy; 2026 Alex Nanjakululu. Student e-Portfolio Dashboard.</p>
     </div>
   </footer>
 
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // Initialize Animate On Scroll
-    AOS.init({
-      duration: 800,
-      once: true,
-      offset: 100
-    });
+    // Init AOS
+    AOS.init({ duration: 600, once: true, offset: 50 });
 
-    // --- IMAGE DEBUG LOGIC (ROBUST FIX) ---
+    // --- IMAGE DEBUG LOGIC ---
     const debugText = document.getElementById('debug-text');
     const debugDot = document.getElementById('debug-dot');
     const heroImage = document.getElementById('heroImage');
@@ -538,47 +694,36 @@
     function updateDebug(msg, colorClass) {
       debugText.innerText = msg;
       debugDot.className = 'debug-dot ' + colorClass;
-      console.log(`[IMAGE DEBUG] ${msg}`);
     }
 
-    // 1. Try loading profile.jpg (Local Root)
     function checkImage() {
       const testImg = new Image();
       testImg.onload = function() {
-        updateDebug("Loaded: profile.jpg", "dot-green");
-        // If found, update the actual image src
+        updateDebug("Local OK", "dot-green");
         heroImage.src = "profile.jpg"; 
       };
-      
       testImg.onerror = function() {
-        updateDebug("Failed: profile.jpg. Trying assets/profile.jpg...", "dot-yellow");
-        // 2. Try assets folder
+        updateDebug("Local Fail. Trying assets...", "dot-red");
         const testImg2 = new Image();
         testImg2.onload = function() {
-          updateDebug("Loaded: assets/profile.jpg", "dot-green");
+          updateDebug("Assets OK", "dot-green");
           heroImage.src = "assets/profile.jpg";
         };
         testImg2.onerror = function() {
-          updateDebug("Failed: assets/profile.jpg. Using Online Avatar.", "dot-red");
-          // 3. Fallback
+          updateDebug("Using Avatar", "dot-red");
           heroImage.src = "https://ui-avatars.com/api/?name=Alex+Nanjakululu&background=4f46e5&color=fff";
-          heroImage.style.borderRadius = "20px"; // Apply radius to avatar
         };
         testImg2.src = "assets/profile.jpg";
       };
-      
       testImg.src = "profile.jpg";
     }
-
-    // Run Check
     checkImage();
 
-    // --- Theme Toggle Logic ---
+    // --- THEME TOGGLE ---
     const themeToggle = document.getElementById('themeToggle');
     const htmlElement = document.documentElement;
     const icon = themeToggle.querySelector('i');
 
-    // Check saved theme
     const savedTheme = localStorage.getItem('theme') || 'light';
     htmlElement.setAttribute('data-theme', savedTheme);
     updateIcon(savedTheme);
@@ -586,21 +731,16 @@
     themeToggle.addEventListener('click', () => {
       const currentTheme = htmlElement.getAttribute('data-theme');
       const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      
       htmlElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
       updateIcon(newTheme);
     });
 
     function updateIcon(theme) {
-      if(theme === 'dark') {
-        icon.className = 'ri-sun-line';
-      } else {
-        icon.className = 'ri-moon-line';
-      }
+      icon.className = theme === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
     }
 
-    // --- Scroll Progress Bar ---
+    // --- SCROLL PROGRESS ---
     window.onscroll = function() {
       let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
       let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -608,59 +748,40 @@
       document.getElementById("progress-bar").style.width = scrolled + "%";
     };
 
-    // --- Mobile Menu ---
-    const menuBtn = document.getElementById('menuBtn');
-    const navLinks = document.getElementById('nav-links');
+    // --- INTERACTIVE NUMBER COUNTER (GPA & Projects) ---
+    const stats = [
+      { id: 'proj-count', target: 12 },
+    ];
     
-    menuBtn.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-      const icon = menuBtn.querySelector('i');
-      if(navLinks.classList.contains('active')) {
-        icon.className = 'ri-close-line';
-      } else {
-        icon.className = 'ri-menu-line';
-      }
-    });
-
-    // --- Typewriter Effect ---
-    const typedTitleSpan = document.getElementById('typed-title');
-    const textToType = "Hello, I'm Alex.";
-    let typeIndex = 0;
-
-    function typeWriter() {
-      if (typeIndex < textToType.length) {
-        typedTitleSpan.innerHTML += textToType.charAt(typeIndex);
-        typeIndex++;
-        setTimeout(typeWriter, 100);
-      }
+    // Simple animation for the stat number
+    const animateValue = (obj, start, end, duration) => {
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        obj.innerHTML = Math.floor(progress * (end - start) + start);
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
     }
-    // Start typing after a short delay
-    setTimeout(typeWriter, 500);
 
-    // --- Number Counter Animation ---
-    const counterElement = document.getElementById('counter');
-    const targetNumber = 5; // Adjust based on actual years
-    let counted = false;
-
+    // Trigger animation when visible
     const observer = new IntersectionObserver((entries) => {
-      if(entries[0].isIntersecting && !counted) {
-        counted = true;
-        let count = 0;
-        const updateCount = () => {
-          const increment = targetNumber / 50; 
-          if(count < targetNumber) {
-            count += increment;
-            counterElement.innerText = Math.ceil(count);
-            setTimeout(updateCount, 30);
-          } else {
-            counterElement.innerText = targetNumber;
-          }
-        };
-        updateCount();
-      }
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const target = entry.target;
+          const endVal = parseInt(target.getAttribute('data-target'));
+          animateValue(target, 0, endVal, 1500);
+          observer.unobserve(target);
+        }
+      });
     }, { threshold: 0.5 });
 
-    observer.observe(counterElement);
+    document.getElementById('proj-count').setAttribute('data-target', '12');
+    observer.observe(document.getElementById('proj-count'));
+
   </script>
 </body>
 </html>

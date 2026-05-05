@@ -18,6 +18,8 @@
       --primary-light: rgba(79, 70, 229, 0.1);
       --secondary: #ec4899;
       --secondary-light: rgba(236, 72, 153, 0.1);
+      --assessment: #0d9488; /* Teal for Assessments */
+      --assessment-light: rgba(13, 148, 136, 0.1);
       
       /* Modern Backgrounds */
       --bg-body: #f8fafc;
@@ -58,7 +60,7 @@
       position: relative;
     }
 
-    /* --- BACKGROUND BLOBS (Modern Decor) --- */
+    /* --- BACKGROUND BLOBS --- */
     .bg-blob {
       position: fixed;
       border-radius: 50%;
@@ -97,7 +99,7 @@
       border-color: var(--primary); 
     }
 
-    /* --- NAVIGATION (Glassmorphism) --- */
+    /* --- NAVIGATION --- */
     header {
       position: fixed; top: 0; width: 100%; z-index: 1000;
       background: var(--bg-glass);
@@ -164,7 +166,7 @@
     .section-header h2 { font-size: 2.5rem; margin-bottom: 0.5rem; }
     .section-header p { color: var(--text-muted); font-size: 1.1rem; }
     
-    /* Add Button Styling */
+    /* Add Button */
     .btn-add {
       background: var(--primary); color: white; padding: 0.6rem 1.2rem;
       border-radius: 8px; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;
@@ -172,180 +174,108 @@
     }
     .btn-add:hover { background: var(--primary-dark); transform: translateY(-2px); }
 
-    /* --- TIMETABLE GRID STYLES --- */
-    .timetable-wrapper {
-      display: grid;
-      grid-template-columns: 80px repeat(5, 1fr); /* Time column + 5 Days */
-      gap: 1rem;
-      overflow-x: auto; /* Allow scroll on small screens */
+    /* --- ASSESSMENT CARD STYLES (New) --- */
+    .assessment-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem;
     }
-
-    .time-column {
+    .assessment-card {
+      border-top: 4px solid var(--assessment);
       display: flex;
       flex-direction: column;
-      gap: 1rem;
     }
-
-    .time-slot-label {
-      height: 60px; /* Matches card height roughly */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      border-bottom: 1px dashed var(--border-color);
-    }
-
-    .day-column {
-      background: var(--bg-card);
-      border-radius: 16px;
-      border: 1px solid var(--border-color);
-      padding: 1rem;
-      min-height: 400px;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .day-header {
-      text-align: center;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid var(--bg-body);
-    }
-
-    .session-card {
-      background: var(--bg-body);
-      border-left: 3px solid var(--secondary);
+    .assessment-card h3 { font-family: 'Inter', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem; }
+    .competency-statement {
+      background: var(--assessment-light);
+      color: #0f766e;
+      padding: 0.8rem;
       border-radius: 8px;
-      padding: 1rem;
-      position: relative;
-      transition: var(--transition);
-    }
-    .session-card:hover {
-      transform: translateX(5px);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .session-time {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .session-title {
-      font-weight: 600;
-      font-size: 1rem;
-      margin-bottom: 0.2rem;
-      color: var(--text-main);
-    }
-
-    .session-details {
       font-size: 0.9rem;
+      margin: 1rem 0;
+      font-style: italic;
+      border-left: 3px solid var(--assessment);
+    }
+    .unit-badge {
+      background: var(--bg-body);
+      border: 1px solid var(--border-color);
       color: var(--text-muted);
-      margin-bottom: 0.5rem;
-    }
-
-    .session-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 0.5rem;
-      padding-top: 0.5rem;
-      border-top: 1px dashed var(--border-color);
-    }
-
-    .class-tag {
-      background: var(--primary-light);
-      color: var(--primary);
-      padding: 2px 8px;
+      padding: 4px 8px;
       border-radius: 4px;
       font-size: 0.75rem;
       font-weight: 600;
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 0.5rem;
     }
+    .ass-type-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      color: white;
+    }
+    .ass-type-project { background: #10b981; }
+    .ass-type-observation { background: #f59e0b; }
+    .ass-type-written { background: #6366f1; }
 
+    /* --- TIMETABLE GRID STYLES --- */
+    .timetable-wrapper {
+      display: grid;
+      grid-template-columns: 80px repeat(5, 1fr); 
+      gap: 1rem;
+      overflow-x: auto; 
+    }
+    .time-column { display: flex; flex-direction: column; gap: 1rem; }
+    .time-slot-label {
+      height: 60px; display: flex; align-items: center; justify-content: center;
+      font-weight: 600; color: var(--text-muted); font-size: 0.85rem;
+      border-bottom: 1px dashed var(--border-color);
+    }
+    .day-column {
+      background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border-color);
+      padding: 1rem; min-height: 400px; display: flex; flex-direction: column; gap: 1rem;
+    }
+    .day-header { text-align: center; font-weight: 700; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--bg-body); }
+    .session-card {
+      background: var(--bg-body); border-left: 3px solid var(--secondary);
+      border-radius: 8px; padding: 1rem; position: relative; transition: var(--transition);
+    }
+    .session-card:hover { transform: translateX(5px); box-shadow: var(--shadow-sm); }
+    .session-time { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .session-title { font-weight: 600; font-size: 1rem; margin-bottom: 0.2rem; color: var(--text-main); }
+    .session-details { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .session-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border-color); }
+    .class-tag { background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
     .delete-session-btn {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 1rem;
-      opacity: 0; 
-      transition: opacity 0.2s;
+      position: absolute; top: 5px; right: 5px; background: transparent; color: var(--text-muted);
+      font-size: 1rem; opacity: 0; transition: opacity 0.2s;
     }
-    
-    .session-card:hover .delete-session-btn {
-      opacity: 1;
-    }
-    .delete-session-btn:hover {
-      color: #ef4444;
-    }
-
-    /* Empty State for Timetable */
-    .timetable-empty {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 2rem;
-      color: var(--text-muted);
-    }
+    .session-card:hover .delete-session-btn { opacity: 1; }
+    .delete-session-btn:hover { color: #ef4444; }
+    .timetable-empty { grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted); }
 
     /* --- TIMELINE (Modern Feed Style) --- */
-    .schedule-layout {
-      display: grid; grid-template-columns: 1.6fr 1fr; gap: 2.5rem;
-    }
-    
-    .activity-grid {
-      display: flex; flex-direction: column; gap: 1.5rem;
-    }
-    
+    .schedule-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 2.5rem; }
+    .activity-grid { display: flex; flex-direction: column; gap: 1.5rem; }
     .activity-card { padding: 1.5rem; }
-    
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .day-badge {
-      background: var(--primary); color: white;
-      padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.5px;
+      background: var(--primary); color: white; padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
     }
-
     .empty-state {
-      text-align: center;
-      padding: 4rem 2rem;
-      border: 2px dashed var(--border-color);
-      background: var(--bg-body);
-      border-radius: 20px;
-      color: var(--text-muted);
-      grid-column: 1 / -1;
+      text-align: center; padding: 4rem 2rem; border: 2px dashed var(--border-color);
+      background: var(--bg-body); border-radius: 20px; color: var(--text-muted); grid-column: 1 / -1;
     }
     .empty-state i { font-size: 3rem; display: block; margin-bottom: 1rem; opacity: 0.5; }
     .empty-state h3 { font-family: 'Inter', sans-serif; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
-
     .tag-group { display: flex; gap: 0.6rem; margin: 1rem 0; flex-wrap: wrap; }
-    .tag {
-      background: var(--bg-body); border: 1px solid var(--border-color);
-      padding: 0.4rem 0.8rem; border-radius: 50px; font-size: 0.75rem; color: var(--text-muted); font-weight: 600;
-    }
-    .tag button { /* Tag Remove Button */
-      background: transparent; border: none; color: var(--text-muted); font-size: 0.8rem;
-      margin-left: 0.5rem; cursor: pointer;
-    }
+    .tag { background: var(--bg-body); border: 1px solid var(--border-color); padding: 0.4rem 0.8rem; border-radius: 50px; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+    .tag button { background: transparent; border: none; color: var(--text-muted); font-size: 0.8rem; margin-left: 0.5rem; cursor: pointer; }
     .tag button:hover { color: #ef4444; }
-
     .project-links { display: flex; gap: 0.8rem; margin-top: 1.5rem; flex-wrap: wrap; }
-    .btn-sm { 
-      padding: 0.6rem 1rem; font-size: 0.85rem; border-radius: 8px; 
-      display: flex; align-items: center; gap: 0.4rem; font-weight: 500;
-      transition: var(--transition);
-    }
+    .btn-sm { padding: 0.6rem 1rem; font-size: 0.85rem; border-radius: 8px; display: flex; align-items: center; gap: 0.4rem; font-weight: 500; transition: var(--transition); }
     .btn-outline { border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main); }
     .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); transform: translateY(-2px); }
-    
     .delete-btn {
       background: rgba(239, 68, 68, 0.1); color: #ef4444; border: none;
       padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.8rem;
@@ -355,65 +285,27 @@
 
     /* Calendar Widget */
     .calendar-widget { padding: 1.5rem; overflow: hidden; display: flex; flex-direction: column; height: 100%; }
-    .widget-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 1rem;
-    }
+    .widget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .widget-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; }
-    
-    .calendar-container { 
-      background: var(--bg-body); border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); flex-grow: 1;
-    }
+    .calendar-container { background: var(--bg-body); border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); flex-grow: 1; }
 
     /* --- ARTIFACTS GRID --- */
-    .filter-container {
-      display: flex; gap: 0.8rem; margin-bottom: 2.5rem; overflow-x: auto; padding-bottom: 0.5rem;
-    }
-    .filter-btn {
-      padding: 0.6rem 1.5rem; border-radius: 50px; border: 1px solid var(--border-color);
-      background: var(--bg-card); color: var(--text-muted); font-weight: 500; white-space: nowrap;
-      transition: var(--transition);
-    }
-    .filter-btn.active, .filter-btn:hover {
-      background: var(--primary); color: white; border-color: var(--primary);
-      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); transform: translateY(-1px);
-    }
-
-    .project-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;
-    }
-    
+    .filter-container { display: flex; gap: 0.8rem; margin-bottom: 2.5rem; overflow-x: auto; padding-bottom: 0.5rem; }
+    .filter-btn { padding: 0.6rem 1.5rem; border-radius: 50px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-weight: 500; white-space: nowrap; transition: var(--transition); }
+    .filter-btn.active, .filter-btn:hover { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); transform: translateY(-1px); }
+    .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
     .artifact-card { padding: 0; height: 100%; display: flex; flex-direction: column; position: relative; }
-    .artifact-thumb {
-      height: 200px; width: 100%; background-color: var(--bg-body);
-      position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
-    }
+    .artifact-thumb { height: 200px; width: 100%; background-color: var(--bg-body); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
     .artifact-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
     .artifact-card:hover .artifact-thumb img { transform: scale(1.08); }
-    
     .artifact-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
     .artifact-content h3 { font-size: 1.3rem; margin-bottom: 0.5rem; font-family: 'Inter', sans-serif; font-weight: 700; }
     .artifact-content p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem; flex-grow: 1; }
-
-    /* Delete button specifically for artifact cards */
     .artifact-delete-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgba(255,255, 255, 0.9);
-        color: #ef4444;
-        border-radius: 50%;
-        width: 35px;
-        height: 35px;
-        display: flex; 
-        align-items: center; justify-content: center;
-        z-index: 10;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        position: absolute; top: 10px; right: 10px; background: rgba(255,255, 255, 0.9); color: #ef4444;
+        border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    .artifact-delete-btn:hover {
-        background: #ef4444;
-        color: white;
-    }
+    .artifact-delete-btn:hover { background: #ef4444; color: white; }
     
     /* --- FAB & MODALS --- */
     .supervisor-fab {
@@ -433,7 +325,6 @@
       display: flex; align-items: center; justify-content: center; padding: 20px;
     }
     .modal-overlay.active { opacity: 1; visibility: visible; }
-    
     .modal-content {
       background: var(--bg-card); width: 100%; max-width: 600px;
       border-radius: 24px; padding: 2rem; position: relative;
@@ -442,16 +333,13 @@
       box-shadow: var(--shadow-lg); border: 1px solid var(--border-color);
     }
     .modal-overlay.active .modal-content { transform: translateY(0); }
-    
     .close-btn {
-      position: absolute; top: 1.5rem; right: 1.5rem;
-      font-size: 1.5rem; color: var(--text-muted); background: transparent;
+      position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.5rem; color: var(--text-muted); background: transparent;
       width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
       border-radius: 50%; transition: var(--transition);
     }
     .close-btn:hover { background: var(--bg-body); color: var(--text-main); }
     
-    /* Smart Viewer Specifics */
     .viewer-container { width: 100%; height: 65vh; background: var(--bg-body); display: flex; align-items: center; justify-content: center; border-radius: 16px; margin-bottom: 1.5rem; overflow: hidden; position: relative; border: 1px solid var(--border-color); }
     .viewer-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
     .viewer-container iframe { width: 100%; height: 100%; border: none; }
@@ -466,7 +354,6 @@
       transition: var(--transition);
     }
     .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
-    
     .btn-primary {
       background: var(--primary); color: white; padding: 1rem 1.5rem;
       border-radius: 8px; font-weight: 600; width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem;
@@ -475,46 +362,17 @@
     .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
 
     /* File Upload Area Styling */
-    .file-upload-group {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        margin-bottom: 5px;
-    }
+    .file-upload-group { display: flex; gap: 10px; align-items: center; margin-bottom: 5px; }
     .file-upload-btn {
-        background: var(--bg-body);
-        border: 1px dashed var(--border-color);
-        padding: 0.6rem 1rem;
-        border-radius: 8px;
-        font-size: 0.85rem;
-        color: var(--text-muted);
-        cursor: pointer;
-        transition: var(--transition);
-        text-align: center;
-        flex-grow: 1;
+        background: var(--bg-body); border: 1px dashed var(--border-color); padding: 0.6rem 1rem;
+        border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); cursor: pointer;
+        transition: var(--transition); text-align: center; flex-grow: 1;
     }
-    .file-upload-btn:hover {
-        border-color: var(--primary);
-        color: var(--primary);
-        background: var(--primary-light);
-    }
-    .file-name-display {
-        font-size: 0.85rem;
-        color: var(--primary);
-        font-weight: 600;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
+    .file-upload-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+    .file-name-display { font-size: 0.85rem; color: var(--primary); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .instruction-box {
-        background: rgba(79, 70, 229, 0.05);
-        border-left: 3px solid var(--primary);
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        font-size: 0.9rem;
-        color: var(--text-main);
-        border-radius: 0.8px 8px 0;
+        background: rgba(79, 70, 229, 0.05); border-left: 3px solid var(--primary);
+        padding: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-main); border-radius: 0.8px 8px 0;
     }
 
     /* Toast Notifications */
@@ -533,33 +391,24 @@
     /* Responsive */
     @media (max-width: 900px) {
       .schedule-layout { grid-template-columns: 1fr; }
-      .timetable-wrapper {
-        grid-template-columns: 60px repeat(5, 1fr);
-        gap: 0.5rem;
-      }
+      .timetable-wrapper { grid-template-columns: 60px repeat(5, 1fr); gap: 0.5rem; }
       .day-header { font-size: 0.8rem; }
       .session-card { padding: 0.8rem; }
       .nav-links { display: none; }
       .mobile-menu-btn { display: block; }
       .nav-links.active {
-        display: flex; flex-direction: column; position: absolute;
-        top: var(--nav-height); left: 0; width: 100%;
-        background: var(--bg-card); padding: 2rem;
-        box-shadow: var(--shadow-lg); border-bottom: 1px solid var(--border-color);
+        display: flex; flex-direction: column; position: absolute; top: var(--nav-height); left: 0; width: 100%;
+        background: var(--bg-card); padding: 2rem; box-shadow: var(--shadow-lg); border-bottom: 1px solid var(--border-color);
       }
       .page-hero h1 { font-size: 2.5rem; }
     }
 
     /* --- ADMIN PROTECTION CSS --- */
-    .admin-only { 
-      display: none !important; 
-    }
-    body.is-admin .admin-only { 
-      display: flex !important; 
-    }
+    .admin-only { display: none !important; }
+    body.is-admin .admin-only { display: flex !important; }
   </style>
   
-  <!-- Script to check admin status IMMEDIATELY to prevent button flashing on load -->
+  <!-- Script to check admin status IMMEDIATELY -->
   <script>
     if(localStorage.getItem('isAdmin') === 'true') {
       document.body.classList.add('is-admin');
@@ -608,19 +457,15 @@
 
   <main class="container">
     
-    <!-- NEW SECTION: TEACHING TIMETABLE (CBET Aligned) -->
+    <!-- SECTION 1: TEACHING TIMETABLE -->
     <section class="content-section" aria-labelledby="timetable-heading">
       <div class="section-header" data-aos="fade-up">
         <h2 id="timetable-heading">Teaching Timetable</h2>
         <p>Weekly schedule of modules and training sessions.</p>
-        <!-- ADD BUTTON (Protected) -->
-        <button class="btn-add admin-only" onclick="openTimetableModal()">
-          <i class="ri-add-line"></i> Add Lesson
-        </button>
+        <button class="btn-add admin-only" onclick="openTimetableModal()"><i class="ri-add-line"></i> Add Lesson</button>
       </div>
 
       <div class="timetable-wrapper" id="timetable-grid">
-        <!-- Time Column Labels -->
         <div class="time-column">
            <div class="time-slot-label">08:00</div>
            <div class="time-slot-label">09:00</div>
@@ -633,24 +478,11 @@
            <div class="time-slot-label">16:00</div>
            <div class="time-slot-label">17:00</div>
         </div>
-
-        <!-- Day Columns (Mon-Fri) -->
-        <div class="day-column" id="day-mon">
-          <div class="day-header">MON</div>
-          <!-- Dynamic Lessons will be injected here -->
-        </div>
-        <div class="day-column" id="day-tue">
-          <div class="day-header">TUE</div>
-        </div>
-        <div class="day-column" id="day-wed">
-          <div class="day-header">WED</div>
-        </div>
-        <div class="day-column" id="day-thu">
-          <div class="day-header">THU</div>
-        </div>
-        <div class="day-column" id="day-fri">
-          <div class="day-header">FRI</div>
-        </div>
+        <div class="day-column" id="day-mon"><div class="day-header">MON</div></div>
+        <div class="day-column" id="day-tue"><div class="day-header">TUE</div></div>
+        <div class="day-column" id="day-wed"><div class="day-header">WED</div></div>
+        <div class="day-column" id="day-thu"><div class="day-header">THU</div></div>
+        <div class="day-column" id="day-fri"><div class="day-header">FRI</div></div>
       </div>
     </section>
 
@@ -659,22 +491,15 @@
       <div class="section-header" data-aos="fade-up">
         <h2 id="daily-log-heading">Daily Teaching Log</h2>
         <p>Chronological record of instructional delivery and curriculum coverage.</p>
-        <!-- ADD BUTTON (Protected by CSS) -->
-        <button class="btn-add admin-only" onclick="openAddActivityModal()">
-          <i class="ri-add-line"></i> Add New Activity
-        </button>
+        <button class="btn-add admin-only" onclick="openAddActivityModal()"><i class="ri-add-line"></i> Add New Activity</button>
       </div>
 
       <div class="schedule-layout">
-        <!-- Activity Column (Timeline) -->
         <div class="activity-column">
-          <!-- Container for Dynamic JS Injection -->
           <div id="log-container" class="activity-grid">
-            <!-- Empty State Loaded by default, items added via JS -->
+            <!-- Dynamic Items -->
           </div>
         </div>
-
-        <!-- Calendar Column -->
         <div class="calendar-column" data-aos="fade-left">
           <div class="calendar-widget card">
             <div class="widget-header">
@@ -682,18 +507,22 @@
               <a href="https://calendar.google.com" target="_blank" class="btn btn-sm btn-outline"><i class="ri-external-link-line"></i> Full</a>
             </div>
             <div class="calendar-container">
-              <iframe 
-                src="https://calendar.google.com/calendar/embed?src=en.ke%23holiday%40group.v.calendar.google.com&ctz=Africa%2FNairobi" 
-                style="border: 0" 
-                width="100%" 
-                height="400" 
-                frameborder="0" 
-                scrolling="no"
-                title="Teaching Schedule Calendar">
-              </iframe>
+              <iframe src="https://calendar.google.com/calendar/embed?src=en.ke%23holiday%40group.v.calendar.google.com&ctz=Africa%2FNairobi" style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- NEW SECTION: CBET ASSESSMENT INSTRUMENTS -->
+    <section class="content-section" aria-labelledby="assessment-heading">
+      <div class="section-header" data-aos="fade-up">
+        <h2 id="assessment-heading">Assessment Instruments</h2>
+        <p>Rubrics, checklists, and marking guides aligned with competency units.</p>
+        <button class="btn-add admin-only" onclick="openAddAssessmentModal()"><i class="ri-add-line"></i> Add Instrument</button>
+      </div>
+      <div id="assessments-render" class="assessment-grid">
+        <!-- Dynamic Assessments -->
       </div>
     </section>
 
@@ -701,246 +530,157 @@
     <section class="content-section artifact-section" aria-labelledby="artifacts-heading">
         <div class="section-header" data-aos="fade-up">
           <h2 id="artifacts-heading">Major Artifacts & Innovations</h2>
-          <p>Digital tools, lesson designs, and assessment mechanisms developed during practice.</p>
-          <!-- ADD ARTIFACT BUTTON (Protected by CSS) -->
-          <button class="btn-add admin-only" onclick="openAddArtifactModal()">
-            <i class="ri-add-line"></i> Add Artifact
-          </button>
+          <p>Digital tools, lesson designs, and other developed materials.</p>
+          <button class="btn-add admin-only" onclick="openAddArtifactModal()"><i class="ri-add-line"></i> Add Artifact</button>
         </div>
-
-        <!-- Filters -->
         <div class="filter-container" data-aos="fade-up" role="tablist" aria-label="Filter Artifacts">
           <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All</button>
           <button class="filter-btn" data-filter="lesson" role="tab" aria-selected="false">Lesson Design</button>
           <button class="filter-btn" data-filter="media" role="tab" aria-selected="false">Instructional Media</button>
           <button class="filter-btn" data-filter="assessment" role="tab" aria-selected="false">Assessment</button>
         </div>
-
-        <!-- Grid (Dynamic Container) -->
-        <div id="artifacts-render" class="project-grid" role="tabpanel">
-           <!-- Dynamic Content Rendered by JS -->
-        </div>
+        <div id="artifacts-render" class="project-grid" role="tabpanel"></div>
     </section>
   </main>
 
   <!-- Supervisor FAB -->
   <a href="#" class="supervisor-fab" onclick="openModal('Supervisor Review'); event.preventDefault();" aria-label="Open Supervisor Portal">
-    <i class="ri-user-star-line"></i> 
-    <span class="fab-text">Supervisor</span>
+    <i class="ri-user-star-line"></i> <span class="fab-text">Supervisor</span>
   </a>
 
-  <!-- MODAL 1: ADD NEW ACTIVITY -->
+  <!-- MODALS -->
+
+  <!-- 1. ADD NEW ACTIVITY -->
   <div class="modal-overlay" id="addActivityModal" aria-hidden="true">
     <div class="modal-content">
       <button class="close-btn" onclick="closeAddActivityModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add Teaching Activity</h3>
-      
       <form id="activityForm">
-        <div class="form-group">
-          <label for="act-title">Activity Title</label>
-          <input type="text" id="act-title" class="form-input" placeholder="e.g. Introduction to OOP" required>
-        </div>
-
+        <div class="form-group"><label for="act-title">Activity Title</label><input type="text" id="act-title" class="form-input" placeholder="e.g. Introduction to OOP" required></div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div class="form-group">
-            <label for="act-time">Time</label>
-            <input type="text" id="act-time" class="form-input" placeholder="e.g. Monday, 08:00 AM" required>
-          </div>
-          <div class="form-group">
-            <label for="act-tag">Tag/Category</label>
-            <input type="text" id="act-tag" class="form-input" placeholder="e.g. Theory" required>
-          </div>
+          <div class="form-group"><label for="act-time">Time</label><input type="text" id="act-time" class="form-input" placeholder="e.g. Monday, 08:00 AM" required></div>
+          <div class="form-group"><label for="act-tag">Tag/Category</label><input type="text" id="act-tag" class="form-input" placeholder="e.g. Theory" required></div>
         </div>
-
-        <div class="form-group">
-          <label for="act-content">Description</label>
-          <textarea id="act-content" class="form-textarea" rows="3" placeholder="What was covered..." required></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="act-file-link">File / Resource Link (Optional)</label>
-            <input type="text" id="act-file-link" class="form-input" placeholder="e.g. assets/lesson-plan.pdf">
-        </div>
-
-        <button type="submit" class="btn-primary">
-          <i class="ri-save-line"></i> Save Activity
-        </button>
+        <div class="form-group"><label for="act-content">Description</label><textarea id="act-content" class="form-textarea" rows="3" placeholder="What was covered..." required></textarea></div>
+        <div class="form-group"><label for="act-file-link">File / Resource Link (Optional)</label><input type="text" id="act-file-link" class="form-input" placeholder="e.g. assets/lesson-plan.pdf"></div>
+        <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Activity</button>
       </form>
     </div>
   </div>
 
-  <!-- MODAL 2: ADD NEW LESSON (TIMETABLE / CBET) -->
+  <!-- 2. ADD NEW LESSON -->
   <div class="modal-overlay" id="timetableModal" aria-hidden="true">
     <div class="modal-content">
       <button class="close-btn" onclick="closeTimetableModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Schedule Lesson</h3>
-      
       <form id="timetableForm">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div class="form-group">
-            <label for="tt-day">Day</label>
-            <select id="tt-day" class="form-select" required>
-              <!-- VALUES MUST MATCH THE IDs IN THE HTML GRID (day-mon, day-tue...) -->
-              <option value="mon">Monday</option>
-              <option value="tue">Tuesday</option>
-              <option value="wed">Wednesday</option>
-              <option value="thu">Thursday</option>
-              <option value="fri">Friday</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="tt-time">Start Time</label>
-            <input type="time" id="tt-time" class="form-input" required>
-          </div>
-          <div class="form-group">
-            <label for="tt-end">End Time</label>
-            <input type="time" id="tt-end" class="form-input" required>
-          </div>
+          <div class="form-group"><label for="tt-day">Day</label><select id="tt-day" class="form-select" required><option value="mon">Monday</option><option value="tue">Tuesday</option><option value="wed">Wednesday</option><option value="thu">Thursday</option><option value="fri">Friday</option></select></div>
+          <div class="form-group"><label for="tt-time">Start Time</label><input type="time" id="tt-time" class="form-input" required></div>
+          <div class="form-group"><label for="tt-end">End Time</label><input type="time" id="tt-end" class="form-input" required></div>
         </div>
-
-        <div class="form-group">
-          <label for="tt-class">Class / Group</label>
-            <input type="text" id="tt-class" class="form-input" placeholder="e.g. 3B" required>
-          </div>
-
-        <div class="form-group">
-          <label for="tt-subject">Subject / Module</label>
-          <input type="text" id="tt-subject" class="form-input" placeholder="e.g. Math / Unit 3.1" required>
-        </div>
-
-        <div class="form-group">
-          <label for="tt-topic">Topic / Title</label>
-          <input type="text" id="tt-topic" class="form-input" placeholder="e.g. Intro to Logic" required>
-        </div>
-
-        <div class="form-group">
-          <label for="tt-enrollment">Class Size (Enrollment)</label>
-          <input type="number" id="tt-enrollment" class="form-input" placeholder="e.g. 25" min="1">
-          <small style="color: var(--text-muted)">Helps monitor trainee attendance.</small>
-        </div>
-
-        <button type="submit" class="btn-primary">
-          <i class="ri-calendar-check-line"></i> Save Lesson
-        </button>
+        <div class="form-group"><label for="tt-class">Class / Group</label><input type="text" id="tt-class" class="form-input" placeholder="e.g. 3B" required></div>
+        <div class="form-group"><label for="tt-subject">Subject / Module</label><input type="text" id="tt-subject" class="form-input" placeholder="e.g. Math / Unit 3.1" required></div>
+        <div class="form-group"><label for="tt-topic">Topic / Title</label><input type="text" id="tt-topic" class="form-input" placeholder="e.g. Intro to Logic" required></div>
+        <div class="form-group"><label for="tt-enrollment">Class Size (Enrollment)</label><input type="number" id="tt-enrollment" class="form-input" placeholder="e.g. 25" min="1"></div>
+        <button type="submit" class="btn-primary"><i class="ri-calendar-check-line"></i> Save Lesson</button>
       </form>
     </div>
   </div>
 
-  <!-- MODAL 3: ADD NEW ARTIFACT (Updated with File Inputs) -->
+  <!-- 3. ADD NEW ASSESSMENT (CBET Focused) -->
+  <div class="modal-overlay" id="addAssessmentModal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeAddAssessmentModal()">&times;</button>
+      <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add Assessment Instrument</h3>
+      
+      <div class="instruction-box" style="border-color: var(--assessment); background: rgba(13, 148, 136, 0.05);">
+        <strong><i class="ri-cursor-line"></i> CBET Focus:</strong><br>
+        Ensure this tool assesses the specific Performance Criteria for the chosen competency.
+      </div>
+
+      <form id="assessmentForm">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label for="ass-unit">Unit Code</label>
+            <input type="text" id="ass-unit" class="form-input" placeholder="e.g. ICT 302" required>
+          </div>
+          <div class="form-group">
+            <label for="ass-type">Assessment Method</label>
+            <select id="ass-type" class="form-select" required>
+              <option value="project">Performance Project</option>
+              <option value="observation">Direct Observation</option>
+              <option value="written">Written Test</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ass-title">Instrument Title</label>
+          <input type="text" id="ass-title" class="form-input" placeholder="e.g. Database Design Rubric" required>
+        </div>
+
+        <div class="form-group">
+          <label for="ass-competency">Competency Statement</label>
+          <textarea id="ass-competency" class="form-textarea" rows="2" placeholder="e.g. Design a normalized database schema to 3NF..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="ass-file">Instrument File (Rubric/Checklist)</label>
+          <div class="file-upload-group">
+            <label class="file-upload-btn" for="ass-file-input"><i class="ri-file-upload-line"></i> Choose File</label>
+            <input type="file" id="ass-file-input" accept=".pdf,.doc,.docx" style="display: none;">
+            <span class="file-name-display" id="ass-file-name">No file chosen</span>
+          </div>
+          <input type="text" id="ass-file" class="form-input" placeholder="assets/rubric.pdf" required style="margin-top: 5px;">
+        </div>
+
+        <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Instrument</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. ADD NEW ARTIFACT -->
   <div class="modal-overlay" id="addArtifactModal" aria-hidden="true">
     <div class="modal-content">
       <button class="close-btn" onclick="closeAddArtifactModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add New Artifact</h3>
-
-      <!-- INSTRUCTIONS -->
-      <div class="instruction-box">
-        <strong><i class="ri-information-line"></i> Important:</strong><br>
-        Since this is a static site, you must move the selected file to your <code>assets</code> folder manually after saving.
-      </div>
-      
+      <div class="instruction-box"><strong><i class="ri-information-line"></i> Important:</strong><br>Since this is a static site, you must move the selected file to your <code>assets</code> folder manually after saving.</div>
       <form id="artifactForm">
-        <div class="form-group">
-          <label for="art-title">Artifact Title</label>
-          <input type="text" id="art-title" class="form-input" placeholder="e.g. Full Stack Curriculum" required>
-        </div>
-
+        <div class="form-group"><label for="art-title">Artifact Title</label><input type="text" id="art-title" class="form-input" placeholder="e.g. Full Stack Curriculum" required></div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div class="form-group">
-            <label for="art-category">Category</label>
-            <select id="art-category" class="form-select" required>
-              <option value="lesson">Lesson Design</option>
-              <option value="media">Instructional Media</option>
-              <option value="assessment">Assessment</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="art-link-type">Link Type</label>
-            <select id="art-link-type" class="form-select" required>
-              <option value="pdf">PDF Document</option>
-              <option value="video">Video File</option>
-              <option value="image">Image Gallery</option>
-              <option value="external">External Website</option>
-            </select>
-          </div>
+          <div class="form-group"><label for="art-category">Category</label><select id="art-category" class="form-select" required><option value="lesson">Lesson Design</option><option value="media">Instructional Media</option><option value="assessment">Assessment</option></select></div>
+          <div class="form-group"><label for="art-link-type">Link Type</label><select id="art-link-type" class="form-select" required><option value="pdf">PDF Document</option><option value="video">Video File</option><option value="image">Image Gallery</option><option value="external">External Website</option></select></div>
         </div>
-
-        <!-- THUMBNAIL UPLOAD -->
-        <div class="form-group">
-          <label for="art-thumb-input">Thumbnail Image</label>
-          <div class="file-upload-group">
-            <label class="file-upload-btn" for="art-thumb-input">
-              <i class="ri-image-add-line"></i> Choose Image
-            </label>
-            <input type="file" id="art-thumb-input" accept="image/*" style="display: none;">
-            <span class="file-name-display" id="art-thumb-name">No file chosen</span>
-          </div>
-          <!-- Hidden input to store the generated path -->
-          <input type="text" id="art-thumb" class="form-input" placeholder="assets/thumbnail.jpg" required style="margin-top: 5px;">
-        </div>
-
-        <div class="form-group">
-          <label for="art-desc">Description</label>
-          <textarea id="art-desc" class="form-textarea" rows="3" placeholder="Brief description of project..." required></textarea>
-        </div>
-
-        <!-- RESOURCE UPLOAD -->
-        <div class="form-group">
-            <label for="art-link-input">Resource File (PDF/Video)</label>
-            <div class="file-upload-group">
-              <label class="file-upload-btn" for="art-link-input">
-                <i class="ri-file-upload-line"></i> Choose File
-              </label>
-              <input type="file" id="art-link-input" accept=".pdf,.mp4,.jpg,.png,.jpeg" style="display: none;">
-              <span class="file-name-display" id="art-link-name">No file chosen</span>
-            </div>
-            <!-- Hidden input to store the generated path -->
-            <input type="text" id="art-link" class="form-input" placeholder="assets/document.pdf" required style="margin-top: 5px;">
-        </div>
-
-        <button type="submit" class="btn-primary">
-          <i class="ri-save-line"></i> Save Artifact
-        </button>
+        <div class="form-group"><label for="art-thumb-input">Thumbnail Image</label><div class="file-upload-group"><label class="file-upload-btn" for="art-thumb-input"><i class="ri-image-add-line"></i> Choose Image</label><input type="file" id="art-thumb-input" accept="image/*" style="display: none;"><span class="file-name-display" id="art-thumb-name">No file chosen</span></div><input type="text" id="art-thumb" class="form-input" placeholder="assets/thumbnail.jpg" required style="margin-top: 5px;"></div>
+        <div class="form-group"><label for="art-desc">Description</label><textarea id="art-desc" class="form-textarea" rows="3" placeholder="Brief description of project..." required></textarea></div>
+        <div class="form-group"><label for="art-link-input">Resource File (PDF/Video)</label><div class="file-upload-group"><label class="file-upload-btn" for="art-link-input"><i class="ri-file-upload-line"></i> Choose File</label><input type="file" id="art-link-input" accept=".pdf,.mp4,.jpg,.png,.jpeg" style="display: none;"><span class="file-name-display" id="art-link-name">No file chosen</span></div><input type="text" id="art-link" class="form-input" placeholder="assets/document.pdf" required style="margin-top: 5px;"></div>
+        <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Artifact</button>
       </form>
     </div>
   </div>
 
-  <!-- MODAL 4: Smart Viewer -->
+  <!-- 5. Smart Viewer -->
   <div class="modal-overlay" id="smartViewerModal" aria-hidden="true" role="dialog">
     <div class="modal-content">
       <button class="close-btn" onclick="closeSmartViewer()" aria-label="Close modal">&times;</button>
       <h3 id="viewer-title" style="margin-bottom: 1rem; font-size: 1.5rem;">Document Viewer</h3>
-      
-      <div class="viewer-container" id="viewer-container">
-        <!-- Content injected via JS -->
-      </div>
-      
-      <div style="text-align: right;">
-         <button class="btn btn-sm btn-outline" style="width:auto; padding: 0.6rem 1.5rem" onclick="closeSmartViewer()">Close Viewer</button>
-      </div>
+      <div class="viewer-container" id="viewer-container"></div>
+      <div style="text-align: right;"><button class="btn btn-sm btn-outline" style="width:auto; padding: 0.6rem 1.5rem" onclick="closeSmartViewer()">Close Viewer</button></div>
     </div>
   </div>
 
-  <!-- MODAL 5: Supervisor Feedback -->
+  <!-- 6. Supervisor Feedback -->
   <div class="modal-overlay" id="feedbackModal" aria-hidden="true" role="dialog">
     <div class="modal-content">
       <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
         <h3 style="margin:0; font-size: 1.5rem;">Supervisor Feedback</h3>
         <button class="close-btn" onclick="closeModal()" aria-label="Close modal" style="position:static;">&times;</button>
       </div>
-      
       <form action="https://formspree.io/f/xqeyrrzr" method="POST">
-        <div class="form-group">
-          <label for="supervisor-name">Supervisor Name</label>
-          <input type="text" id="supervisor-name" class="form-input" name="supervisor_name" placeholder="e.g. Dr. Jane Doe" required>
-        </div>
-        <div class="form-group">
-          <label for="project-name">Project Being Reviewed</label>
-          <input type="text" id="project-name" class="form-input" name="project_name" value="General Portfolio Review" required>
-        </div>
-        <div class="form-group">
-          <label for="feedback-text">Comments / Recommendations</label>
-          <textarea id="feedback-text" class="form-input" rows="4" name="feedback" placeholder="Enter your observations..." required></textarea>
-        </div>
+        <div class="form-group"><label for="supervisor-name">Supervisor Name</label><input type="text" id="supervisor-name" class="form-input" name="supervisor_name" placeholder="e.g. Dr. Jane Doe" required></div>
+        <div class="form-group"><label for="project-name">Project Being Reviewed</label><input type="text" id="project-name" class="form-input" name="project_name" value="General Portfolio Review" required></div>
+        <div class="form-group"><label for="feedback-text">Comments / Recommendations</label><textarea id="feedback-text" class="form-input" rows="4" name="feedback" placeholder="Enter your observations..." required></textarea></div>
         <button type="submit" class="btn-primary"><i class="ri-send-plane-line"></i> Submit Feedback</button>
       </form>
     </div>
@@ -957,10 +697,8 @@
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // 1. Initialize AOS
     AOS.init({ duration: 800, once: true });
 
-    // 2. Theme & Menu Logic
     const themeToggle = document.getElementById('themeToggle');
     const html = document.documentElement;
     
@@ -984,108 +722,67 @@
       menuBtn.querySelector('i').className = navLinks.classList.contains('active') ? 'ri-close-line' : 'ri-menu-line';
     });
 
-    // --- ADMIN LOGIN LOGIC ---
+    // --- ADMIN LOGIN ---
     function checkAdminStatus() {
-      if(localStorage.getItem('isAdmin') === 'true') {
-        document.body.classList.add('is-admin');
-      }
+      if(localStorage.getItem('isAdmin') === 'true') document.body.classList.add('is-admin');
     }
 
     document.getElementById('admin-trigger').addEventListener('click', function(e) {
       e.preventDefault();
       const pass = prompt("Enter Admin Password:");
-      
       if(pass === "admin123") {
         localStorage.setItem('isAdmin', 'true');
         document.body.classList.add('is-admin');
         showToast('Admin Mode Activated');
-        renderLog();
-        renderArtifacts();
-        renderTimetable();
+        renderAll();
       } else {
         showToast('Incorrect Password', 'error');
       }
     });
-
     checkAdminStatus();
 
-    /* -------------------------------------------------------------------
-       3. TIMETABLE SYSTEM (FIXED)
-    ------------------------------------------------------------------- */
+    // --- TIMETABLE ---
     let timetable = JSON.parse(localStorage.getItem('timetable')) || [];
-
-    function saveTimetable() {
-      localStorage.setItem('timetable', JSON.stringify(timetable));
-    }
+    function saveTimetable() { localStorage.setItem('timetable', JSON.stringify(timetable)); }
 
     function renderTimetable() {
-      // 1. Clear all columns first (to prevent duplicates or artifacts)
       const days = ['mon', 'tue', 'wed', 'thu', 'fri'];
       days.forEach(day => {
         const container = document.getElementById(`day-${day}`);
-        
-        // Keep header, remove cards
         const header = container.querySelector('.day-header');
         container.innerHTML = '';
         if(header) container.appendChild(header);
       });
 
       if(timetable.length === 0) {
-        // If no lessons, show empty state in Monday column
         const mon = document.getElementById('day-mon');
         mon.innerHTML = `<div class="day-header">MON</div><div class="timetable-empty">No lessons scheduled.</div>`;
         return;
       }
 
       const isAdmin = document.body.classList.contains('is-admin');
-
-      // 2. Sort by Day Order (Mon, Tue, Wed, Thu, Fri)
       const dayOrder = { 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5 };
-      timetable.sort((a, b) => {
-        return (dayOrder[a.day] || 99) - (dayOrder[b.day] || 99);
-      });
+      timetable.sort((a, b) => (dayOrder[a.day] || 99) - (dayOrder[b.day] || 99));
 
-      // 3. Render Lessons
       timetable.forEach((lesson) => {
-        // The 'day' value from the form is 'mon', 'tue' etc.
-        // This must match the ID pattern 'day-mon', 'day-tue' using lowercase logic
-        const targetId = `day-${lesson.day}`;
-        const container = document.getElementById(targetId);
-
-        if(!container) {
-            console.warn(`Container ${targetId} not found for lesson:`, lesson);
-            return; 
-        }
-
-        // If container is empty (header missing), add it back
+        const container = document.getElementById(`day-${lesson.day}`);
         if(!container.querySelector('.day-header')) {
-             const dayName = lesson.day.charAt(0).toUpperCase() + lesson.day.slice(1);
-             container.innerHTML = `<div class="day-header">${dayName}</div>`;
+             container.innerHTML = `<div class="day-header">${lesson.day.toUpperCase()}</div>`;
         }
-
-        const deleteBtn = isAdmin ? `<button class="delete-session-btn admin-only" onclick="deleteLesson('${lesson.id}')" title="Delete"><i class="ri-delete-bin-line"></i></button>` : '';
-
+        const deleteBtn = isAdmin ? `<button class="delete-session-btn admin-only" onclick="deleteLesson('${lesson.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
         const enrollmentBadge = lesson.enrollment ? `<span class="class-tag"><i class="ri-user-follow-line"></i> ${lesson.enrollment} Trainees</span>` : '';
 
         const html = `
           <div class="session-card" data-aos="fade-up">
-            <div class="session-time">
-               <i class="ri-time-line"></i> ${lesson.startTime} - ${lesson.endTime}
-            </div>
+            <div class="session-time"><i class="ri-time-line"></i> ${lesson.startTime} - ${lesson.endTime}</div>
             <h4 class="session-title">${lesson.topic}</h4>
             <div class="session-details">${lesson.subject}</div>
-            <div class="session-meta">
-               <span class="class-tag">${lesson.classGroup}</span>
-               ${enrollmentBadge}
-               ${deleteBtn}
-            </div>
-          </div>
-        `;
+            <div class="session-meta"><span class="class-tag">${lesson.classGroup}</span>${enrollmentBadge}${deleteBtn}</div>
+          </div>`;
         container.insertAdjacentHTML('beforeend', html);
       });
     }
 
-    // Timetable Modal Logic
     const timetableModal = document.getElementById('timetableModal');
     const timetableForm = document.getElementById('timetableForm');
 
@@ -1094,10 +791,9 @@
 
     timetableForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      
       const newLesson = {
         id: Date.now().toString(),
-        day: document.getElementById('tt-day').value, // 'mon', 'tue', etc.
+        day: document.getElementById('tt-day').value,
         startTime: document.getElementById('tt-time').value,
         endTime: document.getElementById('tt-end').value,
         subject: document.getElementById('tt-subject').value,
@@ -1105,7 +801,6 @@
         classGroup: document.getElementById('tt-class').value,
         enrollment: document.getElementById('tt-enrollment').value
       };
-
       timetable.unshift(newLesson);
       saveTimetable();
       renderTimetable();
@@ -1121,68 +816,39 @@
       }
     }
 
-    /* -------------------------------------------------------------------
-       4. DYNAMIC TEACHING LOG SYSTEM
-    ------------------------------------------------------------------- */
-    
+    // --- TEACHING LOG ---
     let teachingLog = JSON.parse(localStorage.getItem('teachingLog')) || [];
-
-    function saveTeachingLog() {
-      localStorage.setItem('teachingLog', JSON.stringify(teachingLog));
-    }
+    function saveTeachingLog() { localStorage.setItem('teachingLog', JSON.stringify(teachingLog)); }
 
     function renderLog() {
       const container = document.getElementById('log-container');
       container.innerHTML = '';
-
       if (teachingLog.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <i class="ri-clipboard-line"></i>
-            <h3>No Teaching Activities Yet</h3>
-            <p>Your daily log is currently empty. Click the "Add New Activity" button above.</p>
-          </div>
-        `;
+        container.innerHTML = `<div class="empty-state"><i class="ri-clipboard-line"></i><h3>No Teaching Activities Yet</h3><p>Your daily log is currently empty.</p></div>`;
         return;
       }
-
       const isAdmin = document.body.classList.contains('is-admin');
 
       teachingLog.forEach((item) => {
-        const tagsHtml = item.tags.map(tag => 
-          `<span class="tag">${tag} ${isAdmin ? `<button onclick="removeTag('${item.id}', '${tag}')" title="Remove tag">&times;</button>` : ''}</span>`
-        ).join('');
-
+        const tagsHtml = item.tags.map(tag => `<span class="tag">${tag} ${isAdmin ? `<button onclick="removeTag('${item.id}', '${tag}')">&times;</button>` : ''}</span>`).join('');
         const linksHtml = item.links.map(link => {
-          let icon = '';
-          if(link.type === 'pdf') icon = 'ri-file-pdf-line';
-          if(link.type === 'image') icon = 'ri-image-line';
-          
-          return `<button class="btn-sm btn-outline" onclick="openSmartViewer('${link.src}', '${item.title} - ${link.label}', '${link.type}')">
-            <i class="${icon}"></i> ${link.label}
-          </button>`;
+          let icon = link.type === 'pdf' ? 'ri-file-pdf-line' : (link.type === 'image' ? 'ri-image-line' : 'ri-link');
+          return `<button class="btn-sm btn-outline" onclick="openSmartViewer('${link.src}', '${item.title} - ${link.label}', '${link.type}')"><i class="${icon}"></i> ${link.label}</button>`;
         }).join('');
-
-        const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteActivity('${item.id}')" title="Delete Activity"><i class="ri-delete-bin-line"></i></button>` : '';
+        const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteActivity('${item.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
 
         const html = `
           <article class="card activity-card" data-aos="fade-up">
-            <div class="card-header">
-              <span class="day-badge">${item.dayLabel}</span>
-              <span class="text-muted">${item.time}</span>
-              ${deleteBtn}
-            </div>
+            <div class="card-header"><span class="day-badge">${item.dayLabel}</span><span class="text-muted">${item.time}</span>${deleteBtn}</div>
             <h3>${item.title}</h3>
             <p class="text-muted">${item.description}</p>
             <div class="tag-group">${tagsHtml}</div>
             <div class="project-links">${linksHtml}</div>
-          </article>
-        `;
+          </article>`;
         container.insertAdjacentHTML('beforeend', html);
       });
     }
 
-    // --- Activity Modal Logic ---
     const addActivityModal = document.getElementById('addActivityModal');
     const activityForm = document.getElementById('activityForm');
 
@@ -1192,7 +858,6 @@
     activityForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const dayNum = teachingLog.length + 1;
-      
       const newActivity = {
         id: Date.now().toString(),
         title: document.getElementById('act-title').value,
@@ -1203,14 +868,12 @@
         links: [],
         fileLink: document.getElementById('act-file-link').value
       };
-
       if (newActivity.fileLink) {
         let type = 'external';
         if(newActivity.fileLink.toLowerCase().includes('.pdf')) type = 'pdf';
         else if(newActivity.fileLink.match(/\.(jpeg|jpg|png|webp)$/)) type = 'image';
         newActivity.links.push({ label: 'Resource', src: newActivity.fileLink, type: type });
       }
-
       teachingLog.unshift(newActivity);
       saveTeachingLog();
       renderLog();
@@ -1226,107 +889,150 @@
         renderLog();
       }
     }
-
     function deleteActivity(id) {
-      if(confirm('Are you sure you want to delete this entry?')) {
+      if(confirm('Delete this entry?')) {
         teachingLog = teachingLog.filter(item => item.id !== id);
         saveTeachingLog();
         renderLog();
       }
     }
 
-    /* -------------------------------------------------------------------
-       5. DYNAMIC ARTIFACTS SYSTEM (With File Handling)
-    ------------------------------------------------------------------- */
+    // --- ASSESSMENT INSTRUMENTS (New) ---
+    let assessments = JSON.parse(localStorage.getItem('assessments')) || [];
+    function saveAssessments() { localStorage.setItem('assessments', JSON.stringify(assessments)); }
 
-    let artifacts = JSON.parse(localStorage.getItem('artifacts')) || [];
+    function renderAssessments() {
+      const container = document.getElementById('assessments-render');
+      container.innerHTML = '';
+      if(assessments.length === 0) {
+         container.innerHTML = `<div class="empty-state"><i class="ri-clipboard-check-line"></i><h3>No Instruments Yet</h3><p>Upload rubrics and checklists here.</p></div>`;
+         return;
+      }
+      const isAdmin = document.body.classList.contains('is-admin');
 
-    function saveArtifacts() {
-      localStorage.setItem('artifacts', JSON.stringify(artifacts));
-    }
-
-    // Helper: Handle File Selection
-    function handleFileSelect(inputId, displayId) {
-      const input = document.getElementById(inputId);
-      const display = document.getElementById(displayId);
-      
-      input.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        // 1. Show filename
-        display.textContent = file.name;
-
-        // 2. Auto-fill the path into URL input for persistence (Simulating upload)
-        // Note: This path must actually exist in the 'assets' folder for it to work for others!
-        const pathInput = document.getElementById(inputId.replace('-input', ''));
+      assessments.forEach((item) => {
+        const typeClass = `ass-type-${item.type}`;
+        const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteAssessment('${item.id}')" style="position:absolute; top:1rem; right:1rem;"><i class="ri-delete-bin-line"></i></button>` : '';
         
-        // Check if the user is typing a manual URL, if not, auto-fill assets path
-        if(!pathInput.value.startsWith('http')) {
-             pathInput.value = `assets/${file.name}`;
-        }
-
-        // 3. Create a temporary blob URL for immediate preview (Session only)
-        // We store this on the input element for the submit handler to use
-        input.dataset.blobUrl = URL.createObjectURL(file);
+        const html = `
+          <div class="card assessment-card" data-aos="fade-up">
+            ${deleteBtn}
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+               <span class="unit-badge">${item.unitCode}</span>
+               <span class="ass-type-badge ${typeClass}">${item.type}</span>
+            </div>
+            <h3>${item.title}</h3>
+            <div class="competency-statement">
+              <i class="ri-double-quotes-l"></i> ${item.competency}
+            </div>
+            <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.file}', '${item.title} - Instrument', 'pdf')">
+              <i class="ri-file-download-line"></i> Download/View Instrument
+            </button>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
       });
     }
 
-    // Initialize File Listeners
+    const assessmentModal = document.getElementById('addAssessmentModal');
+    const assessmentForm = document.getElementById('assessmentForm');
+
+    function openAddAssessmentModal() { assessmentModal.classList.add('active'); }
+    function closeAddAssessmentModal() { assessmentModal.classList.remove('active'); assessmentForm.reset(); }
+
+    // Init File Listener for Assessment
+    const assFileInput = document.getElementById('ass-file-input');
+    assFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+        document.getElementById('ass-file-name').textContent = file.name;
+        document.getElementById('ass-file').value = `assets/${file.name}`;
+        assFileInput.dataset.blobUrl = URL.createObjectURL(file);
+    });
+
+    assessmentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fileUrl = assFileInput.dataset.blobUrl || document.getElementById('ass-file').value;
+
+      if(assFileInput.files.length > 0) {
+         showToast('File selected! Move files to "assets" folder.', 'success');
+      }
+
+      const newAssessment = {
+        id: Date.now().toString(),
+        unitCode: document.getElementById('ass-unit').value,
+        type: document.getElementById('ass-type').value,
+        title: document.getElementById('ass-title').value,
+        competency: document.getElementById('ass-competency').value,
+        file: fileUrl
+      };
+
+      assessments.unshift(newAssessment);
+      saveAssessments();
+      renderAssessments();
+      closeAddAssessmentModal();
+      showToast('Instrument saved!');
+    });
+
+    function deleteAssessment(id) {
+      if(confirm('Delete this instrument?')) {
+        assessments = assessments.filter(item => item.id !== id);
+        saveAssessments();
+        renderAssessments();
+      }
+    }
+
+    // --- ARTIFACTS ---
+    let artifacts = JSON.parse(localStorage.getItem('artifacts')) || [];
+    function saveArtifacts() { localStorage.setItem('artifacts', JSON.stringify(artifacts)); }
+
+    function handleFileSelect(inputId, displayId) {
+      const input = document.getElementById(inputId);
+      const display = document.getElementById(displayId);
+      input.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        display.textContent = file.name;
+        const pathInput = document.getElementById(inputId.replace('-input', ''));
+        if(!pathInput.value.startsWith('http')) pathInput.value = `assets/${file.name}`;
+        input.dataset.blobUrl = URL.createObjectURL(file);
+      });
+    }
     handleFileSelect('art-thumb-input', 'art-thumb-name');
     handleFileSelect('art-link-input', 'art-link-name');
 
     function renderArtifacts() {
       const container = document.getElementById('artifacts-render');
       container.innerHTML = '';
-
       if (artifacts.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <i class="ri-folder-open-line"></i>
-            <h3>No Artifacts Yet</h3>
-            <p>Upload your projects and innovations to showcase your work.</p>
-          </div>
-        `;
+        container.innerHTML = `<div class="empty-state"><i class="ri-folder-open-line"></i><h3>No Artifacts Yet</h3><p>Upload your projects and innovations.</p></div>`;
         return;
       }
-
       const isAdmin = document.body.classList.contains('is-admin');
 
       artifacts.forEach((item) => {
-        let btnIcon = '';
-        let btnText = 'View Artifact';
+        let btnIcon = 'ri-external-link-line';
+        let btnText = 'Visit Link';
         if(item.linkType === 'pdf') { btnIcon = 'ri-file-pdf-line'; btnText = 'View PDF'; }
         if(item.linkType === 'video') { btnIcon = 'ri-play-circle-line'; btnText = 'Watch Video'; }
         if(item.linkType === 'image') { btnIcon = 'ri-image-line'; btnText = 'View Gallery'; }
-        if(item.linkType === 'external') { btnIcon = 'ri-external-link-line'; btnText = 'Visit Link'; }
-
-        // ONLY render delete button HTML if isAdmin is TRUE (Security Layer 2)
-        const deleteBtn = isAdmin ? 
-          `<button class="artifact-delete-btn admin-only" onclick="deleteArtifact('${item.id}')" title="Delete Artifact"><i class="ri-delete-bin-line"></i></button>` : '';
+        const deleteBtn = isAdmin ? `<button class="artifact-delete-btn admin-only" onclick="deleteArtifact('${item.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
 
         const html = `
           <div class="card artifact-card" data-category="${item.category}" data-aos="zoom-in">
             ${deleteBtn}
-            <div class="artifact-thumb">
-               <img src="${item.thumb}" alt="${item.title}">
-            </div>
+            <div class="artifact-thumb"><img src="${item.thumb}" alt="${item.title}"></div>
             <div class="artifact-content">
                <h3>${item.title}</h3>
                <p>${item.description}</p>
-               <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center" onclick="openSmartViewer('${item.link}', '${item.title}', '${item.linkType}')">
-                 <i class="${btnIcon}"></i> ${btnText}
-               </button>
+               <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center" onclick="openSmartViewer('${item.link}', '${item.title}', '${item.linkType}')"><i class="${btnIcon}"></i> ${btnText}</button>
             </div>
-          </div>
-        `;
+          </div>`;
         container.insertAdjacentHTML('beforeend', html);
       });
-      
       applyFilters();
     }
 
-    // --- Artifact Modal Logic ---
     const addArtifactModal = document.getElementById('addArtifactModal');
     const artifactForm = document.getElementById('artifactForm');
 
@@ -1334,28 +1040,17 @@
     function closeAddArtifactModal() { 
       addArtifactModal.classList.remove('active'); 
       artifactForm.reset(); 
-      // Reset file displays
       document.getElementById('art-thumb-name').textContent = "No file chosen";
       document.getElementById('art-link-name').textContent = "No file chosen";
     }
 
     artifactForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      
       const thumbInput = document.getElementById('art-thumb-input');
       const linkInput = document.getElementById('art-link-input');
-
-      // Use Blob URL for immediate preview if file was selected, otherwise use text path
       const thumbUrl = thumbInput.dataset.blobUrl || document.getElementById('art-thumb').value;
       const linkUrl = linkInput.dataset.blobUrl || document.getElementById('art-link').value;
-
-      // If user selected a file, warn them to move it
-      if(thumbInput.files.length > 0 || linkInput.files.length > 0) {
-        showToast('File selected! Move files to "assets" folder.', 'success');
-        setTimeout(() => {
-            alert("IMPORTANT:\n\nTo make this file visible to your supervisor, you MUST drag& file(s) you selected into your project's 'assets' folder in your code editor.");
-        }, 1000);
-      }
+      if(thumbInput.files.length > 0 || linkInput.files.length > 0) showToast('File selected! Move files to "assets" folder.', 'success');
 
       const newArtifact = {
         id: Date.now().toString(),
@@ -1366,12 +1061,11 @@
         description: document.getElementById('art-desc').value,
         link: linkUrl
       };
-
       artifacts.unshift(newArtifact);
       saveArtifacts();
       renderArtifacts();
       closeAddArtifactModal();
-      showToast('Artifact saved! (Ensure files are in assets folder)');
+      showToast('Artifact saved!');
     });
 
     function deleteArtifact(id) {
@@ -1382,18 +1076,14 @@
       }
     }
 
-    /* -------------------------------------------------------------------
-       6. ARTIFACT FILTERING
-    ------------------------------------------------------------------- */
+    // --- ARTIFACT FILTERING ---
     const filterBtns = document.querySelectorAll('.filter-btn');
 
     function applyFilters() {
         const activeBtn = document.querySelector('.filter-btn.active');
         if(!activeBtn) return;
-        
         const filter = activeBtn.getAttribute('data-filter');
         const cards = document.querySelectorAll('.artifact-card');
-        
         cards.forEach(card => {
           if(filter === 'all' || card.getAttribute('data-category') === filter) {
             card.style.display = 'flex';
@@ -1407,20 +1097,14 @@
 
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        filterBtns.forEach(b => {
-          b.classList.remove('active');
-          b.setAttribute('aria-selected', 'false');
-        });
+        filterBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
         btn.classList.add('active');
         btn.setAttribute('aria-selected', 'true');
-
         applyFilters();
       });
     });
 
-    /* -------------------------------------------------------------------
-       7. SMART VIEWER & MODAL LOGIC
-    ------------------------------------------------------------------- */
+    // --- VIEWER & MODAL LOGIC ---
     const viewerModal = document.getElementById('smartViewerModal');
     const viewerTitle = document.getElementById('viewer-title');
     const viewerContainer = document.getElementById('viewer-container');
@@ -1428,21 +1112,10 @@
     function openSmartViewer(src, title, type) {
       viewerTitle.innerText = title;
       viewerContainer.innerHTML = ''; 
-
-      if(type === 'pdf') {
-        viewerContainer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`;
-      } else if (type === 'image') {
-        viewerContainer.innerHTML = `<img src="${src}" alt="${title}">`;
-      } else if (type === 'video') {
-        viewerContainer.innerHTML = `
-          <video controls autoplay>
-            <source src="${src}" type="video/mp4">
-            Your browser does not support video tag.
-          </video>`;
-      } else {
-        viewerContainer.innerHTML = `<p style="color:var(--text-muted)">This content is hosted externally. <a href="${src}" target="_blank" style="color:var(--primary)">Click here to open it in a new tab.</a></p>`;
-      }
-
+      if(type === 'pdf') { viewerContainer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`; } 
+      else if (type === 'image') { viewerContainer.innerHTML = `<img src="${src}" alt="${title}">`; }
+      else if (type === 'video') { viewerContainer.innerHTML = `<video controls autoplay><source src="${src}" type="video/mp4">Your browser does not support video tag.</video>`; }
+      else { viewerContainer.innerHTML = `<p style="color:var(--text-muted)">External content. <a href="${src}" target="_blank" style="color:var(--primary)">Open here.</a></p>`; }
       viewerModal.classList.add('active');
     }
 
@@ -1452,25 +1125,16 @@
     }
 
     const feedbackModal = document.getElementById('feedbackModal');
-    function openModal(context) {
-      document.getElementById('project-name').value = context;
-      feedbackModal.classList.add('active');
-    }
-    function closeModal() {
-      feedbackModal.classList.remove('active');
-    }
+    function openModal(context) { document.getElementById('project-name').value = context; feedbackModal.classList.add('active'); }
+    function closeModal() { feedbackModal.classList.remove('active'); }
 
-    // Toast Notification
     function showToast(message, type = 'success') {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
       toast.className = `toast ${type}`;
-      
       const icon = type === 'success' ? 'ri-checkbox-circle-fill' : 'ri-error-warning-fill';
-      
       toast.innerHTML = `<i class="${icon}"></i> <span>${message}</span>`;
       container.appendChild(toast);
-      
       setTimeout(() => {
         toast.style.opacity = '0';
         toast.style.transform = 'translateY(20px)';
@@ -1478,19 +1142,22 @@
       }, 3000);
     }
 
-    // Close modals on outside click
     window.onclick = function(event) {
       if (event.target == viewerModal) closeSmartViewer();
       if (event.target == feedbackModal) closeModal();
       if (event.target == addActivityModal) closeAddActivityModal();
       if (event.target == addArtifactModal) closeAddArtifactModal();
       if (event.target == timetableModal) closeTimetableModal();
+      if (event.target == assessmentModal) closeAddAssessmentModal();
     }
 
-    // Initialize on Load
-    renderLog();
-    renderArtifacts();
-    renderTimetable();
+    function renderAll() {
+      renderLog();
+      renderArtifacts();
+      renderTimetable();
+      renderAssessments();
+    }
+    renderAll();
 
   </script>
 </body>

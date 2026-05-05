@@ -277,7 +277,7 @@
         position: absolute;
         top: 10px;
         right: 10px;
-        background: rgba(255, 255, 255, 0.9);
+        background: rgba(255,255, 255, 0.9);
         color: #ef4444;
         border-radius: 50%;
         width: 35px;
@@ -379,16 +379,24 @@
     }
 
     /* --- ADMIN PROTECTION CSS --- */
-    /* 1. By default, hide all elements with class .admin-only */
+    /* 1. STRICT HIDE: By default, hide all elements with class .admin-only */
+    /* Using !important ensures no other styles can accidentally show them */
     .admin-only { 
       display: none !important; 
     }
 
-    /* 2. Only show .admin-only elements if the body has the .is-admin class */
+    /* 2. UNLOCK: Only show .admin-only elements if body has .is-admin class */
     body.is-admin .admin-only { 
       display: flex !important; 
     }
   </style>
+  
+  <!-- Script to check admin status IMMEDIATELY to prevent button flashing on load -->
+  <script>
+    if(localStorage.getItem('isAdmin') === 'true') {
+      document.body.classList.add('is-admin');
+    }
+  </script>
 </head>
 <body>
 
@@ -437,7 +445,7 @@
       <div class="section-header" data-aos="fade-up">
         <h2 id="daily-log-heading">Daily Teaching Log</h2>
         <p>Chronological record of instructional delivery and curriculum coverage.</p>
-        <!-- ADD BUTTON (Protected) -->
+        <!-- ADD BUTTON (Protected by CSS) -->
         <button class="btn-add admin-only" onclick="openAddActivityModal()">
           <i class="ri-add-line"></i> Add New Activity
         </button>
@@ -480,7 +488,7 @@
         <div class="section-header" data-aos="fade-up">
           <h2 id="artifacts-heading">Major Artifacts & Innovations</h2>
           <p>Digital tools, lesson designs, and assessment mechanisms developed during practice.</p>
-          <!-- ADD ARTIFACT BUTTON (Protected) -->
+          <!-- ADD ARTIFACT BUTTON (Protected by CSS) -->
           <button class="btn-add admin-only" onclick="openAddArtifactModal()">
             <i class="ri-add-line"></i> Add Artifact
           </button>
@@ -748,7 +756,7 @@
           </button>`;
         }).join('');
 
-        // Only render delete button HTML if admin
+        // ONLY render delete button HTML if isAdmin is TRUE (Security Layer 2)
         const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteActivity('${item.id}')" title="Delete Activity"><i class="ri-delete-bin-line"></i></button>` : '';
 
         const html = `
@@ -856,7 +864,7 @@
         if(item.linkType === 'image') { btnIcon = 'ri-image-line'; btnText = 'View Gallery'; }
         if(item.linkType === 'external') { btnIcon = 'ri-external-link-line'; btnText = 'Visit Link'; }
 
-        // Only render delete button HTML if admin
+        // ONLY render delete button HTML if isAdmin is TRUE (Security Layer 2)
         const deleteBtn = isAdmin ? 
           `<button class="artifact-delete-btn admin-only" onclick="deleteArtifact('${item.id}')" title="Delete Artifact"><i class="ri-delete-bin-line"></i></button>` : '';
 

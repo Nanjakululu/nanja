@@ -376,7 +376,16 @@
         border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .artifact-delete-btn:hover { background: #ef4444; color: white; }
-    
+
+    /* Lesson Specific Styles */
+    .lesson-meta-row {
+        display: flex; justify-content: space-between; margin-bottom: 0.5rem;
+    }
+    .lesson-meta-item {
+        font-size: 0.8rem; font-weight: 600; color: var(--primary); background: var(--primary-light);
+        padding: 4px 8px; border-radius: 4px; display: flex; align-items: center; gap: 4px;
+    }
+
     /* --- FAB & MODALS --- */
     .supervisor-fab {
       position: fixed; bottom: 30px; right: 30px;
@@ -638,7 +647,7 @@
       </div>
     </section>
 
-    <!-- SECTION 3: ARTIFACTS GRID -->
+    <!-- SECTION 3: ARTIFACTS GRID (Lesson Design Management) -->
     <section class="content-section artifact-section" aria-labelledby="artifacts-heading">
         <div class="section-header" data-aos="fade-up">
           <h2 id="artifacts-heading">Major Artifacts & Innovations</h2>
@@ -680,19 +689,16 @@
     </div>
   </div>
 
-  <!-- 2. ADD NEW LESSON (Updated with Week) -->
+  <!-- 2. ADD NEW LESSON -->
   <div class="modal-overlay" id="timetableModal" aria-hidden="true">
     <div class="modal-content">
       <button class="close-btn" onclick="closeTimetableModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Schedule Lesson</h3>
       <form id="timetableForm">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <!-- NEW: Week Selector -->
           <div class="form-group">
             <label for="tt-week">Week Number</label>
-            <select id="tt-week" class="form-select" required>
-                <!-- Populated via JS -->
-            </select>
+            <select id="tt-week" class="form-select" required></select>
           </div>
           <div class="form-group"><label for="tt-day">Day</label><select id="tt-day" class="form-select" required><option value="mon">Monday</option><option value="tue">Tuesday</option><option value="wed">Wednesday</option><option value="thu">Thursday</option><option value="fri">Friday</option></select></div>
           <div class="form-group"><label for="tt-time">Start Time</label><input type="time" id="tt-time" class="form-input" required></div>
@@ -707,7 +713,7 @@
     </div>
   </div>
 
-  <!-- 3. ADD NEW ASSESSMENT (CBET Focused) -->
+  <!-- 3. ADD NEW ASSESSMENT -->
   <div class="modal-overlay" id="addAssessmentModal" aria-hidden="true">
     <div class="modal-content">
       <button class="close-btn" onclick="closeAddAssessmentModal()">&times;</button>
@@ -759,7 +765,7 @@
     </div>
   </div>
 
-  <!-- 4. ADD NEW ARTIFACT -->
+  <!-- 4. ADD NEW ARTIFACT (Dynamic for Lesson Plans) -->
   <div class="modal-overlay" id="addArtifactModal" aria-hidden="true">
     <div class="modal-content">
       <button class="close-btn" onclick="closeAddArtifactModal()">&times;</button>
@@ -768,9 +774,29 @@
       <form id="artifactForm">
         <div class="form-group"><label for="art-title">Artifact Title</label><input type="text" id="art-title" class="form-input" placeholder="e.g. Full Stack Curriculum" required></div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div class="form-group"><label for="art-category">Category</label><select id="art-category" class="form-select" required><option value="lesson">Lesson Design</option><option value="media">Instructional Media</option><option value="assessment">Assessment</option></select></div>
+          <div class="form-group">
+            <label for="art-category">Category</label>
+            <select id="art-category" class="form-select" required onchange="handleCategoryChange()">
+              <option value="lesson">Lesson Design</option>
+              <option value="media">Instructional Media</option>
+              <option value="assessment">Assessment</option>
+            </select>
+          </div>
           <div class="form-group"><label for="art-link-type">Link Type</label><select id="art-link-type" class="form-select" required><option value="pdf">PDF Document</option><option value="video">Video File</option><option value="image">Image Gallery</option><option value="external">External Website</option></select></div>
         </div>
+
+        <!-- DYNAMIC LESSON FIELDS -->
+        <div id="lesson-specific-fields" style="display: block; animation: fadeIn 0.3s ease;">
+            <div class="form-group">
+                <label for="art-unit">Unit / Topic Focus</label>
+                <input type="text" id="art-unit" class="form-input" placeholder="e.g. Data Structures">
+            </div>
+            <div class="form-group">
+                <label for="art-duration">Duration</label>
+                <input type="text" id="art-duration" class="form-input" placeholder="e.g. 90 Mins">
+            </div>
+        </div>
+
         <div class="form-group"><label for="art-thumb-input">Thumbnail Image</label><div class="file-upload-group"><label class="file-upload-btn" for="art-thumb-input"><i class="ri-image-add-line"></i> Choose Image</label><input type="file" id="art-thumb-input" accept="image/*" style="display: none;"><span class="file-name-display" id="art-thumb-name">No file chosen</span></div><input type="text" id="art-thumb" class="form-input" placeholder="assets/thumbnail.jpg" required style="margin-top: 5px;"></div>
         <div class="form-group"><label for="art-desc">Description</label><textarea id="art-desc" class="form-textarea" rows="3" placeholder="Brief description of project..." required></textarea></div>
         <div class="form-group"><label for="art-link-input">Resource File (PDF/Video)</label><div class="file-upload-group"><label class="file-upload-btn" for="art-link-input"><i class="ri-file-upload-line"></i> Choose File</label><input type="file" id="art-link-input" accept=".pdf,.mp4,.jpg,.png,.jpeg" style="display: none;"><span class="file-name-display" id="art-link-name">No file chosen</span></div><input type="text" id="art-link" class="form-input" placeholder="assets/document.pdf" required style="margin-top: 5px;"></div>
@@ -862,24 +888,19 @@
 
     // --- TIMETABLE & RECORD OF WORK ---
     let timetable = JSON.parse(localStorage.getItem('timetable')) || [];
-    let currentWeek = 1; // Default to Week 1
+    let currentWeek = 1;
 
     function saveTimetable() { localStorage.setItem('timetable', JSON.stringify(timetable)); }
 
-    // Helper to get unique weeks sorted
     function getWeeks() {
         const weeks = timetable.map(l => parseInt(l.week));
-        // Ensure at least 1 exists
         if(weeks.length === 0) return [1];
         return [...new Set(weeks)].sort((a,b) => a - b);
     }
 
-    // Render Week Tabs
     function renderWeekTabs() {
         const container = document.getElementById('week-tabs-container');
         const weeks = getWeeks();
-        
-        // If the current selected week isn't in the list (e.g. deleted), reset to first
         if(!weeks.includes(currentWeek)) currentWeek = weeks[0];
 
         container.innerHTML = '';
@@ -895,10 +916,9 @@
             container.appendChild(btn);
         });
 
-        // Populate Modal Week Selector as well
         const modalSelect = document.getElementById('tt-week');
         modalSelect.innerHTML = '';
-        for(let i=1; i<=16; i++) { // Support up to 16 weeks
+        for(let i=1; i<=16; i++) {
             const opt = document.createElement('option');
             opt.value = i;
             opt.text = `Week ${i}`;
@@ -907,7 +927,6 @@
         }
     }
 
-    // Render Visual Grid
     function renderTimetableGrid() {
       const days = ['mon', 'tue', 'wed', 'thu', 'fri'];
       days.forEach(day => {
@@ -928,7 +947,6 @@
       const isAdmin = document.body.classList.contains('is-admin');
       const dayOrder = { 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5 };
       
-      // Sort by time for grid
       weekLessons.sort((a, b) => a.startTime.localeCompare(b.startTime));
 
       weekLessons.forEach((lesson) => {
@@ -950,7 +968,6 @@
       });
     }
 
-    // Render Record of Work (Table)
     function renderRecordOfWork() {
         const tbody = document.querySelector('#record-of-work-table tbody');
         tbody.innerHTML = '';
@@ -961,8 +978,6 @@
         }
 
         const isAdmin = document.body.classList.contains('is-admin');
-
-        // Sort: Week -> Day -> Time
         const dayOrder = { 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5 };
         const sorted = [...timetable].sort((a,b) => {
             if(parseInt(a.week) !== parseInt(b.week)) return parseInt(a.week) - parseInt(b.week);
@@ -1003,7 +1018,7 @@
             rowBtn.classList.add('active');
             gridView.style.display = 'none';
             rowView.classList.add('active');
-            renderRecordOfWork(); // Refresh table
+            renderRecordOfWork();
         }
     }
 
@@ -1011,9 +1026,7 @@
     const timetableForm = document.getElementById('timetableForm');
 
     function openTimetableModal() { 
-        // Ensure weeks are generated
         renderWeekTabs();
-        // Set select value to current viewing week
         document.getElementById('tt-week').value = currentWeek;
         timetableModal.classList.add('active'); 
     }
@@ -1032,12 +1045,9 @@
         classGroup: document.getElementById('tt-class').value,
         enrollment: document.getElementById('tt-enrollment').value
       };
-      timetable.push(newLesson); // Use push to append, or unshift to prepend
+      timetable.push(newLesson);
       saveTimetable();
-      
-      // Switch to the new week
       currentWeek = newLesson.week;
-      
       renderWeekTabs();
       renderTimetableGrid();
       renderRecordOfWork();
@@ -1191,10 +1201,7 @@
     assessmentForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const fileUrl = assFileInput.dataset.blobUrl || document.getElementById('ass-file').value;
-
-      if(assFileInput.files.length > 0) {
-         showToast('File selected! Move files to "assets" folder.', 'success');
-      }
+      if(assFileInput.files.length > 0) showToast('File selected! Move files to "assets" folder.', 'success');
 
       const newAssessment = {
         id: Date.now().toString(),
@@ -1220,9 +1227,25 @@
       }
     }
 
-    // --- ARTIFACTS ---
+    // --- ARTIFACTS (With Lesson Management) ---
     let artifacts = JSON.parse(localStorage.getItem('artifacts')) || [];
     function saveArtifacts() { localStorage.setItem('artifacts', JSON.stringify(artifacts)); }
+
+    // Handle Category Change in Modal (Show/Hide Lesson Fields)
+    function handleCategoryChange() {
+        const category = document.getElementById('art-category').value;
+        const lessonFields = document.getElementById('lesson-specific-fields');
+        if(category === 'lesson') {
+            lessonFields.style.display = 'block';
+        } else {
+            lessonFields.style.display = 'none';
+            // Optional: clear values
+            document.getElementById('art-unit').value = '';
+            document.getElementById('art-duration').value = '';
+        }
+    }
+    // Initialize state
+    handleCategoryChange();
 
     function handleFileSelect(inputId, displayId) {
       const input = document.getElementById(inputId);
@@ -1256,11 +1279,26 @@
         if(item.linkType === 'image') { btnIcon = 'ri-image-line'; btnText = 'View Gallery'; }
         const deleteBtn = isAdmin ? `<button class="artifact-delete-btn admin-only" onclick="deleteArtifact('${item.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
 
+        // Specific Metadata for Lesson Plans
+        let lessonMetaHtml = '';
+        if(item.category === 'lesson') {
+            const durationBadge = item.duration ? `<span class="lesson-meta-item"><i class="ri-time-line"></i> ${item.duration}</span>` : '';
+            const unitBadge = item.unit ? `<span class="lesson-meta-item" style="background: var(--secondary-light); color: var(--secondary);"><i class="ri-booklet-line"></i> ${item.unit}</span>` : '';
+            
+            lessonMetaHtml = `
+                <div class="lesson-meta-row">
+                    ${unitBadge}
+                    ${durationBadge}
+                </div>
+            `;
+        }
+
         const html = `
           <div class="card artifact-card" data-category="${item.category}" data-aos="zoom-in">
             ${deleteBtn}
             <div class="artifact-thumb"><img src="${item.thumb}" alt="${item.title}"></div>
             <div class="artifact-content">
+               ${lessonMetaHtml}
                <h3>${item.title}</h3>
                <p>${item.description}</p>
                <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center" onclick="openSmartViewer('${item.link}', '${item.title}', '${item.linkType}')"><i class="${btnIcon}"></i> ${btnText}</button>
@@ -1274,12 +1312,17 @@
     const addArtifactModal = document.getElementById('addArtifactModal');
     const artifactForm = document.getElementById('artifactForm');
 
-    function openAddArtifactModal() { addArtifactModal.classList.add('active'); }
+    function openAddArtifactModal() { 
+        // Default to lesson fields visible
+        handleCategoryChange();
+        addArtifactModal.classList.add('active'); 
+    }
     function closeAddArtifactModal() { 
       addArtifactModal.classList.remove('active'); 
       artifactForm.reset(); 
       document.getElementById('art-thumb-name').textContent = "No file chosen";
       document.getElementById('art-link-name').textContent = "No file chosen";
+      handleCategoryChange();
     }
 
     artifactForm.addEventListener('submit', (e) => {
@@ -1290,14 +1333,19 @@
       const linkUrl = linkInput.dataset.blobUrl || document.getElementById('art-link').value;
       if(thumbInput.files.length > 0 || linkInput.files.length > 0) showToast('File selected! Move files to "assets" folder.', 'success');
 
+      const category = document.getElementById('art-category').value;
+
       const newArtifact = {
         id: Date.now().toString(),
         title: document.getElementById('art-title').value,
-        category: document.getElementById('art-category').value,
+        category: category,
         linkType: document.getElementById('art-link-type').value,
         thumb: thumbUrl,
         description: document.getElementById('art-desc').value,
-        link: linkUrl
+        link: linkUrl,
+        // Save lesson fields if category is lesson
+        unit: category === 'lesson' ? document.getElementById('art-unit').value : '',
+        duration: category === 'lesson' ? document.getElementById('art-duration').value : ''
       };
       artifacts.unshift(newArtifact);
       saveArtifacts();

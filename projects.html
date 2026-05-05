@@ -369,6 +369,15 @@
       }
       .page-hero h1 { font-size: 2.5rem; }
     }
+
+    /* --- ADMIN PROTECTION CSS --- */
+    .admin-only { 
+      display: none !important; 
+    }
+    /* Only show admin elements when body has this class */
+    body.is-admin .admin-only { 
+      display: flex !important; 
+    }
   </style>
 </head>
 <body>
@@ -418,8 +427,8 @@
       <div class="section-header" data-aos="fade-up">
         <h2 id="daily-log-heading">Daily Teaching Log</h2>
         <p>Chronological record of instructional delivery and curriculum coverage.</p>
-        <!-- ADD BUTTON -->
-        <button class="btn-add" onclick="openAddActivityModal()">
+        <!-- ADD BUTTON (Hidden by default via .admin-only) -->
+        <button class="btn-add admin-only" onclick="openAddActivityModal()">
           <i class="ri-add-line"></i> Add New Activity
         </button>
       </div>
@@ -604,7 +613,9 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p>&copy; 2024 Alex N. Department of Computing and Informatics.</p>
+      <p>&copy; 2024 Alex N. Department of Computing and Informatics. 
+         <a href="#" id="admin-trigger" style="opacity: 0.3; font-size: 0.8rem; margin-left: 10px; text-decoration: none;">Admin</a>
+      </p>
     </div>
   </footer>
 
@@ -638,11 +649,37 @@
       menuBtn.querySelector('i').className = navLinks.classList.contains('active') ? 'ri-close-line' : 'ri-menu-line';
     });
 
+    // --- ADMIN LOGIN LOGIC ---
+    function checkAdminStatus() {
+      if(localStorage.getItem('isAdmin') === 'true') {
+        document.body.classList.add('is-admin');
+      }
+    }
+
+    // Handle the Admin Link Click in Footer
+    document.getElementById('admin-trigger').addEventListener('click', function(e) {
+      e.preventDefault();
+      const pass = prompt("Enter Admin Password:");
+      
+      // CHANGE PASSWORD HERE
+      if(pass === "admin123") {
+        localStorage.setItem('isAdmin', 'true');
+        document.body.classList.add('is-admin');
+        showToast('Admin Mode Activated');
+        renderLog(); // Re-render to show delete buttons if they exist
+      } else {
+        showToast('Incorrect Password', 'error');
+      }
+    });
+
+    // Check on page load
+    checkAdminStatus();
+
     /* -------------------------------------------------------------------
-       3. DYNAMIC TEACHING LOG SYSTEM (NO HARDCODED DATA)
+       3. DYNAMIC TEACHING LOG SYSTEM
     ------------------------------------------------------------------- */
     
-    // Initialize empty array if storage is empty (Removed hardcoded initialData)
+    // Initialize empty array if storage is empty
     let teachingLog = JSON.parse(localStorage.getItem('teachingLog')) || [];
 
     function saveTeachingLog() {
@@ -666,11 +703,14 @@
         return;
       }
 
+      // Check if we are in admin mode for rendering delete buttons
+      const isAdmin = document.body.classList.contains('is-admin');
+
       // If not empty, render items
       teachingLog.forEach((item, index) => {
-        // Generate Tags HTML
+        // Generate Tags HTML (Only show remove tag button if admin)
         const tagsHtml = item.tags.map(tag => 
-          `<span class="tag">${tag} <button onclick="removeTag('${item.id}', '${tag}')" title="Remove tag">&times;</button></span>`
+          `<span class="tag">${tag} ${isAdmin ? `<button onclick="removeTag('${item.id}', '${tag}')" title="Remove tag">&times;</button>` : ''}</span>`
         ).join('');
 
         // Generate Links HTML
@@ -684,12 +724,16 @@
           </button>`;
         }).join('');
 
+        // Delete button HTML string (conditional)
+        const deleteButtonHtml = isAdmin ? 
+          `<button class="delete-btn admin-only" onclick="deleteActivity('${item.id}')" title="Delete Activity"><i class="ri-delete-bin-line"></i></button>` : '';
+
         const html = `
           <article class="card activity-card" data-aos="fade-up">
             <div class="card-header">
               <span class="day-badge">${item.dayLabel}</span>
               <span class="text-muted">${item.time}</span>
-              <button class="delete-btn" onclick="deleteActivity('${item.id}')" title="Delete Activity"><i class="ri-delete-bin-line"></i></button>
+              ${deleteButtonHtml}
             </div>
             <h3>${item.title}</h3>
             <p class="text-muted">${item.description}</p>
@@ -717,7 +761,6 @@
     activityForm.addEventListener('submit', (e) => {
       e.preventDefault();
       
-      // Generate a simple Day Label based on current count
       const dayNum = teachingLog.length + 1;
       
       const newActivity = {
@@ -725,28 +768,23 @@
         title: document.getElementById('act-title').value,
         time: document.getElementById('act-time').value,
         description: document.getElementById('act-content').value,
-        dayLabel: `Day ${dayNum}`, // Auto-increment Day Label
+        dayLabel: `Day ${dayNum}`,
         tags: [document.getElementById('act-tag').value, 'Activity'], 
         links: [],
         fileLink: document.getElementById('act-file-link').value
       };
 
-      // If a file link is provided, create a link entry
       if (newActivity.fileLink) {
-        // Guess type based on extension (simple heuristic)
         let type = 'external';
         if(newActivity.fileLink.toLowerCase().includes('.pdf')) type = 'pdf';
         else if(newActivity.fileLink.match(/\.(jpeg|jpg|png|webp)$/)) type = 'image';
         
         newActivity.links.push({ label: 'Resource', src: newActivity.fileLink, type: type });
-      } else {
-        // Add a dummy link structure if none provided (optional, for visual consistency)
-         // newActivity.links.push({ label: 'Lesson Plan', src: '#', type: 'external' });
       }
 
-      teachingLog.unshift(newActivity); // Add to beginning
+      teachingLog.unshift(newActivity);
       saveTeachingLog();
-      renderLog(); // Re-render timeline
+      renderLog();
       closeAddActivityModal();
       
       showToast('Activity added successfully!');
@@ -816,7 +854,7 @@
         viewerContainer.innerHTML = `
           <video controls autoplay>
             <source src="${src}" type="video/mp4">
-            Your browser does not support the video tag.
+            Your browser does not support video tag.
           </video>`;
       } else {
         viewerContainer.innerHTML = `<p style="color:var(--text-muted)">This content is hosted externally. <a href="${src}" target="_blank" style="color:var(--primary)">Click here to open it in a new tab.</a></p>`;
@@ -850,7 +888,6 @@
       toast.innerHTML = `<i class="${icon}"></i> <span>${message}</span>`;
       container.appendChild(toast);
       
-      // Remove after 3 seconds
       setTimeout(() => {
         toast.style.opacity = '0';
         toast.style.transform = 'translateY(20px)';
@@ -865,7 +902,7 @@
       if (event.target == addActivityModal) closeAddActivityModal();
     }
 
-    // Initialize Log on Load (Will show empty state initially)
+    // Initialize Log on Load
     renderLog();
 
   </script>

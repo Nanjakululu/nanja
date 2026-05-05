@@ -379,9 +379,12 @@
     }
 
     /* --- ADMIN PROTECTION CSS --- */
+    /* 1. By default, hide all elements with class .admin-only */
     .admin-only { 
       display: none !important; 
     }
+
+    /* 2. Only show .admin-only elements if the body has the .is-admin class */
     body.is-admin .admin-only { 
       display: flex !important; 
     }
@@ -434,7 +437,7 @@
       <div class="section-header" data-aos="fade-up">
         <h2 id="daily-log-heading">Daily Teaching Log</h2>
         <p>Chronological record of instructional delivery and curriculum coverage.</p>
-        <!-- ADD BUTTON -->
+        <!-- ADD BUTTON (Protected) -->
         <button class="btn-add admin-only" onclick="openAddActivityModal()">
           <i class="ri-add-line"></i> Add New Activity
         </button>
@@ -477,7 +480,7 @@
         <div class="section-header" data-aos="fade-up">
           <h2 id="artifacts-heading">Major Artifacts & Innovations</h2>
           <p>Digital tools, lesson designs, and assessment mechanisms developed during practice.</p>
-          <!-- ADD ARTIFACT BUTTON (Admin Only) -->
+          <!-- ADD ARTIFACT BUTTON (Protected) -->
           <button class="btn-add admin-only" onclick="openAddArtifactModal()">
             <i class="ri-add-line"></i> Add Artifact
           </button>
@@ -589,7 +592,7 @@
 
         <div class="form-group">
             <label for="art-link">Resource Link (URL)</label>
-            <input type="text" id="art-link" class="form-input" placeholder="Link to the PDF, Video, or Repo" required>
+            <input type="text" id="art-link" class="form-input" placeholder="Link to PDF, Video, or Repo" required>
         </div>
 
         <button type="submit" class="btn-primary">
@@ -745,6 +748,7 @@
           </button>`;
         }).join('');
 
+        // Only render delete button HTML if admin
         const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteActivity('${item.id}')" title="Delete Activity"><i class="ri-delete-bin-line"></i></button>` : '';
 
         const html = `
@@ -845,7 +849,6 @@
       const isAdmin = document.body.classList.contains('is-admin');
 
       artifacts.forEach((item) => {
-        // Determine Button Icon based on type
         let btnIcon = '';
         let btnText = 'View Artifact';
         if(item.linkType === 'pdf') { btnIcon = 'ri-file-pdf-line'; btnText = 'View PDF'; }
@@ -853,6 +856,7 @@
         if(item.linkType === 'image') { btnIcon = 'ri-image-line'; btnText = 'View Gallery'; }
         if(item.linkType === 'external') { btnIcon = 'ri-external-link-line'; btnText = 'Visit Link'; }
 
+        // Only render delete button HTML if admin
         const deleteBtn = isAdmin ? 
           `<button class="artifact-delete-btn admin-only" onclick="deleteArtifact('${item.id}')" title="Delete Artifact"><i class="ri-delete-bin-line"></i></button>` : '';
 
@@ -874,7 +878,6 @@
         container.insertAdjacentHTML('beforeend', html);
       });
       
-      // Re-apply filters
       applyFilters();
     }
 
@@ -923,7 +926,6 @@
         if(!activeBtn) return;
         
         const filter = activeBtn.getAttribute('data-filter');
-        // Re-select cards to include dynamically added ones
         const cards = document.querySelectorAll('.artifact-card');
         
         cards.forEach(card => {
@@ -952,7 +954,7 @@
 
     /* -------------------------------------------------------------------
        6. SMART VIEWER & MODAL LOGIC
-       ------------------------------------------------------------------- */
+    ------------------------------------------------------------------- */
     const viewerModal = document.getElementById('smartViewerModal');
     const viewerTitle = document.getElementById('viewer-title');
     const viewerContainer = document.getElementById('viewer-container');

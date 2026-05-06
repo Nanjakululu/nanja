@@ -26,6 +26,12 @@
       --scheme-bg: rgba(139, 92, 246, 0.1);
       --plan-color: #f59e0b;
       --plan-bg: rgba(245, 158, 11, 0.1);
+      
+      /* New: Curriculum & Standards Colors */
+      --curriculum-color: #0ea5e9; /* Sky Blue */
+      --curriculum-bg: rgba(14, 165, 233, 0.1);
+      --standard-color: #d946ef; /* Fuchsia */
+      --standard-bg: rgba(217, 70, 239, 0.1);
 
       /* Backgrounds */
       --bg-body: #f8fafc;
@@ -281,11 +287,14 @@
     .ass-type-observation { background: #f59e0b; }
     .ass-type-written { background: #6366f1; }
 
-    /* --- ARTIFACTS (Refined) --- */
+    /* --- CURRICULUM & STANDARDS (New) --- */
     .filter-container { display: flex; gap: 0.8rem; margin-bottom: 2.5rem; overflow-x: auto; padding-bottom: 0.5rem; }
     .filter-btn { padding: 0.6rem 1.5rem; border-radius: 50px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-weight: 500; white-space: nowrap; transition: var(--transition); }
     .filter-btn.active, .filter-btn:hover { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); transform: translateY(-1px); }
-    
+
+    .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+
+    /* --- ARTIFACTS --- */
     .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
     
     .artifact-card { padding: 0; height: 100%; display: flex; flex-direction: column; position: relative; border: 1px solid var(--border-color); border-radius: 20px; overflow: hidden; background: var(--bg-card); transition: var(--transition); }
@@ -306,15 +315,16 @@
     }
     .artifact-delete-btn:hover { background: #ef4444; color: white; }
 
-    /* Specific Meta Badges */
+    /* Meta Badges */
     .artifact-meta-row { display: flex; gap: 0.5rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
     .meta-badge {
         font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;
     }
-    /* Category Colors */
     .badge-plan { background: var(--plan-bg); color: var(--plan-color); border: 1px solid rgba(245, 158, 11, 0.2); }
     .badge-scheme { background: var(--scheme-bg); color: var(--scheme-color); border: 1px solid rgba(139, 92, 246, 0.2); }
     .badge-media { background: var(--primary-light); color: var(--primary); border: 1px solid rgba(79, 70, 229, 0.2); }
+    .badge-curriculum { background: var(--curriculum-bg); color: var(--curriculum-color); border: 1px solid rgba(14, 165, 233, 0.2); }
+    .badge-standard { background: var(--standard-bg); color: var(--standard-color); border: 1px solid rgba(217, 70, 239, 0.2); }
 
     /* --- MODALS --- */
     .supervisor-fab {
@@ -383,15 +393,9 @@
         padding: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-main); border-radius: 0.8px 8px 0;
     }
 
-    /* Dynamic Form Fields */
     .dynamic-field-group {
-        display: none; /* Hidden by default */
-        background: var(--bg-body);
-        padding: 1rem;
-        border-radius: 12px;
-        border: 1px dashed var(--border-color);
-        margin-bottom: 1.2rem;
-        animation: fadeIn 0.3s ease;
+        display: none; background: var(--bg-body); padding: 1rem; border-radius: 12px;
+        border: 1px dashed var(--border-color); margin-bottom: 1.2rem; animation: fadeIn 0.3s ease;
     }
     .dynamic-field-group.active { display: block; }
     .field-group-title { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -412,25 +416,18 @@
     .admin-controls { margin-top: 1rem; }
     .btn-danger {
         background: #ef4444; color: white; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.8rem;
-        display: none; /* Hidden by default */
+        display: none; 
     }
 
-    /* Responsive */
     @media (max-width: 900px) {
       .schedule-layout { grid-template-columns: 1fr; }
       .timetable-wrapper { grid-template-columns: 60px repeat(5, 1fr); gap: 0.5rem; }
-      .day-header { font-size: 0.8rem; }
-      .session-card { padding: 0.8rem; }
       .nav-links { display: none; }
       .mobile-menu-btn { display: block; }
-      .nav-links.active {
-        display: flex; flex-direction: column; position: absolute; top: var(--nav-height); left: 0; width: 100%;
-        background: var(--bg-card); padding: 2rem; box-shadow: var(--shadow-lg); border-bottom: 1px solid var(--border-color);
-      }
+      .nav-links.active { display: flex; flex-direction: column; position: absolute; top: var(--nav-height); left: 0; width: 100%; background: var(--bg-card); padding: 2rem; box-shadow: var(--shadow-lg); border-bottom: 1px solid var(--border-color); }
       .page-hero h1 { font-size: 2.5rem; }
     }
 
-    /* --- ADMIN PROTECTION CSS --- */
     .admin-only { display: none !important; }
     body.is-admin .admin-only { display: flex !important; }
     body.is-admin .admin-only.btn-add { display: inline-flex !important; }
@@ -574,7 +571,7 @@
       </div>
     </section>
 
-    <!-- NEW SECTION: CBET ASSESSMENT INSTRUMENTS -->
+    <!-- SECTION 3: ASSESSMENT INSTRUMENTS -->
     <section class="content-section" aria-labelledby="assessment-heading">
       <div class="section-header" data-aos="fade-up">
         <h2 id="assessment-heading">Assessment Instruments</h2>
@@ -584,7 +581,24 @@
       <div id="assessments-render" class="assessment-grid"></div>
     </section>
 
-    <!-- SECTION 3: REFINED ARTIFACTS (LESSON PLANS & SCHEMES) -->
+    <!-- NEW SECTION 4: CURRICULUM & STANDARDS -->
+    <section class="content-section" aria-labelledby="curriculum-heading">
+        <div class="section-header" data-aos="fade-up">
+          <h2 id="curriculum-heading">Curriculum & Standards</h2>
+          <p>Occupational standards, course outlines, and institutional curricula.</p>
+          <button class="btn-add admin-only" onclick="openCurriculumModal()"><i class="ri-add-line"></i> Upload Document</button>
+        </div>
+        
+        <div class="filter-container" data-aos="fade-up">
+          <button class="filter-btn active" onclick="filterCurriculum('all')">All</button>
+          <button class="filter-btn" onclick="filterCurriculum('curriculum')">Curriculum</button>
+          <button class="filter-btn" onclick="filterCurriculum('standard')">Occupational Standards</button>
+        </div>
+
+        <div id="curriculum-render" class="doc-grid" role="tabpanel"></div>
+    </section>
+
+    <!-- SECTION 5: DOCUMENTATION (PLANS & SCHEMES) -->
     <section class="content-section artifact-section" aria-labelledby="artifacts-heading">
         <div class="section-header" data-aos="fade-up">
           <h2 id="artifacts-heading">Documentation</h2>
@@ -592,12 +606,11 @@
           <button class="btn-add admin-only" onclick="openAddArtifactModal()"><i class="ri-add-line"></i> Add Document</button>
         </div>
         
-        <!-- Specific Filters for Teaching Docs -->
-        <div class="filter-container" data-aos="fade-up" role="tablist" aria-label="Filter Artifacts">
-          <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All</button>
-          <button class="filter-btn" data-filter="plan" role="tab" aria-selected="false">Lesson Plans</button>
-          <button class="filter-btn" data-filter="scheme" role="tab" aria-selected="false">Schemes of Work</button>
-          <button class="filter-btn" data-filter="media" role="tab" aria-selected="false">Media</button>
+        <div class="filter-container" data-aos="fade-up">
+          <button class="filter-btn active" onclick="filterArtifacts('all')">All</button>
+          <button class="filter-btn" onclick="filterArtifacts('plan')">Lesson Plans</button>
+          <button class="filter-btn" onclick="filterArtifacts('scheme')">Schemes of Work</button>
+          <button class="filter-btn" onclick="filterArtifacts('media')">Media</button>
         </div>
         
         <div id="artifacts-render" class="project-grid" role="tabpanel"></div>
@@ -635,10 +648,7 @@
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Schedule Lesson</h3>
       <form id="timetableForm">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div class="form-group">
-            <label for="tt-week">Week Number</label>
-            <select id="tt-week" class="form-select" required></select>
-          </div>
+          <div class="form-group"><label for="tt-week">Week Number</label><select id="tt-week" class="form-select" required></select></div>
           <div class="form-group"><label for="tt-day">Day</label><select id="tt-day" class="form-select" required><option value="mon">Monday</option><option value="tue">Tuesday</option><option value="wed">Wednesday</option><option value="thu">Thursday</option><option value="fri">Friday</option></select></div>
           <div class="form-group"><label for="tt-time">Start Time</label><input type="time" id="tt-time" class="form-input" required></div>
           <div class="form-group"><label for="tt-end">End Time</label><input type="time" id="tt-end" class="form-input" required></div>
@@ -663,135 +673,88 @@
       </div>
       <form id="assessmentForm">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div class="form-group">
-            <label for="ass-unit">Unit Code</label>
-            <input type="text" id="ass-unit" class="form-input" placeholder="e.g. ICT 302" required>
-          </div>
-          <div class="form-group">
-            <label for="ass-type">Assessment Method</label>
-            <select id="ass-type" class="form-select" required>
-              <option value="project">Performance Project</option>
-              <option value="observation">Direct Observation</option>
-              <option value="written">Written Test</option>
-            </select>
-          </div>
+          <div class="form-group"><label for="ass-unit">Unit Code</label><input type="text" id="ass-unit" class="form-input" placeholder="e.g. ICT 302" required></div>
+          <div class="form-group"><label for="ass-type">Assessment Method</label><select id="ass-type" class="form-select" required><option value="project">Performance Project</option><option value="observation">Direct Observation</option><option value="written">Written Test</option></select></div>
         </div>
-        <div class="form-group">
-          <label for="ass-title">Instrument Title</label>
-          <input type="text" id="ass-title" class="form-input" placeholder="e.g. Database Design Rubric" required>
-        </div>
-        <div class="form-group">
-          <label for="ass-competency">Competency Statement</label>
-          <textarea id="ass-competency" class="form-textarea" rows="2" placeholder="e.g. Design a normalized database schema to 3NF..." required></textarea>
-        </div>
-        <div class="form-group">
-            <label for="ass-file">Instrument File (Link or Path)</label>
-            <input type="text" id="ass-file" class="form-input" placeholder="https://drive.google.com/... OR assets/rubric.pdf" required style="margin-top: 5px;">
-        </div>
+        <div class="form-group"><label for="ass-title">Instrument Title</label><input type="text" id="ass-title" class="form-input" placeholder="e.g. Database Design Rubric" required></div>
+        <div class="form-group"><label for="ass-competency">Competency Statement</label><textarea id="ass-competency" class="form-textarea" rows="2" placeholder="e.g. Design a normalized database schema to 3NF..." required></textarea></div>
+        <div class="form-group"><label for="ass-file">Instrument File (Link or Path)</label><input type="text" id="ass-file" class="form-input" placeholder="https://drive.google.com/... OR assets/rubric.pdf" style="margin-top: 5px;"></div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Instrument</button>
       </form>
     </div>
   </div>
 
-  <!-- 4. ADD NEW ARTIFACT (Refined for Plans & Schemes) -->
-  <div class="modal-overlay" id="addArtifactModal" aria-hidden="true">
+  <!-- 4. ADD NEW CURRICULUM/STANDARD -->
+  <div class="modal-overlay" id="addCurriculumModal" aria-hidden="true">
     <div class="modal-content">
-      <button class="close-btn" onclick="closeAddArtifactModal()">&times;</button>
-      <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add Documentation</h3>
-      <div class="instruction-box"><strong><i class="ri-information-line"></i> Saving Files:</strong><br>Thumbnails are saved automatically. For PDFs/Schemes, please use a <strong>Google Drive / Dropbox Link</strong> or place files in your <code>assets</code> folder.</div>
-      
-      <form id="artifactForm">
-        <div class="form-group">
-            <label for="art-category">Document Type</label>
-            <select id="art-category" class="form-select" required onchange="handleCategoryChange()">
-              <option value="plan">Lesson Plan</option>
-              <option value="scheme">Scheme of Work</option>
-              <option value="media">Instructional Media</option>
-            </select>
+      <button class="close-btn" onclick="closeCurriculumModal()">&times;</button>
+      <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Upload Curriculum</h3>
+      <form id="curriculumForm">
+        <div class="form-group"><label for="cur-type">Document Type</label><select id="cur-type" class="form-select" required><option value="curriculum">Curriculum</option><option value="standard">Occupational Standard</option></select></div>
+        <div class="form-group"><label for="cur-title">Title</label><input type="text" id="cur-title" class="form-input" placeholder="e.g. IT Support Level 4" required></div>
+        <div class="form-group"><label for="cur-code">Code / Level</label><input type="text" id="cur-code" class="form-input" placeholder="e.g. ICT-SUP-014 or Diploma"></div>
+        <div class="form-group"><label for="cur-thumb-input">Thumbnail</label>
+            <div class="file-upload-group"><label class="file-upload-btn" for="cur-thumb-input"><i class="ri-image-add-line"></i> Choose</label><input type="file" id="cur-thumb-input" accept="image/*" style="display: none;"><span class="file-name-display" id="cur-thumb-name">No file</span></div>
+            <input type="text" id="cur-thumb" class="form-input" placeholder="assets/thumb.jpg" style="margin-top:5px;">
         </div>
-
-        <!-- Common Fields -->
-        <div class="form-group"><label for="art-title">Title</label><input type="text" id="art-title" class="form-input" placeholder="e.g. Intro to HTML5" required></div>
-        
-        <!-- LESSON PLAN FIELDS -->
-        <div id="plan-fields" class="dynamic-field-group active">
-            <div class="field-group-title"><i class="ri-book-open-line"></i> Lesson Details</div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div class="form-group">
-                    <label for="plan-week">Week Number</label>
-                    <input type="number" id="plan-week" class="form-input" placeholder="e.g. 4">
-                </div>
-                <div class="form-group">
-                    <label for="plan-duration">Duration</label>
-                    <input type="text" id="plan-duration" class="form-input" placeholder="e.g. 90 Mins / 2 Lessons">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="plan-topic">Specific Topic / Sub-topic</label>
-                <input type="text" id="plan-topic" class="form-input" placeholder="e.g. Tags, Attributes & Elements">
-            </div>
+        <div class="form-group"><label for="cur-desc">Description</label><textarea id="cur-desc" class="form-textarea" rows="2" placeholder="Brief overview..."></textarea></div>
+        <div class="form-group"><label for="cur-file-input">Document File</label>
+            <div class="file-upload-group"><label class="file-upload-btn" for="cur-file-input"><i class="ri-file-upload-line"></i> Choose</label><input type="file" id="cur-file-input" accept=".pdf" style="display: none;"><span class="file-name-display" id="cur-link-name">No file</span></div>
+            <input type="text" id="cur-link" class="form-input" placeholder="https://drive... or assets/curr.pdf" style="margin-top:5px;">
         </div>
-
-        <!-- SCHEME OF WORK FIELDS -->
-        <div id="scheme-fields" class="dynamic-field-group">
-            <div class="field-group-title"><i class="ri-calendar-2-line"></i> Scheme Details</div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div class="form-group">
-                    <label for="scheme-term">Term / Period</label>
-                    <input type="text" id="scheme-term" class="form-input" placeholder="e.g. Term 2 2024">
-                </div>
-                <div class="form-group">
-                    <label for="scheme-weeks">Total Weeks</label>
-                    <input type="text" id="scheme-weeks" class="form-input" placeholder="e.g. 14 Weeks">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="scheme-module">Module / Course Code</label>
-                <input type="text" id="scheme-module" class="form-input" placeholder="e.g. ICT 201 - Web Dev">
-            </div>
-        </div>
-
-        <!-- MEDIA FIELDS -->
-        <div id="media-fields" class="dynamic-field-group">
-            <div class="field-group-title"><i class="ri-gallery-line"></i> Media Details</div>
-            <div class="form-group">
-                <label for="media-type">Format</label>
-                <select id="media-type" class="form-select">
-                    <option value="image">Image Set</option>
-                    <option value="video">Video</option>
-                    <option value="slides">Slides/PPT</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="art-thumb-input">Thumbnail Image (Auto-saved)</label>
-            <div class="file-upload-group">
-                <label class="file-upload-btn" for="art-thumb-input"><i class="ri-image-add-line"></i> Choose Image</label>
-                <input type="file" id="art-thumb-input" accept="image/*" style="display: none;">
-                <span class="file-name-display" id="art-thumb-name">No file chosen</span>
-            </div>
-            <input type="text" id="art-thumb" class="form-input" placeholder="assets/thumbnail.jpg" required style="margin-top: 5px;">
-        </div>
-        
-        <div class="form-group"><label for="art-desc">Description</label><textarea id="art-desc" class="form-textarea" rows="2" placeholder="Brief notes..." required></textarea></div>
-        
-        <div class="form-group">
-            <label for="art-file-input">Document File (Link or Path)</label>
-            <div class="file-upload-group">
-                <label class="file-upload-btn" for="art-file-input"><i class="ri-file-upload-line"></i> Choose File</label>
-                <input type="file" id="art-file-input" accept=".pdf,.ppt,.pptx,.doc,.docx" style="display: none;">
-                <span class="file-name-display" id="art-link-name">No file chosen</span>
-            </div>
-            <input type="text" id="art-link" class="form-input" placeholder="https://drive.google.com/... OR assets/plan.pdf" required style="margin-top: 5px;">
-        </div>
-        
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
       </form>
     </div>
   </div>
 
-  <!-- 5. Smart Viewer -->
+  <!-- 5. ADD NEW ARTIFACT -->
+  <div class="modal-overlay" id="addArtifactModal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeAddArtifactModal()">&times;</button>
+      <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add Documentation</h3>
+      <form id="artifactForm">
+        <div class="form-group"><label for="art-category">Document Type</label><select id="art-category" class="form-select" required onchange="handleCategoryChange()"><option value="plan">Lesson Plan</option><option value="scheme">Scheme of Work</option><option value="media">Instructional Media</option></select></div>
+        <div class="form-group"><label for="art-title">Title</label><input type="text" id="art-title" class="form-input" placeholder="e.g. Intro to HTML5" required></div>
+        
+        <div id="plan-fields" class="dynamic-field-group active">
+            <div class="field-group-title">Lesson Details</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group"><label for="plan-week">Week</label><input type="number" id="plan-week" class="form-input" placeholder="e.g. 4"></div>
+                <div class="form-group"><label for="plan-duration">Duration</label><input type="text" id="plan-duration" class="form-input" placeholder="e.g. 90 Mins"></div>
+            </div>
+            <div class="form-group"><label for="plan-topic">Topic</label><input type="text" id="plan-topic" class="form-input" placeholder="e.g. Tags & Attributes"></div>
+        </div>
+
+        <div id="scheme-fields" class="dynamic-field-group">
+            <div class="field-group-title">Scheme Details</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group"><label for="scheme-term">Term</label><input type="text" id="scheme-term" class="form-input" placeholder="e.g. Term 2"></div>
+                <div class="form-group"><label for="scheme-weeks">Weeks</label><input type="text" id="scheme-weeks" class="form-input" placeholder="e.g. 14 Weeks"></div>
+            </div>
+            <div class="form-group"><label for="scheme-module">Module</label><input type="text" id="scheme-module" class="form-input" placeholder="e.g. ICT 201"></div>
+        </div>
+
+        <div id="media-fields" class="dynamic-field-group">
+            <div class="field-group-title">Media Details</div>
+            <div class="form-group"><label for="media-type">Format</label><select id="media-type" class="form-select"><option value="image">Image</option><option value="video">Video</option><option value="slides">Slides</option></select></div>
+        </div>
+
+        <div class="form-group"><label for="art-thumb-input">Thumbnail</label>
+            <div class="file-upload-group"><label class="file-upload-btn" for="art-thumb-input"><i class="ri-image-add-line"></i> Choose</label><input type="file" id="art-thumb-input" accept="image/*" style="display: none;"><span class="file-name-display" id="art-thumb-name">No file</span></div>
+            <input type="text" id="art-thumb" class="form-input" placeholder="assets/thumb.jpg" style="margin-top:5px;">
+        </div>
+        
+        <div class="form-group"><label for="art-desc">Description</label><textarea id="art-desc" class="form-textarea" rows="2" placeholder="Brief notes..." required></textarea></div>
+        <div class="form-group"><label for="art-file-input">Document File</label>
+            <div class="file-upload-group"><label class="file-upload-btn" for="art-file-input"><i class="ri-file-upload-line"></i> Choose</label><input type="file" id="art-file-input" accept=".pdf,.ppt" style="display: none;"><span class="file-name-display" id="art-link-name">No file</span></div>
+            <input type="text" id="art-link" class="form-input" placeholder="https://drive... or assets/plan.pdf" style="margin-top:5px;">
+        </div>
+        <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 6. Smart Viewer -->
   <div class="modal-overlay" id="smartViewerModal" aria-hidden="true" role="dialog">
     <div class="modal-content">
       <button class="close-btn" onclick="closeSmartViewer()" aria-label="Close modal">&times;</button>
@@ -801,7 +764,7 @@
     </div>
   </div>
 
-  <!-- 6. Supervisor Feedback -->
+  <!-- 7. Supervisor Feedback -->
   <div class="modal-overlay" id="feedbackModal" aria-hidden="true" role="dialog">
     <div class="modal-content">
       <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
@@ -855,7 +818,7 @@
       menuBtn.querySelector('i').className = navLinks.classList.contains('active') ? 'ri-close-line' : 'ri-menu-line';
     });
 
-    // --- HELPER: Convert Image to Base64 (Persistent) ---
+    // --- HELPER: Convert Image to Base64 ---
     const fileToBase64 = (file) => new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -1218,11 +1181,130 @@
       }
     }
 
-    // --- REFINED ARTIFACTS (Plans & Schemes) ---
+    // --- CURRICULUM & STANDARDS (New) ---
+    let curriculumDocs = JSON.parse(localStorage.getItem('curriculumDocs')) || [];
+    function saveCurriculumDocs() { localStorage.setItem('curriculumDocs', JSON.stringify(curriculumDocs)); }
+
+    function renderCurriculumDocs() {
+        const container = document.getElementById('curriculum-render');
+        container.innerHTML = '';
+        if(curriculumDocs.length === 0) {
+            container.innerHTML = `<div class="empty-state"><i class="ri-book-2-line"></i><h3>No Curriculum Yet</h3><p>Upload Occupational Standards or Curricula here.</p></div>`;
+            return;
+        }
+        const isAdmin = document.body.classList.contains('is-admin');
+        
+        curriculumDocs.forEach(item => {
+            const deleteBtn = isAdmin ? `<button class="artifact-delete-btn admin-only" onclick="deleteCurriculum('${item.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
+            const badgeClass = item.type === 'curriculum' ? 'badge-curriculum' : 'badge-standard';
+            const typeLabel = item.type === 'curriculum' ? 'Curriculum' : 'Standard';
+            const codeBadge = item.code ? `<span class="meta-badge ${badgeClass}"><i class="ri-price-tag-3-line"></i> ${item.code}</span>` : '';
+
+            const html = `
+                <div class="artifact-card" data-type="${item.type}" data-aos="zoom-in">
+                    <div class="artifact-thumb">
+                        ${deleteBtn}
+                        <img src="${item.thumb}" alt="${item.title}">
+                    </div>
+                    <div class="artifact-content">
+                        <div class="artifact-meta-row" style="margin-top:0;">
+                            <span class="meta-badge ${badgeClass}">${typeLabel}</span>
+                            ${codeBadge}
+                        </div>
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                        <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.link}', '${item.title}', 'pdf')">
+                            <i class="ri-file-download-line"></i> View Document
+                        </button>
+                    </div>
+                </div>`;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+        applyCurriculumFilter('all');
+    }
+
+    const curriculumModal = document.getElementById('addCurriculumModal');
+    const curriculumForm = document.getElementById('curriculumForm');
+
+    function openCurriculumModal() { curriculumModal.classList.add('active'); }
+    function closeCurriculumModal() { 
+        curriculumModal.classList.remove('active'); 
+        curriculumForm.reset();
+        document.getElementById('cur-thumb-name').textContent = "No file";
+        document.getElementById('cur-link-name').textContent = "No file";
+    }
+
+    curriculumForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const thumbInput = document.getElementById('cur-thumb-input');
+        const linkInput = document.getElementById('cur-file-input');
+        
+        let finalThumb = "https://via.placeholder.com/400x200?text=Doc";
+        if (thumbInput.files.length > 0) {
+            try {
+                finalThumb = await fileToBase64(thumbInput.files[0]);
+            } catch (err) {
+                console.error(err);
+            }
+        } else if(document.getElementById('cur-thumb').value) {
+            finalThumb = document.getElementById('cur-thumb').value;
+        }
+
+        let linkUrlPath = document.getElementById('cur-link').value.trim();
+        if (linkUrlPath === "" && linkInput.files.length > 0) {
+            linkUrlPath = `assets/${linkInput.files[0].name}`;
+        }
+        if(linkUrlPath === "") {
+            showToast("Please select a file or enter a link.", "error");
+            return;
+        }
+
+        const newDoc = {
+            id: Date.now().toString(),
+            type: document.getElementById('cur-type').value,
+            title: document.getElementById('cur-title').value,
+            code: document.getElementById('cur-code').value,
+            description: document.getElementById('cur-desc').value,
+            thumb: finalThumb,
+            link: linkUrlPath
+        };
+        curriculumDocs.unshift(newDoc);
+        saveCurriculumDocs();
+        renderCurriculumDocs();
+        closeCurriculumModal();
+        showToast('Document uploaded successfully!');
+    });
+
+    function deleteCurriculum(id) {
+        if(confirm('Delete this document?')) {
+            curriculumDocs = curriculumDocs.filter(item => item.id !== id);
+            saveCurriculumDocs();
+            renderCurriculumDocs();
+        }
+    }
+
+    function filterCurriculum(filter) {
+        const btns = document.querySelectorAll('#curriculum-heading').parentElement.nextElementSibling.querySelectorAll('.filter-btn');
+        btns.forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        applyCurriculumFilter(filter);
+    }
+
+    function applyCurriculumFilter(filter) {
+        const cards = document.querySelectorAll('#curriculum-render .artifact-card');
+        cards.forEach(card => {
+            if(filter === 'all' || card.getAttribute('data-type') === filter) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // --- ARTIFACTS (Plans & Schemes) ---
     let artifacts = JSON.parse(localStorage.getItem('artifacts')) || [];
     function saveArtifacts() { localStorage.setItem('artifacts', JSON.stringify(artifacts)); }
 
-    // Toggle Form Fields
     function handleCategoryChange() {
         const category = document.getElementById('art-category').value;
         const groups = {
@@ -1230,17 +1312,12 @@
             'scheme': document.getElementById('scheme-fields'),
             'media': document.getElementById('media-fields')
         };
-        
-        // Hide all
         Object.values(groups).forEach(el => el.classList.remove('active'));
-        
-        // Show selected
         if(groups[category]) groups[category].classList.add('active');
     }
-    // Init state
     handleCategoryChange();
 
-    // Handle File Selection Simulation
+    // Global File Helper for all forms
     function handleFileSelect(inputId, displayId, pathInputId) {
       const input = document.getElementById(inputId);
       const display = document.getElementById(displayId);
@@ -1250,12 +1327,13 @@
         const file = e.target.files[0];
         if (!file) return;
         display.textContent = file.name;
-        // Auto-fill path for user convenience
-        pathInput.value = `assets/${file.name}`;
+        if(pathInput) pathInput.value = `assets/${file.name}`;
       });
     }
     handleFileSelect('art-thumb-input', 'art-thumb-name', 'art-thumb');
     handleFileSelect('art-file-input', 'art-link-name', 'art-link');
+    handleFileSelect('cur-thumb-input', 'cur-thumb-name', 'cur-thumb');
+    handleFileSelect('cur-file-input', 'cur-link-name', 'cur-link');
 
     function renderArtifacts() {
       const container = document.getElementById('artifacts-render');
@@ -1268,11 +1346,9 @@
 
       artifacts.forEach((item) => {
         const deleteBtn = isAdmin ? `<button class="artifact-delete-btn admin-only" onclick="deleteArtifact('${item.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
-        
         let metaHtml = '';
         let categoryLabel = '';
         
-        // Generate specific badges based on type
         if(item.category === 'plan') {
             const week = item.planWeek ? `<span class="meta-badge badge-plan"><i class="ri-calendar-line"></i> Wk ${item.planWeek}</span>` : '';
             const duration = item.planDuration ? `<span class="meta-badge badge-plan"><i class="ri-time-line"></i> ${item.planDuration}</span>` : '';
@@ -1309,29 +1385,26 @@
           </div>`;
         container.insertAdjacentHTML('beforeend', html);
       });
-      applyFilters();
+      applyArtifactsFilter('all');
     }
 
     const addArtifactModal = document.getElementById('addArtifactModal');
     const artifactForm = document.getElementById('artifactForm');
 
-    function openAddArtifactModal() { 
-        addArtifactModal.classList.add('active'); 
-    }
+    function openAddArtifactModal() { addArtifactModal.classList.add('active'); }
     function closeAddArtifactModal() { 
       addArtifactModal.classList.remove('active'); 
       artifactForm.reset(); 
-      document.getElementById('art-thumb-name').textContent = "No file chosen";
-      document.getElementById('art-link-name').textContent = "No file chosen";
+      document.getElementById('art-thumb-name').textContent = "No file";
+      document.getElementById('art-link-name').textContent = "No file";
       handleCategoryChange();
     }
 
     artifactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const thumbInput = document.getElementById('art-thumb-input');
-      const linkUrlPath = document.getElementById('art-link').value;
+      const fileInput = document.getElementById('art-file-input');
       
-      // Convert Thumbnail to Base64
       let finalThumb = "https://via.placeholder.com/400x200?text=No+Image";
       if (thumbInput.files.length > 0) {
           try {
@@ -1344,6 +1417,15 @@
           finalThumb = document.getElementById('art-thumb').value;
       }
 
+      let linkUrlPath = document.getElementById('art-link').value.trim();
+      if (linkUrlPath === "" && fileInput.files.length > 0) {
+          linkUrlPath = `assets/${fileInput.files[0].name}`;
+      }
+      if(linkUrlPath === "") {
+          showToast("Please select a file or enter a link.", "error");
+          return;
+      }
+
       const category = document.getElementById('art-category').value;
       const newArtifact = {
         id: Date.now().toString(),
@@ -1352,7 +1434,6 @@
         thumb: finalThumb,
         description: document.getElementById('art-desc').value,
         link: linkUrlPath,
-        // Save dynamic fields
         planWeek: category === 'plan' ? document.getElementById('plan-week').value : '',
         planDuration: category === 'plan' ? document.getElementById('plan-duration').value : '',
         planTopic: category === 'plan' ? document.getElementById('plan-topic').value : '',
@@ -1361,7 +1442,6 @@
         schemeModule: category === 'scheme' ? document.getElementById('scheme-module').value : '',
         mediaType: category === 'media' ? document.getElementById('media-type').value : ''
       };
-      
       artifacts.unshift(newArtifact);
       saveArtifacts();
       renderArtifacts();
@@ -1377,14 +1457,15 @@
       }
     }
 
-    // --- ARTIFACT FILTERING ---
-    const filterBtns = document.querySelectorAll('.filter-btn');
+    function filterArtifacts(filter) {
+        const btns = document.querySelectorAll('#artifacts-heading').parentElement.nextElementSibling.querySelectorAll('.filter-btn');
+        btns.forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        applyArtifactsFilter(filter);
+    }
 
-    function applyFilters() {
-        const activeBtn = document.querySelector('.filter-btn.active');
-        if(!activeBtn) return;
-        const filter = activeBtn.getAttribute('data-filter');
-        const cards = document.querySelectorAll('.artifact-card');
+    function applyArtifactsFilter(filter) {
+        const cards = document.querySelectorAll('#artifacts-render .artifact-card');
         cards.forEach(card => {
           if(filter === 'all' || card.getAttribute('data-category') === filter) {
             card.style.display = 'flex';
@@ -1395,15 +1476,6 @@
           }
         });
     }
-
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
-        btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
-        applyFilters();
-      });
-    });
 
     // --- VIEWER & MODAL LOGIC ---
     const viewerModal = document.getElementById('smartViewerModal');
@@ -1450,11 +1522,13 @@
       if (event.target == addArtifactModal) closeAddArtifactModal();
       if (event.target == timetableModal) closeTimetableModal();
       if (event.target == assessmentModal) closeAddAssessmentModal();
+      if (event.target == curriculumModal) closeCurriculumModal();
     }
 
     function renderAll() {
       renderLog();
       renderArtifacts();
+      renderCurriculumDocs(); // New Render
       renderWeekTabs();
       renderTimetableGrid();
       renderAssessments();

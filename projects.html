@@ -28,14 +28,14 @@
       --plan-bg: rgba(245, 158, 11, 0.1);
       
       /* New: Curriculum & Standards Colors */
-      --curriculum-color: #0ea5e9; /* Sky Blue */
+      --curriculum-color: #0ea5e9; 
       --curriculum-bg: rgba(14, 165, 233, 0.1);
-      --standard-color: #d946ef; /* Fuchsia */
+      --standard-color: #d946ef; 
       --standard-bg: rgba(217, 70, 239, 0.1);
 
       /* Backgrounds */
       --bg-body: #f8fafc;
-      --bg-glass: rgba(255, 255, 255, 0.75);
+      --bg-glass: rgba(255,255, 255, 0.75);
       --bg-card: #ffffff;
       
       --text-main: #0f172a; 
@@ -287,7 +287,7 @@
     .ass-type-observation { background: #f59e0b; }
     .ass-type-written { background: #6366f1; }
 
-    /* --- CURRICULUM & STANDARDS (New) --- */
+    /* --- CURRICULUM & STANDARDS --- */
     .filter-container { display: flex; gap: 0.8rem; margin-bottom: 2.5rem; overflow-x: auto; padding-bottom: 0.5rem; }
     .filter-btn { padding: 0.6rem 1.5rem; border-radius: 50px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-weight: 500; white-space: nowrap; transition: var(--transition); }
     .filter-btn.active, .filter-btn:hover { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); transform: translateY(-1px); }
@@ -394,8 +394,7 @@
     }
 
     .dynamic-field-group {
-        display: none; background: var(--bg-body); padding: 1rem; border-radius: 12px;
-        border: 1px dashed var(--border-color); margin-bottom: 1.2rem; animation: fadeIn 0.3s ease;
+        display: none; background: var(--bg-body); padding: 1rem; border-radius: 12px; border: 1px dashed var(--border-color); margin-bottom: 1.2rem; animation: fadeIn 0.3s ease;
     }
     .dynamic-field-group.active { display: block; }
     .field-group-title { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -436,7 +435,6 @@
     body.is-admin .btn-danger { display: inline-block !important; }
   </style>
   
-  <!-- Script to check admin status IMMEDIATELY -->
   <script>
     if(localStorage.getItem('isAdmin') === 'true') {
       document.body.classList.add('is-admin');
@@ -678,7 +676,7 @@
         </div>
         <div class="form-group"><label for="ass-title">Instrument Title</label><input type="text" id="ass-title" class="form-input" placeholder="e.g. Database Design Rubric" required></div>
         <div class="form-group"><label for="ass-competency">Competency Statement</label><textarea id="ass-competency" class="form-textarea" rows="2" placeholder="e.g. Design a normalized database schema to 3NF..." required></textarea></div>
-        <div class="form-group"><label for="ass-file">Instrument File (Link or Path)</label><input type="text" id="ass-file" class="form-input" placeholder="https://drive.google.com/... OR assets/rubric.pdf" style="margin-top: 5px;"></div>
+        <div class="form-group"><label for="ass-file">Instrument File (Link or Path)</label><input type="text" id="ass-file" class="form-input" placeholder="https://drive.google.com/... OR assets/rubric.pdf"></div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Instrument</button>
       </form>
     </div>
@@ -689,6 +687,9 @@
     <div class="modal-content">
       <button class="close-btn" onclick="closeCurriculumModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Upload Curriculum</h3>
+      <div class="instruction-box" style="background: rgba(14, 165, 233, 0.05); border-left: 3px solid var(--curriculum-color);">
+        <strong><i class="ri-information-line"></i> Note:</strong><br>Small files are saved automatically. For large documents (over 2MB), use a Google Drive link to save storage space.
+      </div>
       <form id="curriculumForm">
         <div class="form-group"><label for="cur-type">Document Type</label><select id="cur-type" class="form-select" required><option value="curriculum">Curriculum</option><option value="standard">Occupational Standard</option></select></div>
         <div class="form-group"><label for="cur-title">Title</label><input type="text" id="cur-title" class="form-input" placeholder="e.g. IT Support Level 4" required></div>
@@ -700,7 +701,7 @@
         <div class="form-group"><label for="cur-desc">Description</label><textarea id="cur-desc" class="form-textarea" rows="2" placeholder="Brief overview..."></textarea></div>
         <div class="form-group"><label for="cur-file-input">Document File</label>
             <div class="file-upload-group"><label class="file-upload-btn" for="cur-file-input"><i class="ri-file-upload-line"></i> Choose</label><input type="file" id="cur-file-input" accept=".pdf" style="display: none;"><span class="file-name-display" id="cur-link-name">No file</span></div>
-            <input type="text" id="cur-link" class="form-input" placeholder="https://drive... or assets/curr.pdf" style="margin-top:5px;">
+            <input type="text" id="cur-link" class="form-input" placeholder="https://drive... OR select file" style="margin-top:5px;">
         </div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
       </form>
@@ -712,6 +713,9 @@
     <div class="modal-content">
       <button class="close-btn" onclick="closeAddArtifactModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add Documentation</h3>
+      <div class="instruction-box" style="background: rgba(245, 158, 11, 0.05); border-left: 3px solid var(--plan-color);">
+        <strong><i class="ri-information-line"></i> Note:</strong><br>Small PDFs/Lesson Plans are saved automatically. For large files (>2MB), please paste a Google Drive link.
+      </div>
       <form id="artifactForm">
         <div class="form-group"><label for="art-category">Document Type</label><select id="art-category" class="form-select" required onchange="handleCategoryChange()"><option value="plan">Lesson Plan</option><option value="scheme">Scheme of Work</option><option value="media">Instructional Media</option></select></div>
         <div class="form-group"><label for="art-title">Title</label><input type="text" id="art-title" class="form-input" placeholder="e.g. Intro to HTML5" required></div>
@@ -747,7 +751,7 @@
         <div class="form-group"><label for="art-desc">Description</label><textarea id="art-desc" class="form-textarea" rows="2" placeholder="Brief notes..." required></textarea></div>
         <div class="form-group"><label for="art-file-input">Document File</label>
             <div class="file-upload-group"><label class="file-upload-btn" for="art-file-input"><i class="ri-file-upload-line"></i> Choose</label><input type="file" id="art-file-input" accept=".pdf,.ppt" style="display: none;"><span class="file-name-display" id="art-link-name">No file</span></div>
-            <input type="text" id="art-link" class="form-input" placeholder="https://drive... or assets/plan.pdf" style="margin-top:5px;">
+            <input type="text" id="art-link" class="form-input" placeholder="https://drive... OR select file" style="margin-top:5px;">
         </div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
       </form>
@@ -818,7 +822,7 @@
       menuBtn.querySelector('i').className = navLinks.classList.contains('active') ? 'ri-close-line' : 'ri-menu-line';
     });
 
-    // --- HELPER: Convert Image to Base64 ---
+    // --- HELPER: Convert Image/File to Base64 (Persistent) ---
     const fileToBase64 = (file) => new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -1181,7 +1185,7 @@
       }
     }
 
-    // --- CURRICULUM & STANDARDS (New) ---
+    // --- CURRICULUM & STANDARDS (Base64 Fix) ---
     let curriculumDocs = JSON.parse(localStorage.getItem('curriculumDocs')) || [];
     function saveCurriculumDocs() { localStorage.setItem('curriculumDocs', JSON.stringify(curriculumDocs)); }
 
@@ -1239,6 +1243,7 @@
         const thumbInput = document.getElementById('cur-thumb-input');
         const linkInput = document.getElementById('cur-file-input');
         
+        // Handle Thumbnail (Base64)
         let finalThumb = "https://via.placeholder.com/400x200?text=Doc";
         if (thumbInput.files.length > 0) {
             try {
@@ -1250,10 +1255,24 @@
             finalThumb = document.getElementById('cur-thumb').value;
         }
 
+        // Handle Document File (Base64 or Link)
         let linkUrlPath = document.getElementById('cur-link').value.trim();
-        if (linkUrlPath === "" && linkInput.files.length > 0) {
-            linkUrlPath = `assets/${linkInput.files[0].name}`;
+
+        if (linkInput.files.length > 0) {
+            try {
+                // Attempt to convert to Base64 to avoid 404 errors
+                linkUrlPath = await fileToBase64(linkInput.files[0]);
+            } catch (err) {
+                // If file is too big for localStorage, catch the error
+                showToast('Error: File too large for browser storage (Limit: ~5MB). Please use a Google Drive link instead.', 'error');
+                return; 
+            }
+        } 
+        // If user manually typed a link, use that instead
+        else if (document.getElementById('cur-link').value.trim() !== "") {
+            linkUrlPath = document.getElementById('cur-link').value.trim();
         }
+        
         if(linkUrlPath === "") {
             showToast("Please select a file or enter a link.", "error");
             return;
@@ -1266,7 +1285,7 @@
             code: document.getElementById('cur-code').value,
             description: document.getElementById('cur-desc').value,
             thumb: finalThumb,
-            link: linkUrlPath
+            link: linkUrlPath // This is now Base64 string or external URL
         };
         curriculumDocs.unshift(newDoc);
         saveCurriculumDocs();
@@ -1301,7 +1320,7 @@
         });
     }
 
-    // --- ARTIFACTS (Plans & Schemes) ---
+    // --- ARTIFACTS (Plans & Schemes - Base64 Fix) ---
     let artifacts = JSON.parse(localStorage.getItem('artifacts')) || [];
     function saveArtifacts() { localStorage.setItem('artifacts', JSON.stringify(artifacts)); }
 
@@ -1317,7 +1336,7 @@
     }
     handleCategoryChange();
 
-    // Global File Helper for all forms
+    // Global File Helper
     function handleFileSelect(inputId, displayId, pathInputId) {
       const input = document.getElementById(inputId);
       const display = document.getElementById(displayId);
@@ -1327,7 +1346,8 @@
         const file = e.target.files[0];
         if (!file) return;
         display.textContent = file.name;
-        if(pathInput) pathInput.value = `assets/${file.name}`;
+        // Only pre-fill path if it's not already filled by user preference
+        if(pathInput && pathInput.value === '') pathInput.value = `assets/${file.name}`;
       });
     }
     handleFileSelect('art-thumb-input', 'art-thumb-name', 'art-thumb');
@@ -1405,22 +1425,36 @@
       const thumbInput = document.getElementById('art-thumb-input');
       const fileInput = document.getElementById('art-file-input');
       
+      // Handle Thumbnail (Base64)
       let finalThumb = "https://via.placeholder.com/400x200?text=No+Image";
       if (thumbInput.files.length > 0) {
           try {
               finalThumb = await fileToBase64(thumbInput.files[0]);
           } catch (error) {
-              console.error(error);
               showToast('Image too large. Using default.', 'error');
           }
       } else if(document.getElementById('art-thumb').value) {
           finalThumb = document.getElementById('art-thumb').value;
       }
 
+      // Handle Document File (Base64 or Link) - FIX 404
       let linkUrlPath = document.getElementById('art-link').value.trim();
-      if (linkUrlPath === "" && fileInput.files.length > 0) {
-          linkUrlPath = `assets/${fileInput.files[0].name}`;
+
+      if (fileInput.files.length > 0) {
+          try {
+              // Convert to Base64 to embed file directly
+              linkUrlPath = await fileToBase64(fileInput.files[0]);
+          } catch (err) {
+              // If file too big, alert user
+              showToast('Error: File too large for browser storage. Please use a Google Drive link.', 'error');
+              return; 
+          }
       }
+      // If user didn't pick file but typed a link
+      else if (document.getElementById('art-link').value.trim() !== "") {
+          linkUrlPath = document.getElementById('art-link').value.trim();
+      }
+
       if(linkUrlPath === "") {
           showToast("Please select a file or enter a link.", "error");
           return;
@@ -1433,7 +1467,7 @@
         category: category,
         thumb: finalThumb,
         description: document.getElementById('art-desc').value,
-        link: linkUrlPath,
+        link: linkUrlPath, // Storing Base64 string here
         planWeek: category === 'plan' ? document.getElementById('plan-week').value : '',
         planDuration: category === 'plan' ? document.getElementById('plan-duration').value : '',
         planTopic: category === 'plan' ? document.getElementById('plan-topic').value : '',
@@ -1485,15 +1519,21 @@
     function openSmartViewer(src, title, type) {
       viewerTitle.innerText = title;
       viewerContainer.innerHTML = ''; 
-      if(type === 'pdf') { viewerContainer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`; } 
+      
+      // Handle Base64 or URL
+      if (type === 'pdf') { 
+          viewerContainer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`; 
+      } 
       else if (type === 'image') { viewerContainer.innerHTML = `<img src="${src}" alt="${title}">`; }
       else if (type === 'video') { viewerContainer.innerHTML = `<video controls autoplay><source src="${src}" type="video/mp4">Your browser does not support video tag.</video>`; }
       else { viewerContainer.innerHTML = `<p style="color:var(--text-muted)">External content. <a href="${src}" target="_blank" style="color:var(--primary)">Open here.</a></p>`; }
+      
       viewerModal.classList.add('active');
     }
 
     function closeSmartViewer() {
       viewerModal.classList.remove('active');
+      // Clear content after animation to stop playback
       setTimeout(() => { viewerContainer.innerHTML = ''; }, 300);
     }
 
@@ -1528,7 +1568,7 @@
     function renderAll() {
       renderLog();
       renderArtifacts();
-      renderCurriculumDocs(); // New Render
+      renderCurriculumDocs(); 
       renderWeekTabs();
       renderTimetableGrid();
       renderAssessments();

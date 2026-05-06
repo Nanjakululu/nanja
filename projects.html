@@ -28,9 +28,9 @@
       --plan-bg: rgba(245, 158, 11, 0.1);
       
       /* New: Curriculum & Standards Colors */
-      --curriculum-color: #0ea5e9; 
+      --curriculum-color: #0ea5e9; /* Sky Blue */
       --curriculum-bg: rgba(14, 165, 233, 0.1);
-      --standard-color: #d946ef; 
+      --standard-color: #d946ef; /* Fuchsia */
       --standard-bg: rgba(217, 70, 239, 0.1);
 
       /* Backgrounds */
@@ -90,7 +90,7 @@
     
     .card {
       background: var(--bg-card);
-      border: 1px solid var(--border-color);
+      border:1px solid var(--border-color);
       border-radius: 20px;
       padding: 2rem;
       transition: var(--transition);
@@ -124,7 +124,7 @@
     .logo { font-size: 1.5rem; font-weight:  700; display: flex; align-items: center; gap: 5px; }
     
     .nav-links { display: flex; gap: 2.5rem; }
-    .nav-links a { font-weight:  500; color: var(--text-muted); font-size: 0.95rem; position: relative; }
+    .nav-links a { font-weight: 500; color: var(--text-muted); font-size: 0.95rem; position: relative; }
     .nav-links a:hover, .nav-links a.active { color: var(--primary); }
     .nav-links a.active::after {
       content: ''; position: absolute; bottom: -24px; left: 0;
@@ -301,7 +301,7 @@
     .artifact-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
 
     .artifact-thumb { height: 180px; width: 100%; background-color: var(--bg-body); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-    .artifact-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .artifact-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform: 0.6s ease; }
     .artifact-card:hover .artifact-thumb img { transform: scale(1.08); }
     
     .artifact-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
@@ -359,7 +359,7 @@
     }
     .close-btn:hover { background: var(--bg-body); color: var(--text-main); }
     
-    .viewer-container { width: 100%; height: 65vh; background: var(--bg-body); display: flex; align-items: center; justify-content: center; border-radius: 16px; margin-bottom:1.5rem; overflow: hidden; position: relative; border:1px solid var(--border-color); }
+    .viewer-container { width: 100%; height: 65vh; background: var(--bg-body); display: flex; align-items: center; justify-content: center; border-radius: 16px; margin-bottom:1.5rem; overflow: hidden; position: relative; border: 1px solid var(--border-color); }
     .viewer-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
     .viewer-container iframe { width: 100%; height: 100%; border: none; }
     .viewer-container video { width: 100%; height: 100%; outline: none; }
@@ -513,6 +513,7 @@
                  <div class="time-slot-label">15:00</div>
                  <div class="time-slot-label">16:00</div>
                  <div class="time-slot-label">17:00</div>
+                 <div class="time-slot-label">17:00</div>
               </div>
               <div class="day-column" id="day-mon"><div class="day-header">MON</div></div>
               <div class="day-column" id="day-tue"><div class="day-header">TUE</div></div>
@@ -566,8 +567,7 @@
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
     <!-- SECTION 3: ASSESSMENT INSTRUMENTS -->
     <section class="content-section" aria-labelledby="assessment-heading">
@@ -672,11 +672,11 @@
       <form id="assessmentForm">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div class="form-group"><label for="ass-unit">Unit Code</label><input type="text" id="ass-unit" class="form-input" placeholder="e.g. ICT 302" required></div>
-          <div class="form-group"><label for="ass-type">Assessment Method</label><select id="ass-type" class="form-select" required><option value="project">Performance Project</option><option value="observation">Direct Observation</option><option value="written">Written Test</option></select></div>
+          <div class="form-group"><label for="ass-type">Assessment Method</label><select id="ass-type" class="form-select" required><option value="project">Performance Project</option><option value="observation">Observation</option><option value="written">Written Test</option></select></div>
         </div>
         <div class="form-group"><label for="ass-title">Instrument Title</label><input type="text" id="ass-title" class="form-input" placeholder="e.g. Database Design Rubric" required></div>
         <div class="form-group"><label for="ass-competency">Competency Statement</label><textarea id="ass-competency" class="form-textarea" rows="2" placeholder="e.g. Design a normalized database schema to 3NF..." required></textarea></div>
-        <div class="form-group"><label for="ass-file">Instrument File (Link or Path)</label><input type="text" id="ass-file" class="form-input" placeholder="https://drive.google.com/... OR assets/rubric.pdf"></div>
+        <div class="form-group"><label for="ass-file">Instrument File (Link or Path)</label><input type="text" id="ass-file" class="form-input" placeholder="https://drive.google.com/... OR assets/rubric.pdf" style="margin-top: 5px;"></div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Instrument</button>
       </form>
     </div>
@@ -948,7 +948,7 @@
         }
 
         const isAdmin = document.body.classList.contains('is-admin');
-        const dayOrder = { 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5 };
+        const dayOrder = { 'mon': 1, 'tu': 2, 'wed': 3, 'thu': 4, 'fri': 5 };
         const sorted = [...timetable].sort((a,b) => {
             if(parseInt(a.week) !== parseInt(b.week)) return parseInt(a.week) - parseInt(b.week);
             if(dayOrder[a.day] !== dayOrder[b.day]) return dayOrder[a.day] - dayOrder[b.day];
@@ -1243,7 +1243,7 @@
         const thumbInput = document.getElementById('cur-thumb-input');
         const linkInput = document.getElementById('cur-file-input');
         
-        // Handle Thumbnail (Base64)
+        // 1. Handle Thumbnail (Base64)
         let finalThumb = "https://via.placeholder.com/400x200?text=Doc";
         if (thumbInput.files.length > 0) {
             try {
@@ -1255,29 +1255,36 @@
             finalThumb = document.getElementById('cur-thumb').value;
         }
 
-        // Handle Document File (Base64 or Link)
+        // 2. Handle Document File (Base64 or Link) - FIX 404
         let linkUrlPath = document.getElementById('cur-link').value.trim();
 
         if (linkInput.files.length > 0) {
             try {
-                // Attempt to convert to Base64 to avoid 404 errors
+                // Convert to Base64
                 linkUrlPath = await fileToBase64(linkInput.files[0]);
             } catch (err) {
-                // If file is too big for localStorage, catch the error
-                showToast('Error: File too large for browser storage (Limit: ~5MB). Please use a Google Drive link instead.', 'error');
+                // CRITICAL FIX: Catch storage errors
+                console.error(err);
+                if (err.name === 'QuotaExceededError') {
+                    showToast('Error: File too large for browser storage.', 'error');
+                    alert("Browser Storage is Full.\n\n1. Delete old documents.\n2. Use Google Drive links for large PDFs.");
+                    return; 
+                }
+                showToast('Error processing file. Try a smaller file or a link.', 'error');
                 return; 
             }
         } 
-        // If user manually typed a link, use that instead
         else if (document.getElementById('cur-link').value.trim() !== "") {
             linkUrlPath = document.getElementById('cur-link').value.trim();
         }
         
+        // Final Validation
         if(linkUrlPath === "") {
             showToast("Please select a file or enter a link.", "error");
             return;
         }
 
+        // 3. Save Data with Error Handling (FIX FOR SAVING)
         const newDoc = {
             id: Date.now().toString(),
             type: document.getElementById('cur-type').value,
@@ -1285,13 +1292,26 @@
             code: document.getElementById('cur-code').value,
             description: document.getElementById('cur-desc').value,
             thumb: finalThumb,
-            link: linkUrlPath // This is now Base64 string or external URL
+            link: linkUrlPath 
         };
-        curriculumDocs.unshift(newDoc);
-        saveCurriculumDocs();
-        renderCurriculumDocs();
-        closeCurriculumModal();
-        showToast('Document uploaded successfully!');
+
+        try {
+            // Attempt to save
+            curriculumDocs.unshift(newDoc);
+            saveCurriculumDocs();
+            renderCurriculumDocs();
+            closeCurriculumModal();
+            showToast('Document uploaded successfully!');
+        } catch (error) {
+            // CRITICAL FIX: Catch saving errors
+            console.error(error);
+            if (error.name === 'QuotaExceededError') {
+                showToast('Storage Full! Cannot save document.', 'error');
+                alert("Browser Storage is Full.\nYour document list is too large.\n1. Delete old documents.\n2. Use Google Drive links for large PDFs.");
+            } else {
+                showToast('An unexpected error occurred while saving.', 'error');
+            }
+        }
     });
 
     function deleteCurriculum(id) {
@@ -1442,7 +1462,6 @@
 
       if (fileInput.files.length > 0) {
           try {
-              // Convert to Base64 to embed file directly
               linkUrlPath = await fileToBase64(fileInput.files[0]);
           } catch (err) {
               // If file too big, alert user
@@ -1519,13 +1538,10 @@
     function openSmartViewer(src, title, type) {
       viewerTitle.innerText = title;
       viewerContainer.innerHTML = ''; 
-      
       // Handle Base64 or URL
-      if (type === 'pdf') { 
-          viewerContainer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`; 
-      } 
+      if (type === 'pdf') { viewerContainer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`; } 
       else if (type === 'image') { viewerContainer.innerHTML = `<img src="${src}" alt="${title}">`; }
-      else if (type === 'video') { viewerContainer.innerHTML = `<video controls autoplay><source src="${src}" type="video/mp4">Your browser does not support video tag.</video>`; }
+      else if (type === 'video') { viewerContainer.innerHTML = `<video controls autoplay><source src="${src}" type="video/mp4">Your browser does not support video tag.</video>`; } 
       else { viewerContainer.innerHTML = `<p style="color:var(--text-muted)">External content. <a href="${src}" target="_blank" style="color:var(--primary)">Open here.</a></p>`; }
       
       viewerModal.classList.add('active');
@@ -1533,7 +1549,6 @@
 
     function closeSmartViewer() {
       viewerModal.classList.remove('active');
-      // Clear content after animation to stop playback
       setTimeout(() => { viewerContainer.innerHTML = ''; }, 300);
     }
 

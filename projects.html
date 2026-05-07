@@ -831,6 +831,9 @@
         reader.onerror = error => reject(error);
     });
 
+    // --- HELPER: Safe Placeholder (No External Calls) ---
+    const DEFAULT_THUMB = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%2364748b'%3EDocument%3C/text%3E%3C/svg%3E";
+
     // --- ADMIN LOGIN ---
     function checkAdminStatus() {
       if(localStorage.getItem('isAdmin') === 'true') document.body.classList.add('is-admin');
@@ -1209,7 +1212,7 @@
                 <div class="artifact-card" data-type="${item.type}" data-aos="zoom-in">
                     <div class="artifact-thumb">
                         ${deleteBtn}
-                        <img src="${item.thumb}" alt="${item.title}">
+                        <img src="${item.thumb || DEFAULT_THUMB}" alt="${item.title}">
                     </div>
                     <div class="artifact-content">
                         <div class="artifact-meta-row" style="margin-top:0;">
@@ -1246,7 +1249,7 @@
         const submitBtn = curriculumForm.querySelector('button[type="submit"]');
         
         // 1. Handle Thumbnail (Base64)
-        let finalThumb = "https://via.placeholder.com/400x200?text=Doc";
+        let finalThumb = DEFAULT_THUMB;
         if (thumbInput.files.length > 0) {
             try {
                 finalThumb = await fileToBase64(thumbInput.files[0]);
@@ -1345,16 +1348,19 @@
     }
     handleCategoryChange();
 
-    // Global File Helper
+    // Global File Helper - FIXED NULL ERROR
     function handleFileSelect(inputId, displayId, pathInputId) {
       const input = document.getElementById(inputId);
+      // SAFETY CHECK: If input doesn't exist, don't crash
+      if(!input) return;
+
       const display = document.getElementById(displayId);
       const pathInput = document.getElementById(pathInputId);
       
       input.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        display.textContent = file.name;
+        if(display) display.textContent = file.name;
         if(pathInput && pathInput.value === '') pathInput.value = `assets/${file.name}`;
       });
     }
@@ -1399,7 +1405,7 @@
           <div class="artifact-card" data-category="${item.category}" data-aos="zoom-in">
             <div class="artifact-thumb">
                 ${deleteBtn}
-                <img src="${item.thumb}" alt="${item.title}">
+                <img src="${item.thumb || DEFAULT_THUMB}" alt="${item.title}">
             </div>
             <div class="artifact-content">
                <div class="artifact-meta-row" style="margin-top:0;">${categoryLabel}</div>
@@ -1435,7 +1441,7 @@
       const submitBtn = artifactForm.querySelector('button[type="submit"]');
       
       // Handle Thumbnail (Base64)
-      let finalThumb = "https://via.placeholder.com/400x200?text=No+Image";
+      let finalThumb = DEFAULT_THUMB;
       if (thumbInput.files.length > 0) {
           try {
               finalThumb = await fileToBase64(thumbInput.files[0]);
@@ -1532,10 +1538,21 @@
     function openSmartViewer(src, title, type) {
       viewerTitle.innerText = title;
       viewerContainer.innerHTML = ''; 
-      if (type === 'pdf') { viewerContainer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`; } 
+      if (type === 'pdf') { 
+          // Improved PDF handling
+          viewerContainer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`; 
+      } 
       else if (type === 'image') { viewerContainer.innerHTML = `<img src="${src}" alt="${title}">`; }
       else if (type === 'video') { viewerContainer.innerHTML = `<video controls autoplay><source src="${src}" type="video/mp4">Your browser does not support video tag.</video>`; }
-      else { viewerContainer.innerHTML = `<p style="color:var(--text-muted)">External content. <a href="${src}" target="_blank" style="color:var(--primary)">Open here.</a></p>`; }
+      else { 
+          // Handle external/broken links gracefully
+          viewerContainer.innerHTML = `
+            <div style="text-align:center; padding:2rem;">
+                <i class="ri-external-link-line" style="font-size:3rem; margin-bottom:1rem; display:block;"></i>
+                <p style="color:var(--text-muted); margin-bottom:1rem;">This file is hosted externally.</p>
+                <a href="${src}" target="_blank" style="display:inline-block; background:var(--primary); color:white; padding:0.6rem 1.5rem; border-radius:8px;">Open File in New Tab</a>
+            </div>`; 
+      }
       
       viewerModal.classList.add('active');
     }

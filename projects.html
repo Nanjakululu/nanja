@@ -121,7 +121,7 @@
       display: flex; align-items: center; justify-content: space-between;
     }
 
-    .logo { font-size: 1.5rem; font-weight:  700; display: flex; align-items: center; gap: 5px; }
+    .logo { font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 5px; }
     
     .nav-links { display: flex; gap: 2.5rem; }
     .nav-links a { font-weight: 500; color: var(--text-muted); font-size: 0.95rem; position: relative; }
@@ -947,7 +947,7 @@
         }
 
         const isAdmin = document.body.classList.contains('is-admin');
-        const dayOrder = { 'mon': 1, 'tu': 2, 'wed': 3, 'thu': 4, 'fri': 5 };
+        const dayOrder = { 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5 };
         const sorted = [...timetable].sort((a,b) => {
             if(parseInt(a.week) !== parseInt(b.week)) return parseInt(a.week) - parseInt(b.week);
             if(dayOrder[a.day] !== dayOrder[b.day]) return dayOrder[a.day] - dayOrder[b.day];
@@ -1254,29 +1254,30 @@
             finalThumb = document.getElementById('cur-thumb').value;
         }
 
-        // 2. Handle Document File (Base64 or Link) - FIX 404
+        // 2. Handle Document File (Base64 or Link) - FIXED
         let linkUrlPath = document.getElementById('cur-link').value.trim();
 
-        if (linkInput.files.length > 0) {
-            // FORCE Google Drive Link for documents > 2MB
-            showToast("File is too large. Using Google Drive link instead to save space.", "success");
-            linkUrlPath = "https://drive.google.com/your-link";
-        } else if (document.getElementById('cur-link').value.trim() !== "") {
-            // Small file saved as Base64
+        // Check Text Link First
+        if (document.getElementById('cur-link').value.trim() !== "") {
+            linkUrlPath = document.getElementById('cur-link').value.trim();
+        } 
+        // Check File Input
+        else if (linkInput.files.length > 0) {
             try {
                 linkUrlPath = await fileToBase64(linkInput.files[0]);
             } catch (err) {
                 // Fallback if file is too big, use default link (error handling)
                 showToast('Error: File too large for browser storage. Using default link.', 'error');
+                linkUrlPath = document.getElementById('cur-link').value;
             }
         }
 
+        // Final Validation
         if(linkUrlPath === "") {
             showToast("Please select a file or enter a link.", "error");
             return;
         }
 
-        // Save Data (always use Google Drive link for Docs)
         const newDoc = {
             id: Date.now().toString(),
             type: document.getElementById('cur-type').value,
@@ -1284,7 +1285,7 @@
             code: document.getElementById('cur-code').value,
             description: document.getElementById('cur-desc').value,
             thumb: finalThumb,
-            link: linkUrlPath // ALWAYS stores Google Drive link
+            link: linkUrlPath 
         };
 
         curriculumDocs.unshift(newDoc);
@@ -1346,7 +1347,6 @@
         const file = e.target.files[0];
         if (!file) return;
         display.textContent = file.name;
-        // Only pre-fill path if it's not already filled by user preference
         if(pathInput && pathInput.value === '') pathInput.value = `assets/${file.name}`;
       });
     }
@@ -1394,7 +1394,7 @@
                 <img src="${item.thumb}" alt="${item.title}">
             </div>
             <div class="artifact-content">
-               <div class="artifact-meta-row" style="margin-top:0;">${categoryLabel}</div>
+               <div class="artifact-meta-row" style="margin-top:0;"><span class="meta-badge badge-plan">Lesson Plan</span></div>
                ${metaHtml}
                <h3>${item.title}</h3>
                <p>${item.description}</p>
@@ -1431,7 +1431,6 @@
           try {
               finalThumb = await fileToBase64(thumbInput.files[0]);
           } catch (err) {
-              console.error(err);
               showToast('Image too large. Using default.', 'error');
           }
       } else if(document.getElementById('art-thumb').value) {
@@ -1441,15 +1440,21 @@
       // Handle Document File (Base64 or Link) - FIX 404
       let linkUrlPath = document.getElementById('art-link').value.trim();
 
-      // Force Google Drive Link usage
-      if (linkInput.files.length > 0) {
-          alert("File too large. Using Google Drive link.");
-          linkUrlPath = "https://drive.google.com/your-link";
-      } else {
-          if(document.getElementById('art-link').value.trim() !== "") {
+      // Logic: Prioritize Text Link. If empty, check File Input.
+      if (document.getElementById('art-link').value.trim() !== "") {
+          linkUrlPath = document.getElementById('art-link').value.trim();
+      } 
+      else if (linkInput.files.length > 0) {
+          try {
+              // Small file saved as Base64
+              linkUrlPath = await fileToBase64(linkInput.files[0]);
+          } catch (err) {
+              // Fallback if file is too big, use default link (error handling)
+              showToast('Error: File too large for browser storage. Using default link.', 'error');
               linkUrlPath = document.getElementById('art-link').value.trim();
-          } 
+          }
       }
+      
       if(linkUrlPath === "") {
           showToast("Please select a file or enter a link.", "error");
           return;
@@ -1462,7 +1467,7 @@
         category: category,
         thumb: finalThumb,
         description: document.getElementById('art-desc').value,
-        link: linkUrlPath // Stores Google Drive Link
+        link: linkUrlPath
       };
       artifacts.unshift(newArtifact);
       saveArtifacts();
@@ -1509,7 +1514,7 @@
       viewerContainer.innerHTML = ''; 
       if (type === 'pdf') { viewerContainer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`; } 
       else if (type === 'image') { viewerContainer.innerHTML = `<img src="${src}" alt="${title}">`; }
-      else if (type === 'video') { viewerContainer.innerHTML = `<video controls autoplay><source src="${src}" type="video/mp4">Your browser does not support video tag.</video>`; }
+      else if (type === 'video') { viewerContainer.innerHTML = `<video controls autoplay><source src="${src}" type="video/mp4">Your browser does not support video tag.</video>`; `; }
       else { viewerContainer.innerHTML = `<p style="color:var(--text-muted)">External content. <a href="${src}" target="_blank" style="color:var(--primary)">Open here.</a></p>`; }
       
       viewerModal.classList.add('active');
@@ -1529,7 +1534,7 @@
       const toast = document.createElement('div');
       toast.className = `toast ${type}`;
       const icon = type === 'success' ? 'ri-checkbox-circle-fill' : 'ri-error-warning-fill';
-      toast.innerHTML = `<i class="${icon}"></i> <span>${message}</span>`;
+      toast.innerHTML = `<i class="${icon}"></i> <span>${message}</span>
       container.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = '0';

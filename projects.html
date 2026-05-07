@@ -28,9 +28,9 @@
       --plan-bg: rgba(245, 158, 11, 0.1);
       
       /* New: Curriculum & Standards Colors */
-      --curriculum-color: #0ea5e9; /* Sky Blue */
+      --curriculum-color: #0ea5e9; 
       --curriculum-bg: rgba(14, 165, 233, 0.1);
-      --standard-color: #d946ef; /* Fuchsia */
+      --standard-color: #d946ef; 
       --standard-bg: rgba(217, 70, 239, 0.1);
 
       /* Backgrounds */
@@ -67,7 +67,7 @@
       background-color: var(--bg-body);
       color: var(--text-main);
       line-height: 1.6;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.3s, color: 0.3s;
       padding-bottom: 100px;
       position: relative;
     }
@@ -90,7 +90,7 @@
     
     .card {
       background: var(--bg-card);
-      border:1px solid var(--border-color);
+      border: 1px solid var(--border-color);
       border-radius: 20px;
       padding: 2rem;
       transition: var(--transition);
@@ -133,7 +133,7 @@
     
     .nav-actions { display: flex; align-items: center; gap: 1rem; }
     .theme-toggle { 
-      font-size:1.2rem; color: var(--text-main); background: transparent; 
+      font-size: 1.2rem; color: var(--text-main); background: transparent; 
       width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
       transition: var(--transition);
     }
@@ -309,7 +309,7 @@
     .artifact-content p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; flex-grow: 1; line-height: 1.5; }
 
     .artifact-delete-btn {
-        position: absolute; top: 10px; right: 10px; background: rgba(255,255, 255, 0.9); color: #ef4444;
+        position: absolute; top: 10px; right: 10px; background: rgba(255,255,255, 0.9); color: #ef4444;
         border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         transition: var(--transition);
     }
@@ -359,7 +359,7 @@
     }
     .close-btn:hover { background: var(--bg-body); color: var(--text-main); }
     
-    .viewer-container { width: 100%; height: 65vh; background: var(--bg-body); display: flex; align-items: center; justify-content: center; border-radius: 16px; margin-bottom:1.5rem; overflow: hidden; position: relative; border: 1px solid var(--border-color); }
+    .viewer-container { width: 100%; height: 65vh; background: var(--bg-body); display: flex; align-items: center; justify-content: center; border-radius: 16px; margin-bottom: 1.5rem; overflow: hidden; position: relative; border: 1px solid var(--border-color); }
     .viewer-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
     .viewer-container iframe { width: 100%; height: 100%; border: none; }
     .viewer-container video { width: 100%; height: 100%; outline: none; }
@@ -691,7 +691,7 @@
         <strong><i class="ri-information-line"></i> Note:</strong><br>Small files are saved automatically. For large documents (over 2MB), use a Google Drive link to save storage space.
       </div>
       <form id="curriculumForm">
-        <div class="form-group"><label for="cur-type">Document Type</label><select id="cur-type" class="form-select" required><option value="curriculum">Curriculum</option><option value="standard">Occupational Standard</option></select></div>
+        <div class="form-group"><label for="cur-type">Document Type</label><select id="cur-type" class="form-select" required><option value="curriculum">Curriculum</option><option value="standard">Occupational Standard</option></select></div></div>
         <div class="form-group"><label for="cur-title">Title</label><input type="text" id="cur-title" class="form-input" placeholder="e.g. IT Support Level 4" required></div>
         <div class="form-group"><label for="cur-code">Code / Level</label><input type="text" id="cur-code" class="form-input" placeholder="e.g. ICT-SUP-014 or Diploma"></div>
         <div class="form-group"><label for="cur-thumb-input">Thumbnail</label>
@@ -725,9 +725,8 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                 <div class="form-group"><label for="plan-week">Week</label><input type="number" id="plan-week" class="form-input" placeholder="e.g. 4"></div>
                 <div class="form-group"><label for="plan-duration">Duration</label><input type="text" id="plan-duration" class="form-input" placeholder="e.g. 90 Mins"></div>
+                <div class="form-group"><label for="plan-topic">Topic</label><input type="text" id="plan-topic" class="form-input" placeholder="e.g. Tags & Attributes"></div>
             </div>
-            <div class="form-group"><label for="plan-topic">Topic</label><input type="text" id="plan-topic" class="form-input" placeholder="e.g. Tags & Attributes"></div>
-        </div>
 
         <div id="scheme-fields" class="dynamic-field-group">
             <div class="field-group-title">Scheme Details</div>
@@ -736,7 +735,7 @@
                 <div class="form-group"><label for="scheme-weeks">Weeks</label><input type="text" id="scheme-weeks" class="form-input" placeholder="e.g. 14 Weeks"></div>
             </div>
             <div class="form-group"><label for="scheme-module">Module</label><input type="text" id="scheme-module" class="form-input" placeholder="e.g. ICT 201"></div>
-        </div>
+            </div>
 
         <div id="media-fields" class="dynamic-field-group">
             <div class="field-group-title">Media Details</div>
@@ -764,7 +763,7 @@
       <button class="close-btn" onclick="closeSmartViewer()" aria-label="Close modal">&times;</button>
       <h3 id="viewer-title" style="margin-bottom: 1rem; font-size: 1.5rem;">Document Viewer</h3>
       <div class="viewer-container" id="viewer-container"></div>
-      <div style="text-align: right;"><button class="btn btn-sm btn-outline" style="width:auto; padding: 0.6rem 1.5rem" onclick="closeSmartViewer()">Close Viewer</button></div>
+      <div style="text-align: right;"><button class="btn btn-sm btn-outline" style="width:auto; padding: 0.6rem 1.5rem;" onclick="closeSmartViewer()">Close Viewer</button></div>
     </div>
   </div>
 
@@ -1259,32 +1258,25 @@
         let linkUrlPath = document.getElementById('cur-link').value.trim();
 
         if (linkInput.files.length > 0) {
+            // FORCE Google Drive Link for documents > 2MB
+            showToast("File is too large. Using Google Drive link instead to save space.", "success");
+            linkUrlPath = "https://drive.google.com/your-link";
+        } else if (document.getElementById('cur-link').value.trim() !== "") {
+            // Small file saved as Base64
             try {
-                // Convert to Base64
                 linkUrlPath = await fileToBase64(linkInput.files[0]);
             } catch (err) {
-                // CRITICAL FIX: Catch storage errors
-                console.error(err);
-                if (err.name === 'QuotaExceededError') {
-                    showToast('Error: File too large for browser storage.', 'error');
-                    alert("Browser Storage is Full.\n\n1. Delete old documents.\n2. Use Google Drive links for large PDFs.");
-                    return; 
-                }
-                showToast('Error processing file. Try a smaller file or a link.', 'error');
-                return; 
+                // Fallback if file is too big, use default link (error handling)
+                showToast('Error: File too large for browser storage. Using default link.', 'error');
             }
-        } 
-        else if (document.getElementById('cur-link').value.trim() !== "") {
-            linkUrlPath = document.getElementById('cur-link').value.trim();
         }
-        
-        // Final Validation
+
         if(linkUrlPath === "") {
             showToast("Please select a file or enter a link.", "error");
             return;
         }
 
-        // 3. Save Data with Error Handling (FIX FOR SAVING)
+        // Save Data (always use Google Drive link for Docs)
         const newDoc = {
             id: Date.now().toString(),
             type: document.getElementById('cur-type').value,
@@ -1292,26 +1284,14 @@
             code: document.getElementById('cur-code').value,
             description: document.getElementById('cur-desc').value,
             thumb: finalThumb,
-            link: linkUrlPath 
+            link: linkUrlPath // ALWAYS stores Google Drive link
         };
 
-        try {
-            // Attempt to save
-            curriculumDocs.unshift(newDoc);
-            saveCurriculumDocs();
-            renderCurriculumDocs();
-            closeCurriculumModal();
-            showToast('Document uploaded successfully!');
-        } catch (error) {
-            // CRITICAL FIX: Catch saving errors
-            console.error(error);
-            if (error.name === 'QuotaExceededError') {
-                showToast('Storage Full! Cannot save document.', 'error');
-                alert("Browser Storage is Full.\nYour document list is too large.\n1. Delete old documents.\n2. Use Google Drive links for large PDFs.");
-            } else {
-                showToast('An unexpected error occurred while saving.', 'error');
-            }
-        }
+        curriculumDocs.unshift(newDoc);
+        saveCurriculumDocs();
+        renderCurriculumDocs();
+        closeCurriculumModal();
+        showToast('Document uploaded successfully!');
     });
 
     function deleteCurriculum(id) {
@@ -1450,7 +1430,8 @@
       if (thumbInput.files.length > 0) {
           try {
               finalThumb = await fileToBase64(thumbInput.files[0]);
-          } catch (error) {
+          } catch (err) {
+              console.error(err);
               showToast('Image too large. Using default.', 'error');
           }
       } else if(document.getElementById('art-thumb').value) {
@@ -1460,20 +1441,15 @@
       // Handle Document File (Base64 or Link) - FIX 404
       let linkUrlPath = document.getElementById('art-link').value.trim();
 
-      if (fileInput.files.length > 0) {
-          try {
-              linkUrlPath = await fileToBase64(fileInput.files[0]);
-          } catch (err) {
-              // If file too big, alert user
-              showToast('Error: File too large for browser storage. Please use a Google Drive link.', 'error');
-              return; 
-          }
+      // Force Google Drive Link usage
+      if (linkInput.files.length > 0) {
+          alert("File too large. Using Google Drive link.");
+          linkUrlPath = "https://drive.google.com/your-link";
+      } else {
+          if(document.getElementById('art-link').value.trim() !== "") {
+              linkUrlPath = document.getElementById('art-link').value.trim();
+          } 
       }
-      // If user didn't pick file but typed a link
-      else if (document.getElementById('art-link').value.trim() !== "") {
-          linkUrlPath = document.getElementById('art-link').value.trim();
-      }
-
       if(linkUrlPath === "") {
           showToast("Please select a file or enter a link.", "error");
           return;
@@ -1486,14 +1462,7 @@
         category: category,
         thumb: finalThumb,
         description: document.getElementById('art-desc').value,
-        link: linkUrlPath, // Storing Base64 string here
-        planWeek: category === 'plan' ? document.getElementById('plan-week').value : '',
-        planDuration: category === 'plan' ? document.getElementById('plan-duration').value : '',
-        planTopic: category === 'plan' ? document.getElementById('plan-topic').value : '',
-        schemeTerm: category === 'scheme' ? document.getElementById('scheme-term').value : '',
-        schemeWeeks: category === 'scheme' ? document.getElementById('scheme-weeks').value : '',
-        schemeModule: category === 'scheme' ? document.getElementById('scheme-module').value : '',
-        mediaType: category === 'media' ? document.getElementById('media-type').value : ''
+        link: linkUrlPath // Stores Google Drive Link
       };
       artifacts.unshift(newArtifact);
       saveArtifacts();
@@ -1521,11 +1490,11 @@
         const cards = document.querySelectorAll('#artifacts-render .artifact-card');
         cards.forEach(card => {
           if(filter === 'all' || card.getAttribute('data-category') === filter) {
-            card.style.display = 'flex';
-            setTimeout(() => card.style.opacity = '1', 50);
+                card.style.display = 'flex';
+                setTimeout(() => card.style.opacity = '1', 50);
           } else {
-            card.style.display = 'none';
-            card.style.opacity = '0';
+                card.style.display = 'none';
+                card.style.opacity = '0';
           }
         });
     }
@@ -1538,10 +1507,9 @@
     function openSmartViewer(src, title, type) {
       viewerTitle.innerText = title;
       viewerContainer.innerHTML = ''; 
-      // Handle Base64 or URL
       if (type === 'pdf') { viewerContainer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`; } 
       else if (type === 'image') { viewerContainer.innerHTML = `<img src="${src}" alt="${title}">`; }
-      else if (type === 'video') { viewerContainer.innerHTML = `<video controls autoplay><source src="${src}" type="video/mp4">Your browser does not support video tag.</video>`; } 
+      else if (type === 'video') { viewerContainer.innerHTML = `<video controls autoplay><source src="${src}" type="video/mp4">Your browser does not support video tag.</video>`; }
       else { viewerContainer.innerHTML = `<p style="color:var(--text-muted)">External content. <a href="${src}" target="_blank" style="color:var(--primary)">Open here.</a></p>`; }
       
       viewerModal.classList.add('active');

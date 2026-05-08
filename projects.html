@@ -707,7 +707,7 @@
       <button class="close-btn" onclick="closeCurriculumModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Upload Curriculum</h3>
       <div class="instruction-box" style="background: rgba(14, 165, 233, 0.05); border-left: 3px solid var(--curriculum-color);">
-        <strong><i class="ri-folder-shield-line"></i> File Path Logic:</strong><br>Enter the path relative to this file (e.g., <code>assets/curriculum.pdf</code>). Supports PDF, DOCX, PPTX, Video, Audio.
+        <strong><i class="ri-folder-shield-line"></i> File Path Logic:</strong><br>Enter path relative to this file (e.g., <code>assets/curriculum.pdf</code>). Supports PDF, DOCX, PPTX, Video, Audio.
       </div>
       <form id="curriculumForm">
         <div class="form-group"><label for="cur-type">Document Type</label><select id="cur-type" class="form-select" required><option value="curriculum">Curriculum</option><option value="standard">Occupational Standard</option></select></div>
@@ -746,7 +746,7 @@
       <button class="close-btn" onclick="closeAddArtifactModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add Documentation</h3>
       <div class="instruction-box" style="background: rgba(245, 158, 11, 0.05); border-left: 3px solid var(--plan-color);">
-        <strong><i class="ri-folder-shield-line"></i> File Path Logic:</strong><br>Enter the path relative to this file (e.g., <code>assets/lesson_1.pdf</code>). Supports PDF, DOCX, PPTX, Video, Audio.
+        <strong><i class="ri-folder-shield-line"></i> File Path Logic:</strong><br>Enter path relative to this file (e.g., <code>assets/lesson_1.pdf</code>). Supports PDF, DOCX, PPTX, Video, Audio.
       </div>
       <form id="artifactForm">
         <div class="form-group"><label for="art-category">Document Type</label><select id="art-category" class="form-select" required onchange="handleCategoryChange()"><option value="plan">Lesson Plan</option><option value="scheme">Scheme of Work</option><option value="media">Instructional Media</option></select></div>
@@ -943,13 +943,15 @@
         });
 
         const modalSelect = document.getElementById('tt-week');
-        modalSelect.innerHTML = '';
-        for(let i=1; i<=16; i++) {
-            const opt = document.createElement('option');
-            opt.value = i;
-            opt.text = `Week ${i}`;
-            if(i === currentWeek) opt.selected = true;
-            modalSelect.appendChild(opt);
+        if(modalSelect) {
+            modalSelect.innerHTML = '';
+            for(let i=1; i<=16; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.text = `Week ${i}`;
+                if(i === currentWeek) opt.selected = true;
+                modalSelect.appendChild(opt);
+            }
         }
     }
 
@@ -966,7 +968,7 @@
 
       if(weekLessons.length === 0) {
         const mon = document.getElementById('day-mon');
-        mon.innerHTML = `<div class="day-header">MON</div><div class="timetable-empty">No lessons for Week ${currentWeek}.</div>`;
+        if(mon) mon.innerHTML = `<div class="day-header">MON</div><div class="timetable-empty">No lessons for Week ${currentWeek}.</div>`;
         return;
       }
 
@@ -995,36 +997,37 @@
 
     function renderRecordOfWork() {
         const tbody = document.querySelector('#record-of-work-table tbody');
-        tbody.innerHTML = '';
+        if(tbody) {
+            tbody.innerHTML = '';
+            if(timetable.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem;">No records available.</td></tr>';
+                return;
+            }
 
-        if(timetable.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem;">No records available.</td></tr>';
-            return;
+            const isAdmin = document.body.classList.contains('is-admin');
+            const dayOrder = { 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5 };
+            const sorted = [...timetable].sort((a,b) => {
+                if(parseInt(a.week) !== parseInt(b.week)) return parseInt(a.week) - parseInt(b.week);
+                if(dayOrder[a.day] !== dayOrder[b.day]) return dayOrder[a.day] - dayOrder[b.day];
+                return a.startTime.localeCompare(b.startTime);
+            });
+
+            sorted.forEach(lesson => {
+                const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteLesson('${lesson.id}')" style="padding:0.2rem 0.5rem;"><i class="ri-delete-bin-line"></i></button>` : '';
+                const row = `
+                    <tr>
+                        <td class="row-week-col">Week ${lesson.week}</td>
+                        <td style="text-transform: capitalize;">${lesson.day}</td>
+                        <td>${lesson.startTime} - ${lesson.endTime}</td>
+                        <td>${lesson.subject}</td>
+                        <td>${lesson.topic}</td>
+                        <td>${lesson.classGroup} ${lesson.enrollment ? `(${lesson.enrollment})` : ''}</td>
+                        <td class="admin-only" style="display:none">${deleteBtn}</td>
+                    </tr>
+                `;
+                tbody.insertAdjacentHTML('beforeend', row);
+            });
         }
-
-        const isAdmin = document.body.classList.contains('is-admin');
-        const dayOrder = { 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5 };
-        const sorted = [...timetable].sort((a,b) => {
-            if(parseInt(a.week) !== parseInt(b.week)) return parseInt(a.week) - parseInt(b.week);
-            if(dayOrder[a.day] !== dayOrder[b.day]) return dayOrder[a.day] - dayOrder[b.day];
-            return a.startTime.localeCompare(b.startTime);
-        });
-
-        sorted.forEach(lesson => {
-            const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteLesson('${lesson.id}')" style="padding:0.2rem 0.5rem;"><i class="ri-delete-bin-line"></i></button>` : '';
-            const row = `
-                <tr>
-                    <td class="row-week-col">Week ${lesson.week}</td>
-                    <td style="text-transform: capitalize;">${lesson.day}</td>
-                    <td>${lesson.startTime} - ${lesson.endTime}</td>
-                    <td>${lesson.subject}</td>
-                    <td>${lesson.topic}</td>
-                    <td>${lesson.classGroup} ${lesson.enrollment ? `(${lesson.enrollment})` : ''}</td>
-                    <td class="admin-only" style="display:none">${deleteBtn}</td>
-                </tr>
-            `;
-            tbody.insertAdjacentHTML('beforeend', row);
-        });
     }
 
     function switchView(view) {
@@ -1033,17 +1036,19 @@
         const gridView = document.getElementById('grid-view');
         const rowView = document.getElementById('row-view');
 
-        if(view === 'grid') {
-            gridBtn.classList.add('active');
-            rowBtn.classList.remove('active');
-            gridView.style.display = 'block';
-            rowView.classList.remove('active');
-        } else {
-            gridBtn.classList.remove('active');
-            rowBtn.classList.add('active');
-            gridView.style.display = 'none';
-            rowView.classList.add('active');
-            renderRecordOfWork();
+        if(gridBtn && rowBtn && gridView && rowView) {
+            if(view === 'grid') {
+                gridBtn.classList.add('active');
+                rowBtn.classList.remove('active');
+                gridView.style.display = 'block';
+                rowView.classList.remove('active');
+            } else {
+                gridBtn.classList.remove('active');
+                rowBtn.classList.add('active');
+                gridView.style.display = 'none';
+                rowView.classList.add('active');
+                renderRecordOfWork();
+            }
         }
     }
 
@@ -1051,34 +1056,46 @@
     const timetableForm = document.getElementById('timetableForm');
 
     function openTimetableModal() { 
-        renderWeekTabs();
-        document.getElementById('tt-week').value = currentWeek;
-        timetableModal.classList.add('active'); 
+        if(timetableModal) {
+            renderWeekTabs();
+            const weekSelect = document.getElementById('tt-week');
+            if(weekSelect) weekSelect.value = currentWeek;
+            timetableModal.classList.add('active');
+            timetableModal.setAttribute('aria-hidden', 'false');
+        }
     }
-    function closeTimetableModal() { timetableModal.classList.remove('active'); timetableForm.reset(); }
+    function closeTimetableModal() { 
+        if(timetableModal) {
+            timetableModal.classList.remove('active'); 
+            timetableModal.setAttribute('aria-hidden', 'true');
+            timetableForm.reset(); 
+        }
+    }
 
-    timetableForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const newLesson = {
-        id: Date.now().toString(),
-        week: parseInt(document.getElementById('tt-week').value),
-        day: document.getElementById('tt-day').value,
-        startTime: document.getElementById('tt-time').value,
-        endTime: document.getElementById('tt-end').value,
-        subject: document.getElementById('tt-subject').value,
-        topic: document.getElementById('tt-topic').value,
-        classGroup: document.getElementById('tt-class').value,
-        enrollment: document.getElementById('tt-enrollment').value
-      };
-      timetable.push(newLesson);
-      saveTimetable();
-      currentWeek = newLesson.week;
-      renderWeekTabs();
-      renderTimetableGrid();
-      renderRecordOfWork();
-      closeTimetableModal();
-      showToast('Lesson scheduled successfully!');
-    });
+    if(timetableForm) {
+        timetableForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newLesson = {
+            id: Date.now().toString(),
+            week: parseInt(document.getElementById('tt-week').value),
+            day: document.getElementById('tt-day').value,
+            startTime: document.getElementById('tt-time').value,
+            endTime: document.getElementById('tt-end').value,
+            subject: document.getElementById('tt-subject').value,
+            topic: document.getElementById('tt-topic').value,
+            classGroup: document.getElementById('tt-class').value,
+            enrollment: document.getElementById('tt-enrollment').value
+        };
+        timetable.push(newLesson);
+        saveTimetable();
+        currentWeek = newLesson.week;
+        renderWeekTabs();
+        renderTimetableGrid();
+        renderRecordOfWork();
+        closeTimetableModal();
+        showToast('Lesson scheduled successfully!');
+        });
+    }
 
     function deleteLesson(id) {
       if(confirm('Remove this lesson?')) {
@@ -1096,68 +1113,83 @@
 
     function renderLog() {
       const container = document.getElementById('log-container');
-      container.innerHTML = '';
-      if (teachingLog.length === 0) {
-        container.innerHTML = `<div class="empty-state"><i class="ri-clipboard-line"></i><h3>No Teaching Activities Yet</h3><p>Your daily log is currently empty.</p></div>`;
-        return;
+      if(container) {
+          container.innerHTML = '';
+          if (teachingLog.length === 0) {
+            container.innerHTML = `<div class="empty-state"><i class="ri-clipboard-line"></i><h3>No Teaching Activities Yet</h3><p>Your daily log is currently empty.</p></div>`;
+            return;
+          }
+          const isAdmin = document.body.classList.contains('is-admin');
+
+          teachingLog.forEach((item) => {
+            const tagsHtml = item.tags.map(tag => `<span class="tag">${tag} ${isAdmin ? `<button onclick="removeTag('${item.id}', '${tag}')">&times;</button>` : ''}</span>`).join('');
+            
+            // Detect file type for icon
+            let fileIcon = 'ri-link';
+            let fileType = 'external';
+            if(item.fileLink) {
+                const ext = item.fileLink.split('.').pop().toLowerCase();
+                if(['pdf'].includes(ext)) { fileIcon = 'ri-file-pdf-line'; fileType='pdf'; }
+                else if(['jpg','png','gif','jpeg'].includes(ext)) { fileIcon = 'ri-image-line'; fileType='image'; }
+                else if(['mp4','webm'].includes(ext)) { fileIcon = 'ri-video-line'; fileType='video'; }
+                else if(['mp3','wav'].includes(ext)) { fileIcon = 'ri-music-line'; fileType='audio'; }
+            }
+
+            const linksHtml = item.fileLink ? 
+              `<button class="btn-sm btn-outline" onclick="openSmartViewer('${item.fileLink}', '${item.title}', '${fileType}')"><i class="${fileIcon}"></i> View Resource</button>` : '';
+
+            const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteActivity('${item.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
+
+            const html = `
+              <article class="card activity-card" data-aos="fade-up">
+                <div class="card-header"><span class="day-badge">${item.dayLabel}</span><span class="text-muted">${item.time}</span>${deleteBtn}</div>
+                <h3>${item.title}</h3>
+                <p class="text-muted">${item.description}</p>
+                <div class="tag-group">${tagsHtml}</div>
+                <div class="project-links">${linksHtml}</div>
+              </article>`;
+            container.insertAdjacentHTML('beforeend', html);
+          });
       }
-      const isAdmin = document.body.classList.contains('is-admin');
-
-      teachingLog.forEach((item) => {
-        const tagsHtml = item.tags.map(tag => `<span class="tag">${tag} ${isAdmin ? `<button onclick="removeTag('${item.id}', '${tag}')">&times;</button>` : ''}</span>`).join('');
-        
-        // Detect file type for icon
-        let fileIcon = 'ri-link';
-        let fileType = 'external';
-        if(item.fileLink) {
-            const ext = item.fileLink.split('.').pop().toLowerCase();
-            if(['pdf'].includes(ext)) { fileIcon = 'ri-file-pdf-line'; fileType='pdf'; }
-            else if(['jpg','png','gif','jpeg'].includes(ext)) { fileIcon = 'ri-image-line'; fileType='image'; }
-            else if(['mp4','webm'].includes(ext)) { fileIcon = 'ri-video-line'; fileType='video'; }
-            else if(['mp3','wav'].includes(ext)) { fileIcon = 'ri-music-line'; fileType='audio'; }
-        }
-
-        const linksHtml = item.fileLink ? 
-          `<button class="btn-sm btn-outline" onclick="openSmartViewer('${item.fileLink}', '${item.title}', '${fileType}')"><i class="${fileIcon}"></i> View Resource</button>` : '';
-
-        const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteActivity('${item.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
-
-        const html = `
-          <article class="card activity-card" data-aos="fade-up">
-            <div class="card-header"><span class="day-badge">${item.dayLabel}</span><span class="text-muted">${item.time}</span>${deleteBtn}</div>
-            <h3>${item.title}</h3>
-            <p class="text-muted">${item.description}</p>
-            <div class="tag-group">${tagsHtml}</div>
-            <div class="project-links">${linksHtml}</div>
-          </article>`;
-        container.insertAdjacentHTML('beforeend', html);
-      });
     }
 
     const addActivityModal = document.getElementById('addActivityModal');
     const activityForm = document.getElementById('activityForm');
 
-    function openAddActivityModal() { addActivityModal.classList.add('active'); }
-    function closeAddActivityModal() { addActivityModal.classList.remove('active'); activityForm.reset(); }
+    function openAddActivityModal() { 
+        if(addActivityModal) {
+            addActivityModal.classList.add('active');
+            addActivityModal.setAttribute('aria-hidden', 'false');
+        }
+    }
+    function closeAddActivityModal() { 
+        if(addActivityModal) {
+            addActivityModal.classList.remove('active'); 
+            addActivityModal.setAttribute('aria-hidden', 'true');
+            activityForm.reset(); 
+        }
+    }
 
-    activityForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const dayNum = teachingLog.length + 1;
-      const newActivity = {
-        id: Date.now().toString(),
-        title: document.getElementById('act-title').value,
-        time: document.getElementById('act-time').value,
-        description: document.getElementById('act-content').value,
-        dayLabel: `Day ${dayNum}`,
-        tags: [document.getElementById('act-tag').value, 'Activity'], 
-        fileLink: document.getElementById('act-file-link').value
-      };
-      teachingLog.unshift(newActivity);
-      saveTeachingLog();
-      renderLog();
-      closeAddActivityModal();
-      showToast('Activity added successfully!');
-    });
+    if(activityForm) {
+        activityForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const dayNum = teachingLog.length + 1;
+        const newActivity = {
+            id: Date.now().toString(),
+            title: document.getElementById('act-title').value,
+            time: document.getElementById('act-time').value,
+            description: document.getElementById('act-content').value,
+            dayLabel: `Day ${dayNum}`,
+            tags: [document.getElementById('act-tag').value, 'Activity'], 
+            fileLink: document.getElementById('act-file-link').value
+        };
+        teachingLog.unshift(newActivity);
+        saveTeachingLog();
+        renderLog();
+        closeAddActivityModal();
+        showToast('Activity added successfully!');
+        });
+    }
 
     function removeTag(id, tagToRemove) {
       const index = teachingLog.findIndex(item => item.id === id);
@@ -1181,60 +1213,75 @@
 
     function renderAssessments() {
       const container = document.getElementById('assessments-render');
-      container.innerHTML = '';
-      if(assessments.length === 0) {
-         container.innerHTML = `<div class="empty-state"><i class="ri-clipboard-check-line"></i><h3>No Instruments Yet</h3><p>Upload rubrics and checklists here.</p></div>`;
-         return;
-      }
-      const isAdmin = document.body.classList.contains('is-admin');
+      if(container) {
+          container.innerHTML = '';
+          if(assessments.length === 0) {
+             container.innerHTML = `<div class="empty-state"><i class="ri-clipboard-check-line"></i><h3>No Instruments Yet</h3><p>Upload rubrics and checklists here.</p></div>`;
+             return;
+          }
+          const isAdmin = document.body.classList.contains('is-admin');
 
-      assessments.forEach((item) => {
-        const typeClass = `ass-type-${item.type}`;
-        const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteAssessment('${item.id}')" style="position:absolute; top:1rem; right:1rem;"><i class="ri-delete-bin-line"></i></button>` : '';
-        
-        const html = `
-          <div class="card assessment-card" data-aos="fade-up">
-            ${deleteBtn}
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-               <span class="unit-badge">${item.unitCode}</span>
-               <span class="ass-type-badge ${typeClass}">${item.type}</span>
-            </div>
-            <h3>${item.title}</h3>
-            <div class="competency-statement">
-              <i class="ri-double-quotes-l"></i> ${item.competency}
-            </div>
-            <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.file}', '${item.title}', 'pdf')">
-              <i class="ri-file-download-line"></i> Download/View Instrument
-            </button>
-          </div>
-        `;
-        container.insertAdjacentHTML('beforeend', html);
-      });
+          assessments.forEach((item) => {
+            const typeClass = `ass-type-${item.type}`;
+            const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteAssessment('${item.id}')" style="position:absolute; top:1rem; right:1rem;"><i class="ri-delete-bin-line"></i></button>` : '';
+            
+            const html = `
+              <div class="card assessment-card" data-aos="fade-up">
+                ${deleteBtn}
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                   <span class="unit-badge">${item.unitCode}</span>
+                   <span class="ass-type-badge ${typeClass}">${item.type}</span>
+                </div>
+                <h3>${item.title}</h3>
+                <div class="competency-statement">
+                  <i class="ri-double-quotes-l"></i> ${item.competency}
+                </div>
+                <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.file}', '${item.title}', 'pdf')">
+                  <i class="ri-file-download-line"></i> Download/View Instrument
+                </button>
+              </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+          });
+      }
     }
 
     const assessmentModal = document.getElementById('addAssessmentModal');
     const assessmentForm = document.getElementById('assessmentForm');
 
-    function openAddAssessmentModal() { assessmentModal.classList.add('active'); }
-    function closeAddAssessmentModal() { assessmentModal.classList.remove('active'); assessmentForm.reset(); }
+    function openAddAssessmentModal() { 
+        if(assessmentModal) {
+            assessmentModal.classList.add('active');
+            assessmentModal.setAttribute('aria-hidden', 'false');
+        }
+    }
+    function closeAddAssessmentModal() { 
+        if(assessmentModal) {
+            assessmentModal.classList.remove('active'); 
+            assessmentModal.setAttribute('aria-hidden', 'true');
+            assessmentForm.reset(); 
+        }
+    }
 
-    assessmentForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const fileUrl = document.getElementById('ass-file').value;
-      const newAssessment = {
-        id: Date.now().toString(),
-        unitCode: document.getElementById('ass-unit').value,
-        type: document.getElementById('ass-type').value,
-        title: document.getElementById('ass-title').value,
-        competency: document.getElementById('ass-competency').value,
-        file: fileUrl
-      };
-      assessments.unshift(newAssessment);
-      saveAssessments();
-      renderAssessments();
-      closeAddAssessmentModal();
-      showToast('Instrument saved!');
-    });
+    if(assessmentForm) {
+        assessmentForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fileUrl = document.getElementById('ass-file').value;
+        const newAssessment = {
+            id: Date.now().toString(),
+            unitCode: document.getElementById('ass-unit').value,
+            type: document.getElementById('ass-type').value,
+            title: document.getElementById('ass-title').value,
+            competency: document.getElementById('ass-competency').value,
+            file: fileUrl
+        };
+        assessments.unshift(newAssessment);
+        saveAssessments();
+        renderAssessments();
+        closeAddAssessmentModal();
+        showToast('Instrument saved!');
+        });
+    }
 
     function deleteAssessment(id) {
       if(confirm('Delete this instrument?')) {
@@ -1250,77 +1297,91 @@
 
     function renderCurriculumDocs() {
         const container = document.getElementById('curriculum-render');
-        container.innerHTML = '';
-        if(curriculumDocs.length === 0) {
-            container.innerHTML = `<div class="empty-state"><i class="ri-book-2-line"></i><h3>No Curriculum Yet</h3><p>Upload Occupational Standards or Curricula here.</p></div>`;
-            return;
-        }
-        const isAdmin = document.body.classList.contains('is-admin');
-        
-        curriculumDocs.forEach(item => {
-            const deleteBtn = isAdmin ? `<button class="artifact-delete-btn admin-only" onclick="deleteCurriculum('${item.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
-            const badgeClass = item.type === 'curriculum' ? 'badge-curriculum' : 'badge-standard';
-            const typeLabel = item.type === 'curriculum' ? 'Curriculum' : 'Standard';
-            const codeBadge = item.code ? `<span class="meta-badge ${badgeClass}"><i class="ri-price-tag-3-line"></i> ${item.code}</span>` : '';
+        if(container) {
+            container.innerHTML = '';
+            if(curriculumDocs.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="ri-book-2-line"></i><h3>No Curriculum Yet</h3><p>Upload Occupational Standards or Curricula here.</p></div>`;
+                return;
+            }
+            const isAdmin = document.body.classList.contains('is-admin');
+            
+            curriculumDocs.forEach(item => {
+                const deleteBtn = isAdmin ? `<button class="artifact-delete-btn admin-only" onclick="deleteCurriculum('${item.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
+                const badgeClass = item.type === 'curriculum' ? 'badge-curriculum' : 'badge-standard';
+                const typeLabel = item.type === 'curriculum' ? 'Curriculum' : 'Standard';
+                const codeBadge = item.code ? `<span class="meta-badge ${badgeClass}"><i class="ri-price-tag-3-line"></i> ${item.code}</span>` : '';
 
-            const html = `
-                <div class="artifact-card" data-type="${item.type}" data-aos="zoom-in">
-                    <div class="artifact-thumb">
-                        ${deleteBtn}
-                        <img src="${item.thumb || DEFAULT_THUMB}" alt="${item.title}">
-                    </div>
-                    <div class="artifact-content">
-                        <div class="artifact-meta-row" style="margin-top:0;">
-                            <span class="meta-badge ${badgeClass}">${typeLabel}</span>
-                            ${codeBadge}
+                const html = `
+                    <div class="artifact-card" data-type="${item.type}" data-aos="zoom-in">
+                        <div class="artifact-thumb">
+                            ${deleteBtn}
+                            <img src="${item.thumb || DEFAULT_THUMB}" alt="${item.title}">
                         </div>
-                        <h3>${item.title}</h3>
-                        <p>${item.description}</p>
-                        <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.link}', '${item.title}', 'detect')">
-                            <i class="ri-file-download-line"></i> View Document
-                        </button>
-                    </div>
-                </div>`;
-            container.insertAdjacentHTML('beforeend', html);
-        });
-        applyCurriculumFilter('all');
+                        <div class="artifact-content">
+                            <div class="artifact-meta-row" style="margin-top:0;">
+                                <span class="meta-badge ${badgeClass}">${typeLabel}</span>
+                                ${codeBadge}
+                            </div>
+                            <h3>${item.title}</h3>
+                            <p>${item.description}</p>
+                            <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.link}', '${item.title}', 'detect')">
+                                <i class="ri-file-download-line"></i> View Document
+                            </button>
+                        </div>
+                    </div>`;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+            applyCurriculumFilter('all');
+        }
     }
 
     const curriculumModal = document.getElementById('addCurriculumModal');
     const curriculumForm = document.getElementById('curriculumForm');
 
-    function openCurriculumModal() { curriculumModal.classList.add('active'); }
+    function openCurriculumModal() { 
+        if(curriculumModal) {
+            curriculumModal.classList.add('active');
+            curriculumModal.setAttribute('aria-hidden', 'false');
+        }
+    }
     function closeCurriculumModal() { 
-        curriculumModal.classList.remove('active'); 
-        curriculumForm.reset();
-        document.getElementById('cur-thumb-name').textContent = "No file";
-        document.getElementById('cur-link-name').textContent = "No file";
+        if(curriculumModal) {
+            curriculumModal.classList.remove('active'); 
+            curriculumModal.setAttribute('aria-hidden', 'true');
+            curriculumForm.reset();
+            const nameDisplay = document.getElementById('cur-thumb-name');
+            const linkDisplay = document.getElementById('cur-link-name');
+            if(nameDisplay) nameDisplay.textContent = "No file";
+            if(linkDisplay) linkDisplay.textContent = "No file";
+        }
     }
 
-    curriculumForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        // 1. Thumbnail (Path or Base64) - We keep base64 for thumbs as they are small usually, but prefer path
-        let finalThumb = DEFAULT_THUMB;
-        if(document.getElementById('cur-thumb').value) {
-            finalThumb = document.getElementById('cur-thumb').value;
-        }
+    if(curriculumForm) {
+        curriculumForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // 1. Thumbnail (Path only)
+            let finalThumb = DEFAULT_THUMB;
+            if(document.getElementById('cur-thumb').value) {
+                finalThumb = document.getElementById('cur-thumb').value;
+            }
 
-        const newDoc = {
-            id: Date.now().toString(),
-            type: document.getElementById('cur-type').value,
-            title: document.getElementById('cur-title').value,
-            code: document.getElementById('cur-code').value,
-            description: document.getElementById('cur-desc').value,
-            thumb: finalThumb,
-            link: document.getElementById('cur-link').value 
-        };
-        curriculumDocs.unshift(newDoc);
-        saveCurriculumDocs();
-        renderCurriculumDocs();
-        closeCurriculumModal();
-        showToast('Document saved successfully!');
-    });
+            const newDoc = {
+                id: Date.now().toString(),
+                type: document.getElementById('cur-type').value,
+                title: document.getElementById('cur-title').value,
+                code: document.getElementById('cur-code').value,
+                description: document.getElementById('cur-desc').value,
+                thumb: finalThumb,
+                link: document.getElementById('cur-link').value 
+            };
+            curriculumDocs.unshift(newDoc);
+            saveCurriculumDocs();
+            renderCurriculumDocs();
+            closeCurriculumModal();
+            showToast('Document saved successfully!');
+        });
+    }
 
     function deleteCurriculum(id) {
         if(confirm('Delete this document?')) {
@@ -1350,14 +1411,17 @@
     function saveArtifacts() { localStorage.setItem('artifacts', JSON.stringify(artifacts)); }
 
     function handleCategoryChange() {
-        const category = document.getElementById('art-category').value;
-        const groups = {
-            'plan': document.getElementById('plan-fields'),
-            'scheme': document.getElementById('scheme-fields'),
-            'media': document.getElementById('media-fields')
-        };
-        Object.values(groups).forEach(el => el.classList.remove('active'));
-        if(groups[category]) groups[category].classList.add('active');
+        const category = document.getElementById('art-category');
+        if(category) {
+            const catValue = category.value;
+            const groups = {
+                'plan': document.getElementById('plan-fields'),
+                'scheme': document.getElementById('scheme-fields'),
+                'media': document.getElementById('media-fields')
+            };
+            Object.values(groups).forEach(el => { if(el) el.classList.remove('active'); });
+            if(groups[catValue]) groups[catValue].classList.add('active');
+        }
     }
     handleCategoryChange();
 
@@ -1386,100 +1450,114 @@
 
     function renderArtifacts() {
       const container = document.getElementById('artifacts-render');
-      container.innerHTML = '';
-      if (artifacts.length === 0) {
-        container.innerHTML = `<div class="empty-state"><i class="ri-folder-open-line"></i><h3>No Documents Yet</h3><p>Upload your Lesson Plans and Schemes here.</p></div>`;
-        return;
+      if(container) {
+          container.innerHTML = '';
+          if (artifacts.length === 0) {
+            container.innerHTML = `<div class="empty-state"><i class="ri-folder-open-line"></i><h3>No Documents Yet</h3><p>Upload your Lesson Plans and Schemes here.</p></div>`;
+            return;
+          }
+          const isAdmin = document.body.classList.contains('is-admin');
+
+          artifacts.forEach((item) => {
+            const deleteBtn = isAdmin ? `<button class="artifact-delete-btn admin-only" onclick="deleteArtifact('${item.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
+            let metaHtml = '';
+            let categoryLabel = '';
+            
+            if(item.category === 'plan') {
+                const week = item.planWeek ? `<span class="meta-badge badge-plan"><i class="ri-calendar-line"></i> Wk ${item.planWeek}</span>` : '';
+                const duration = item.planDuration ? `<span class="meta-badge badge-plan"><i class="ri-time-line"></i> ${item.planDuration}</span>` : '';
+                metaHtml = `<div class="artifact-meta-row">${week}${duration}</div>`;
+                if(item.planTopic) metaHtml += `<p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;"><em>${item.planTopic}</em></p>`;
+                categoryLabel = `<span class="meta-badge badge-plan">Lesson Plan</span>`;
+            } else if (item.category === 'scheme') {
+                const term = item.schemeTerm ? `<span class="meta-badge badge-scheme"><i class="ri-calendar-event-line"></i> ${item.schemeTerm}</span>` : '';
+                const weeks = item.schemeWeeks ? `<span class="meta-badge badge-scheme"><i class="ri-timer-line"></i> ${item.schemeWeeks}</span>` : '';
+                const module = item.schemeModule ? `<span class="meta-badge badge-scheme"><i class="ri-booklet-line"></i> ${item.schemeModule}</span>` : '';
+                metaHtml = `<div class="artifact-meta-row">${term}${module}${weeks}</div>`;
+                categoryLabel = `<span class="meta-badge badge-scheme">Scheme of Work</span>`;
+            } else {
+                const type = item.mediaType || 'Media';
+                metaHtml = `<div class="artifact-meta-row"><span class="meta-badge badge-media"><i class="ri-file-line"></i> ${type}</span></div>`;
+                categoryLabel = `<span class="meta-badge badge-media">Media</span>`;
+            }
+
+            const html = `
+              <div class="artifact-card" data-category="${item.category}" data-aos="zoom-in">
+                <div class="artifact-thumb">
+                    ${deleteBtn}
+                    <img src="${item.thumb || DEFAULT_THUMB}" alt="${item.title}">
+                </div>
+                <div class="artifact-content">
+                   <div class="artifact-meta-row" style="margin-top:0;">${categoryLabel}</div>
+                   ${metaHtml}
+                   <h3>${item.title}</h3>
+                   <p>${item.description}</p>
+                   <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.link}', '${item.title}', 'detect')">
+                      <i class="ri-file-download-line"></i> View Document
+                   </button>
+                </div>
+              </div>`;
+            container.insertAdjacentHTML('beforeend', html);
+          });
+          applyArtifactsFilter('all');
       }
-      const isAdmin = document.body.classList.contains('is-admin');
-
-      artifacts.forEach((item) => {
-        const deleteBtn = isAdmin ? `<button class="artifact-delete-btn admin-only" onclick="deleteArtifact('${item.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
-        let metaHtml = '';
-        let categoryLabel = '';
-        
-        if(item.category === 'plan') {
-            const week = item.planWeek ? `<span class="meta-badge badge-plan"><i class="ri-calendar-line"></i> Wk ${item.planWeek}</span>` : '';
-            const duration = item.planDuration ? `<span class="meta-badge badge-plan"><i class="ri-time-line"></i> ${item.planDuration}</span>` : '';
-            metaHtml = `<div class="artifact-meta-row">${week}${duration}</div>`;
-            if(item.planTopic) metaHtml += `<p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;"><em>${item.planTopic}</em></p>`;
-            categoryLabel = `<span class="meta-badge badge-plan">Lesson Plan</span>`;
-        } else if (item.category === 'scheme') {
-            const term = item.schemeTerm ? `<span class="meta-badge badge-scheme"><i class="ri-calendar-event-line"></i> ${item.schemeTerm}</span>` : '';
-            const weeks = item.schemeWeeks ? `<span class="meta-badge badge-scheme"><i class="ri-timer-line"></i> ${item.schemeWeeks}</span>` : '';
-            const module = item.schemeModule ? `<span class="meta-badge badge-scheme"><i class="ri-booklet-line"></i> ${item.schemeModule}</span>` : '';
-            metaHtml = `<div class="artifact-meta-row">${term}${module}${weeks}</div>`;
-            categoryLabel = `<span class="meta-badge badge-scheme">Scheme of Work</span>`;
-        } else {
-            const type = item.mediaType || 'Media';
-            metaHtml = `<div class="artifact-meta-row"><span class="meta-badge badge-media"><i class="ri-file-line"></i> ${type}</span></div>`;
-            categoryLabel = `<span class="meta-badge badge-media">Media</span>`;
-        }
-
-        const html = `
-          <div class="artifact-card" data-category="${item.category}" data-aos="zoom-in">
-            <div class="artifact-thumb">
-                ${deleteBtn}
-                <img src="${item.thumb || DEFAULT_THUMB}" alt="${item.title}">
-            </div>
-            <div class="artifact-content">
-               <div class="artifact-meta-row" style="margin-top:0;">${categoryLabel}</div>
-               ${metaHtml}
-               <h3>${item.title}</h3>
-               <p>${item.description}</p>
-               <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.link}', '${item.title}', 'detect')">
-                  <i class="ri-file-download-line"></i> View Document
-               </button>
-            </div>
-          </div>`;
-        container.insertAdjacentHTML('beforeend', html);
-      });
-      applyArtifactsFilter('all');
     }
 
     const addArtifactModal = document.getElementById('addArtifactModal');
     const artifactForm = document.getElementById('artifactForm');
 
-    function openAddArtifactModal() { addArtifactModal.classList.add('active'); }
+    function openAddArtifactModal() { 
+        if(addArtifactModal) {
+            addArtifactModal.classList.add('active');
+            addArtifactModal.setAttribute('aria-hidden', 'false');
+        }
+    }
     function closeAddArtifactModal() { 
-      addArtifactModal.classList.remove('active'); 
-      artifactForm.reset(); 
-      document.getElementById('art-thumb-name').textContent = "No file";
-      document.getElementById('art-link-name').textContent = "No file";
-      handleCategoryChange();
+        if(addArtifactModal) {
+            addArtifactModal.classList.remove('active'); 
+            addArtifactModal.setAttribute('aria-hidden', 'true');
+            artifactForm.reset(); 
+            const nameDisplay = document.getElementById('art-thumb-name');
+            const linkDisplay = document.getElementById('art-link-name');
+            if(nameDisplay) nameDisplay.textContent = "No file";
+            if(linkDisplay) linkDisplay.textContent = "No file";
+            handleCategoryChange();
+        }
     }
 
-    artifactForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      // Path Only for Thumbnails now
-      let finalThumb = DEFAULT_THUMB;
-      if(document.getElementById('art-thumb').value) {
-          finalThumb = document.getElementById('art-thumb').value;
-      }
+    if(artifactForm) {
+        artifactForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          // Path Only for Thumbnails now
+          let finalThumb = DEFAULT_THUMB;
+          if(document.getElementById('art-thumb').value) {
+              finalThumb = document.getElementById('art-thumb').value;
+          }
 
-      const category = document.getElementById('art-category').value;
-      const newArtifact = {
-        id: Date.now().toString(),
-        title: document.getElementById('art-title').value,
-        category: category,
-        thumb: finalThumb,
-        description: document.getElementById('art-desc').value,
-        link: document.getElementById('art-link').value,
-        planWeek: document.getElementById('plan-week').value,
-        planDuration: document.getElementById('plan-duration').value,
-        planTopic: document.getElementById('plan-topic').value,
-        schemeTerm: document.getElementById('scheme-term').value,
-        schemeWeeks: document.getElementById('scheme-weeks').value,
-        schemeModule: document.getElementById('scheme-module').value,
-        mediaType: document.getElementById('media-type').value
-      };
-      artifacts.unshift(newArtifact);
-      saveArtifacts();
-      renderArtifacts();
-      closeAddArtifactModal();
-      showToast('Document saved successfully!');
-    });
+          const category = document.getElementById('art-category').value;
+          const newArtifact = {
+            id: Date.now().toString(),
+            title: document.getElementById('art-title').value,
+            category: category,
+            thumb: finalThumb,
+            description: document.getElementById('art-desc').value,
+            link: document.getElementById('art-link').value,
+            planWeek: document.getElementById('plan-week').value,
+            planDuration: document.getElementById('plan-duration').value,
+            planTopic: document.getElementById('plan-topic').value,
+            schemeTerm: document.getElementById('scheme-term').value,
+            schemeWeeks: document.getElementById('scheme-weeks').value,
+            schemeModule: document.getElementById('scheme-module').value,
+            mediaType: document.getElementById('media-type').value
+          };
+          artifacts.unshift(newArtifact);
+          saveArtifacts();
+          renderArtifacts();
+          closeAddArtifactModal();
+          showToast('Document saved successfully!');
+        });
+    }
 
     function deleteArtifact(id) {
       if(confirm('Delete this artifact?')) {
@@ -1517,10 +1595,13 @@
     const openExtBtn = document.getElementById('open-ext-btn');
 
     function getExtension(url) {
+        if(!url) return '';
         return url.split('.').pop().toLowerCase();
     }
 
     function openSmartViewer(src, title, type) {
+      if(!viewerModal || !viewerTitle || !viewerContainer) return;
+
       viewerTitle.innerText = title;
       viewerContainer.innerHTML = ''; 
       downloadBtn.style.display = 'none';
@@ -1549,7 +1630,7 @@
       }
       else if (['mp4','webm','ogg'].includes(type)) { 
           viewerContainer.classList.add('media-video');
-          viewerContainer.innerHTML = `<video controls autoplay><source src="${src}" type="video/${type}">Your browser does not support the video tag.</video>`;
+          viewerContainer.innerHTML = `<video controls autoplay><source src="${src}" type="video/${type}">Your browser does not support video tag.</video>`;
       }
       else if (['mp3','wav'].includes(type)) {
           viewerContainer.classList.add('media-audio');
@@ -1580,29 +1661,47 @@
       }
       
       viewerModal.classList.add('active');
+      viewerModal.setAttribute('aria-hidden', 'false');
     }
 
     function closeSmartViewer() {
-      viewerModal.classList.remove('active');
-      setTimeout(() => { viewerContainer.innerHTML = ''; }, 300);
+        if(viewerModal) {
+            viewerModal.classList.remove('active');
+            viewerModal.setAttribute('aria-hidden', 'true');
+            setTimeout(() => { if(viewerContainer) viewerContainer.innerHTML = ''; }, 300);
+        }
     }
 
     const feedbackModal = document.getElementById('feedbackModal');
-    function openModal(context) { document.getElementById('project-name').value = context; feedbackModal.classList.add('active'); }
-    function closeModal() { feedbackModal.classList.remove('active'); }
+    function openModal(context) { 
+        if(feedbackModal) {
+            const projectNameInput = document.getElementById('project-name');
+            if(projectNameInput) projectNameInput.value = context;
+            feedbackModal.classList.add('active');
+            feedbackModal.setAttribute('aria-hidden', 'false');
+        }
+    }
+    function closeModal() { 
+        if(feedbackModal) {
+            feedbackModal.classList.remove('active');
+            feedbackModal.setAttribute('aria-hidden', 'true');
+        }
+    }
 
     function showToast(message, type = 'success') {
       const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      const icon = type === 'success' ? 'ri-checkbox-circle-fill' : 'ri-error-warning-fill';
-      toast.innerHTML = `<i class="${icon}"></i> <span>${message}</span>`;
-      container.appendChild(toast);
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateY(20px)';
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
+      if(container) {
+          const toast = document.createElement('div');
+          toast.className = `toast ${type}`;
+          const icon = type === 'success' ? 'ri-checkbox-circle-fill' : 'ri-error-warning-fill';
+          toast.innerHTML = `<i class="${icon}"></i> <span>${message}</span>`;
+          container.appendChild(toast);
+          setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(20px)';
+            setTimeout(() => toast.remove(), 300);
+          }, 3000);
+      }
     }
 
     window.onclick = function(event) {

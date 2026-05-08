@@ -1600,69 +1600,75 @@
     }
 
     function openSmartViewer(src, title, type) {
-      if(!viewerModal || !viewerTitle || !viewerContainer) return;
+  if(!viewerModal || !viewerTitle || !viewerContainer) return;
 
-      viewerTitle.innerText = title;
-      viewerContainer.innerHTML = ''; 
-      downloadBtn.style.display = 'none';
-      openExtBtn.style.display = 'none';
-      
-      // Reset container classes
-      viewerContainer.className = 'viewer-container';
+  // 1. Convert GitHub Blob link to Raw link immediately
+  // This fixes the 404 error when embedding GitHub files
+  const processedSrc = getRawGitHubUrl(src);
 
-      // If type is 'detect', guess from extension
-      if(type === 'detect') {
-          type = getExtension(src);
-      }
+  viewerTitle.innerText = title;
+  viewerContainer.innerHTML = ''; 
+  downloadBtn.style.display = 'none';
+  openExtBtn.style.display = 'none';
+  
+  // Reset container classes
+  viewerContainer.className = 'viewer-container';
 
-      // Google Docs Viewer Helper for Office docs
-      const googleViewerUrl = (url) => `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(url)}`;
+  // If type is 'detect', guess from extension
+  if(type === 'detect') {
+      type = getExtension(processedSrc);
+  }
 
-      if (type === 'pdf') { 
-          viewerContainer.classList.add('media-pdf');
-          viewerContainer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`;
-          openExtBtn.href = src;
-          openExtBtn.style.display = 'flex';
-      } 
-      else if (['jpg','jpeg','png','gif','webp'].includes(type)) { 
-          viewerContainer.classList.add('media-image');
-          viewerContainer.innerHTML = `<img src="${src}" alt="${title}">`;
-      }
-      else if (['mp4','webm','ogg'].includes(type)) { 
-          viewerContainer.classList.add('media-video');
-          viewerContainer.innerHTML = `<video controls autoplay><source src="${src}" type="video/${type}">Your browser does not support video tag.</video>`;
-      }
-      else if (['mp3','wav'].includes(type)) {
-          viewerContainer.classList.add('media-audio');
-          viewerContainer.innerHTML = `<audio controls autoplay><source src="${src}" type="audio/${type}">Your browser does not support audio.</audio>`;
-      }
-      else if (['ppt','pptx'].includes(type)) {
-          viewerContainer.classList.add('media-pdf'); // Use tall container like pdf
-          viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(src)}" frameborder="0"></iframe>`;
-          openExtBtn.href = src;
-          openExtBtn.style.display = 'flex';
-      }
-      else if (['doc','docx'].includes(type)) {
-          viewerContainer.classList.add('media-pdf');
-          viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(src)}" frameborder="0"></iframe>`;
-          openExtBtn.href = src;
-          openExtBtn.style.display = 'flex';
-      }
-      else { 
-          // Fallback
-          viewerContainer.innerHTML = `
-            <div style="text-align:center; padding:2rem; width: 100%;">
-                <i class="ri-file-unknow-line" style="font-size:3rem; margin-bottom:1rem; display:block;"></i>
-                <p style="color:var(--text-muted); margin-bottom:1rem;">Preview not available for this file type.</p>
-                <a href="${src}" target="_blank" style="display:inline-block; background:var(--primary); color:white; padding:0.6rem 1.5rem; border-radius:8px;">Open / Download</a>
-            </div>`; 
-          openExtBtn.href = src;
-          openExtBtn.style.display = 'flex';
-      }
-      
-      viewerModal.classList.add('active');
-      viewerModal.setAttribute('aria-hidden', 'false');
-    }
+  // Google Docs Viewer Helper (for Office docs)
+  const googleViewerUrl = (url) => `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(url)}`;
+
+  if (type === 'pdf') { 
+      viewerContainer.classList.add('media-pdf');
+      viewerContainer.innerHTML = `<iframe src="${processedSrc}" frameborder="0"></iframe>`;
+      openExtBtn.href = processedSrc;
+      openExtBtn.style.display = 'flex';
+  } 
+  else if (['jpg','jpeg','png','gif','webp'].includes(type)) { 
+      viewerContainer.classList.add('media-image');
+      viewerContainer.innerHTML = `<img src="${processedSrc}" alt="${title}">`;
+  }
+  else if (['mp4','webm','ogg'].includes(type)) { 
+      viewerContainer.classList.add('media-video');
+      viewerContainer.innerHTML = `<video controls autoplay><source src="${processedSrc}" type="video/${type}">Your browser does not support video tag.</video>`;
+  }
+  else if (['mp3','wav'].includes(type)) {
+      viewerContainer.classList.add('media-audio');
+      viewerContainer.innerHTML = `<audio controls autoplay><source src="${processedSrc}" type="audio/${type}">Your browser does not support audio.</audio>`;
+  }
+  else if (['ppt','pptx'].includes(type)) {
+      // IMPORTANT: Pass the PROCESSED (Raw) URL to Google Docs
+      viewerContainer.classList.add('media-pdf'); 
+      viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(processedSrc)}" frameborder="0"></iframe>`;
+      openExtBtn.href = processedSrc;
+      openExtBtn.style.display = 'flex';
+  }
+  else if (['doc','docx'].includes(type)) {
+      // IMPORTANT: Pass the PROCESSED (Raw) URL to Google Docs
+      viewerContainer.classList.add('media-pdf');
+      viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(processedSrc)}" frameborder="0"></iframe>`;
+      openExtBtn.href = processedSrc;
+      openExtBtn.style.display = 'flex';
+  }
+  else { 
+      // Fallback for other types
+      viewerContainer.innerHTML = `
+        <div style="text-align:center; padding:2rem; width: 100%;">
+            <i class="ri-file-unknow-line" style="font-size:3rem; margin-bottom:1rem; display:block;"></i>
+            <p style="color:var(--text-muted); margin-bottom:1rem;">Preview not available for this file type.</p>
+            <a href="${processedSrc}" target="_blank" style="display:inline-block; background:var(--primary); color:white; padding:0.6rem 1.5rem; border-radius:8px;">Open / Download</a>
+        </div>`; 
+      openExtBtn.href = processedSrc;
+      openExtBtn.style.display = 'flex';
+  }
+  
+  viewerModal.classList.add('active');
+  viewerModal.setAttribute('aria-hidden', 'false');
+}
 
     function closeSmartViewer() {
         if(viewerModal) {

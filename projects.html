@@ -351,18 +351,25 @@
       max-height: 90vh; overflow-y: auto;
       box-shadow: var(--shadow-lg); border: 1px solid var(--border-color);
     }
+    /* Special wide modal for Viewer */
+    .modal-content.wide { max-width: 900px; }
+
     .modal-overlay.active .modal-content { transform: translateY(0); }
     .close-btn {
       position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.5rem; color: var(--text-muted); background: transparent;
       width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-      border-radius: 50%; transition: var(--transition);
+      border-radius: 50%; transition: var(--transition); z-index: 10;
     }
     .close-btn:hover { background: var(--bg-body); color: var(--text-main); }
     
-    .viewer-container { width: 100%; height: 65vh; background: var(--bg-body); display: flex; align-items: center; justify-content: center; border-radius: 16px; margin-bottom: 1.5rem; overflow: hidden; position: relative; border: 1px solid var(--border-color); }
+    .viewer-container { width: 100%; height: 65vh; background: var(--bg-body); display: flex; align-items: center; justify-content: center; border-radius: 16px; margin-bottom: 1rem; overflow: hidden; position: relative; border: 1px solid var(--border-color); }
     .viewer-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
     .viewer-container iframe { width: 100%; height: 100%; border: none; }
     .viewer-container video { width: 100%; height: 100%; outline: none; }
+
+    .viewer-actions {
+        display: flex; justify-content: flex-end; gap: 1rem; padding-top: 0.5rem; border-top: 1px solid var(--border-color);
+    }
 
     /* Form Styles */
     .form-group { margin-bottom: 1.2rem; }
@@ -689,7 +696,7 @@
       <button class="close-btn" onclick="closeCurriculumModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Upload Curriculum</h3>
       <div class="instruction-box" style="background: rgba(14, 165, 233, 0.05); border-left: 3px solid var(--curriculum-color);">
-        <strong><i class="ri-information-line"></i> Note:</strong><br>Small files are saved automatically. For large documents (over 2MB), use a Google Drive link to save storage space.
+        <strong><i class="ri-information-line"></i> GitHub Hint:</strong><br>Paste the full URL to the PDF. If it's a GitHub link (e.g. github.com/user/blob/main/file.pdf), I will auto-convert it to a viewable Raw link.
       </div>
       <form id="curriculumForm">
         <div class="form-group"><label for="cur-type">Document Type</label><select id="cur-type" class="form-select" required><option value="curriculum">Curriculum</option><option value="standard">Occupational Standard</option></select></div></div>
@@ -702,7 +709,7 @@
         <div class="form-group"><label for="cur-desc">Description</label><textarea id="cur-desc" class="form-textarea" rows="2" placeholder="Brief overview..."></textarea></div>
         <div class="form-group"><label for="cur-file-input">Document File</label>
             <div class="file-upload-group"><label class="file-upload-btn" for="cur-file-input"><i class="ri-file-upload-line"></i> Choose</label><input type="file" id="cur-file-input" accept=".pdf" style="display: none;"><span class="file-name-display" id="cur-link-name">No file</span></div>
-            <input type="text" id="cur-link" class="form-input" placeholder="https://drive... OR select file" style="margin-top:5px;">
+            <input type="text" id="cur-link" class="form-input" placeholder="https://github.../file.pdf OR select file" style="margin-top:5px;">
         </div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
       </form>
@@ -715,7 +722,7 @@
       <button class="close-btn" onclick="closeAddArtifactModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add Documentation</h3>
       <div class="instruction-box" style="background: rgba(245, 158, 11, 0.05); border-left: 3px solid var(--plan-color);">
-        <strong><i class="ri-information-line"></i> Note:</strong><br>Small PDFs/Lesson Plans are saved automatically. For large files (>2MB), please paste a Google Drive link.
+        <strong><i class="ri-information-line"></i> GitHub Hint:</strong><br>Paste the full URL to the PDF. If it's a GitHub link (e.g. github.com/user/blob/main/file.pdf), I will auto-convert it to a viewable Raw link.
       </div>
       <form id="artifactForm">
         <div class="form-group"><label for="art-category">Document Type</label><select id="art-category" class="form-select" required onchange="handleCategoryChange()"><option value="plan">Lesson Plan</option><option value="scheme">Scheme of Work</option><option value="media">Instructional Media</option></select></div>
@@ -752,20 +759,37 @@
         <div class="form-group"><label for="art-desc">Description</label><textarea id="art-desc" class="form-textarea" rows="2" placeholder="Brief notes..." required></textarea></div>
         <div class="form-group"><label for="art-file-input">Document File</label>
             <div class="file-upload-group"><label class="file-upload-btn" for="art-file-input"><i class="ri-file-upload-line"></i> Choose</label><input type="file" id="art-file-input" accept=".pdf,.ppt" style="display: none;"><span class="file-name-display" id="art-link-name">No file</span></div>
-            <input type="text" id="art-link" class="form-input" placeholder="https://drive... OR select file" style="margin-top:5px;">
+            <input type="text" id="art-link" class="form-input" placeholder="https://github.../file.pdf OR select file" style="margin-top:5px;">
         </div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
       </form>
     </div>
   </div>
 
-  <!-- 6. Smart Viewer -->
+  <!-- 6. Smart Viewer (Enhanced for GitHub & Downloads) -->
   <div class="modal-overlay" id="smartViewerModal" aria-hidden="true" role="dialog">
-    <div class="modal-content" style="max-width: 900px;">
+    <div class="modal-content wide">
       <button class="close-btn" onclick="closeSmartViewer()" aria-label="Close modal">&times;</button>
-      <h3 id="viewer-title" style="margin-bottom: 1rem; font-size: 1.5rem;">Document Viewer</h3>
-      <div class="viewer-container" id="viewer-container"></div>
-      <div style="text-align: right;"><button class="btn btn-sm btn-outline" style="width:auto; padding: 0.6rem 1.5rem;" onclick="closeSmartViewer()">Close Viewer</button></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:10px;">
+        <h3 id="viewer-title" style="margin:0; font-size: 1.5rem;">Document Viewer</h3>
+        <div id="viewer-badges" style="display:flex; gap:0.5rem;"></div>
+      </div>
+      
+      <div class="viewer-container" id="viewer-container">
+          <!-- Content injected via JS -->
+      </div>
+      
+      <div class="viewer-actions">
+          <button id="download-view-btn" class="btn btn-sm btn-primary" style="display:none; width:auto;">
+              <i class="ri-download-line"></i> Download File
+          </button>
+          <button id="open-ext-btn" class="btn btn-sm btn-outline" style="display:none; width:auto;" target="_blank">
+              <i class="ri-external-link-line"></i> Open in New Tab
+          </button>
+          <button class="btn btn-sm btn-outline" onclick="closeSmartViewer()" style="width:auto; padding: 0.6rem 1.5rem;">
+              <i class="ri-close-line"></i> Close
+          </button>
+      </div>
     </div>
   </div>
 
@@ -831,8 +855,16 @@
         reader.onerror = error => reject(error);
     });
 
-    // --- HELPER: Safe Placeholder (No External Calls) ---
+    // --- HELPER: Safe Placeholder ---
     const DEFAULT_THUMB = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%2364748b'%3EDocument%3C/text%3E%3C/svg%3E";
+
+    // --- HELPER: GitHub Raw Converter ---
+    function getRawGitHubUrl(url) {
+        if (url && url.includes('github.com') && url.includes('/blob/')) {
+            return url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+        }
+        return url;
+    }
 
     // --- ADMIN LOGIN ---
     function checkAdminStatus() {
@@ -1189,7 +1221,7 @@
       }
     }
 
-    // --- CURRICULUM & STANDARDS (Base64 Fix) ---
+    // --- CURRICULUM & STANDARDS ---
     let curriculumDocs = JSON.parse(localStorage.getItem('curriculumDocs')) || [];
     function saveCurriculumDocs() { localStorage.setItem('curriculumDocs', JSON.stringify(curriculumDocs)); }
 
@@ -1248,26 +1280,17 @@
         const linkInput = document.getElementById('cur-file-input');
         const submitBtn = curriculumForm.querySelector('button[type="submit"]');
         
-        // 1. Handle Thumbnail (Base64)
         let finalThumb = DEFAULT_THUMB;
         if (thumbInput.files.length > 0) {
-            try {
-                finalThumb = await fileToBase64(thumbInput.files[0]);
-            } catch (err) {
-                console.error(err);
-            }
+            try { finalThumb = await fileToBase64(thumbInput.files[0]); } catch (err) { console.error(err); }
         } else if(document.getElementById('cur-thumb').value) {
             finalThumb = document.getElementById('cur-thumb').value;
         }
 
-        // 2. Handle Document File (Base64 or Link) - FIXED
         let linkUrlPath = "";
-
-        // Check Text Link First
         if (document.getElementById('cur-link').value.trim() !== "") {
             linkUrlPath = document.getElementById('cur-link').value.trim();
         } 
-        // Check File Input
         else if (linkInput.files.length > 0) {
             submitBtn.disabled = true;
             submitBtn.textContent = "Processing File...";
@@ -1283,11 +1306,7 @@
             submitBtn.innerHTML = '<i class="ri-save-line"></i> Save Document';
         }
 
-        // Final Validation
-        if(linkUrlPath === "") {
-            showToast("Please select a file or enter a link.", "error");
-            return;
-        }
+        if(linkUrlPath === "") { showToast("Please select a file or enter a link.", "error"); return; }
 
         const newDoc = {
             id: Date.now().toString(),
@@ -1298,7 +1317,6 @@
             thumb: finalThumb,
             link: linkUrlPath 
         };
-
         curriculumDocs.unshift(newDoc);
         saveCurriculumDocs();
         renderCurriculumDocs();
@@ -1324,15 +1342,12 @@
     function applyCurriculumFilter(filter) {
         const cards = document.querySelectorAll('#curriculum-render .artifact-card');
         cards.forEach(card => {
-            if(filter === 'all' || card.getAttribute('data-type') === filter) {
-                card.style.display = 'flex';
-            } else {
-                card.style.display = 'none';
-            }
+            if(filter === 'all' || card.getAttribute('data-type') === filter) { card.style.display = 'flex'; }
+            else { card.style.display = 'none'; }
         });
     }
 
-    // --- ARTIFACTS (Plans & Schemes - Base64 Fix) ---
+    // --- ARTIFACTS ---
     let artifacts = JSON.parse(localStorage.getItem('artifacts')) || [];
     function saveArtifacts() { localStorage.setItem('artifacts', JSON.stringify(artifacts)); }
 
@@ -1348,15 +1363,11 @@
     }
     handleCategoryChange();
 
-    // Global File Helper - FIXED NULL ERROR
     function handleFileSelect(inputId, displayId, pathInputId) {
       const input = document.getElementById(inputId);
-      // SAFETY CHECK: If input doesn't exist, don't crash
       if(!input) return;
-
       const display = document.getElementById(displayId);
       const pathInput = document.getElementById(pathInputId);
-      
       input.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -1440,22 +1451,14 @@
       const fileInput = document.getElementById('art-file-input');
       const submitBtn = artifactForm.querySelector('button[type="submit"]');
       
-      // Handle Thumbnail (Base64)
       let finalThumb = DEFAULT_THUMB;
       if (thumbInput.files.length > 0) {
-          try {
-              finalThumb = await fileToBase64(thumbInput.files[0]);
-          } catch (err) {
-              showToast('Image too large. Using default.', 'error');
-          }
+          try { finalThumb = await fileToBase64(thumbInput.files[0]); } catch (err) { showToast('Image too large. Using default.', 'error'); }
       } else if(document.getElementById('art-thumb').value) {
           finalThumb = document.getElementById('art-thumb').value;
       }
 
-      // Handle Document File (Base64 or Link) - FIX 404
       let linkUrlPath = "";
-
-      // Logic: Prioritize Text Link. If empty, check File Input.
       if (document.getElementById('art-link').value.trim() !== "") {
           linkUrlPath = document.getElementById('art-link').value.trim();
       } 
@@ -1474,10 +1477,7 @@
           submitBtn.innerHTML = '<i class="ri-save-line"></i> Save Document';
       }
       
-      if(linkUrlPath === "") {
-          showToast("Please select a file or enter a link.", "error");
-          return;
-      }
+      if(linkUrlPath === "") { showToast("Please select a file or enter a link.", "error"); return; }
 
       const category = document.getElementById('art-category').value;
       const newArtifact = {
@@ -1530,28 +1530,70 @@
         });
     }
 
-    // --- VIEWER & MODAL LOGIC ---
+    // --- SMART VIEWER & DOWNLOAD LOGIC ---
     const viewerModal = document.getElementById('smartViewerModal');
     const viewerTitle = document.getElementById('viewer-title');
     const viewerContainer = document.getElementById('viewer-container');
+    const downloadBtn = document.getElementById('download-view-btn');
+    const openExtBtn = document.getElementById('open-ext-btn');
 
     function openSmartViewer(src, title, type) {
       viewerTitle.innerText = title;
       viewerContainer.innerHTML = ''; 
+      downloadBtn.style.display = 'none';
+      openExtBtn.style.display = 'none';
+
+      // Check if it's a Base64 string (starts with data:)
+      const isBase64 = src.startsWith('data:');
+      
+      // Convert GitHub Blob links to Raw links automatically
+      let processedSrc = isBase64 ? src : getRawGitHubUrl(src);
+
       if (type === 'pdf') { 
-          // Improved PDF handling
-          viewerContainer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`; 
+          viewerContainer.innerHTML = `<iframe src="${processedSrc}" frameborder="0"></iframe>`;
+          
+          // If external link, show Open New Tab button (in case of X-Frame-Options blocking)
+          if(!isBase64) {
+              openExtBtn.href = processedSrc;
+              openExtBtn.style.display = 'flex';
+          } else {
+              // Base64: Download
+              downloadBtn.onclick = () => {
+                  const a = document.createElement('a');
+                  a.href = processedSrc;
+                  a.download = title.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.pdf';
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+              };
+              downloadBtn.style.display = 'flex';
+          }
       } 
-      else if (type === 'image') { viewerContainer.innerHTML = `<img src="${src}" alt="${title}">`; }
-      else if (type === 'video') { viewerContainer.innerHTML = `<video controls autoplay><source src="${src}" type="video/mp4">Your browser does not support video tag.</video>`; }
+      else if (type === 'image') { 
+          viewerContainer.innerHTML = `<img src="${processedSrc}" alt="${title}">`;
+          if(isBase64) {
+               downloadBtn.onclick = () => {
+                  const a = document.createElement('a');
+                  a.href = processedSrc;
+                  a.download = title.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.png';
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+              };
+              downloadBtn.style.display = 'flex';
+          }
+      }
+      else if (type === 'video') { viewerContainer.innerHTML = `<video controls autoplay><source src="${processedSrc}" type="video/mp4">Your browser does not support video tag.</video>`; }
       else { 
           // Handle external/broken links gracefully
           viewerContainer.innerHTML = `
             <div style="text-align:center; padding:2rem;">
                 <i class="ri-external-link-line" style="font-size:3rem; margin-bottom:1rem; display:block;"></i>
                 <p style="color:var(--text-muted); margin-bottom:1rem;">This file is hosted externally.</p>
-                <a href="${src}" target="_blank" style="display:inline-block; background:var(--primary); color:white; padding:0.6rem 1.5rem; border-radius:8px;">Open File in New Tab</a>
+                <a href="${processedSrc}" target="_blank" style="display:inline-block; background:var(--primary); color:white; padding:0.6rem 1.5rem; border-radius:8px;">Open File in New Tab</a>
             </div>`; 
+          openExtBtn.href = processedSrc;
+          openExtBtn.style.display = 'flex';
       }
       
       viewerModal.classList.add('active');

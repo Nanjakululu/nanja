@@ -351,7 +351,6 @@
       max-height: 90vh; overflow-y: auto;
       box-shadow: var(--shadow-lg); border: 1px solid var(--border-color);
     }
-    /* Special wide modal for Viewer */
     .modal-content.wide { max-width: 900px; }
 
     .modal-overlay.active .modal-content { transform: translateY(0); }
@@ -362,10 +361,22 @@
     }
     .close-btn:hover { background: var(--bg-body); color: var(--text-main); }
     
-    .viewer-container { width: 100%; height: 65vh; background: var(--bg-body); display: flex; align-items: center; justify-content: center; border-radius: 16px; margin-bottom: 1rem; overflow: hidden; position: relative; border: 1px solid var(--border-color); }
+    .viewer-container { 
+      width: 100%; 
+      background: var(--bg-body); 
+      display: flex; align-items: center; justify-content: center; 
+      border-radius: 16px; margin-bottom: 1rem; overflow: hidden; position: relative; border: 1px solid var(--border-color); 
+    }
+    /* Dynamic heights based on content */
+    .viewer-container.media-pdf { height: 65vh; }
+    .viewer-container.media-video { height: 50vh; }
+    .viewer-container.media-audio { padding: 2rem; }
+    .viewer-container.media-image { height: 65vh; }
+
     .viewer-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
     .viewer-container iframe { width: 100%; height: 100%; border: none; }
-    .viewer-container video { width: 100%; height: 100%; outline: none; }
+    .viewer-container video { width: 100%; height: 100%; outline: none; background: black; }
+    .viewer-container audio { width: 100%; }
 
     .viewer-actions {
         display: flex; justify-content: flex-end; gap: 1rem; padding-top: 0.5rem; border-top: 1px solid var(--border-color);
@@ -641,7 +652,7 @@
           <div class="form-group"><label for="act-tag">Tag/Category</label><input type="text" id="act-tag" class="form-input" placeholder="e.g. Theory" required></div>
         </div>
         <div class="form-group"><label for="act-content">Description</label><textarea id="act-content" class="form-textarea" rows="3" placeholder="What was covered..." required></textarea></div>
-        <div class="form-group"><label for="act-file-link">File / Resource Link (Optional)</label><input type="text" id="act-file-link" class="form-input" placeholder="e.g. https://drive.google.com/..."></div>
+        <div class="form-group"><label for="act-file-link">File / Resource Link (Optional)</label><input type="text" id="act-file-link" class="form-input" placeholder="e.g. assets/notes.pdf"></div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Activity</button>
       </form>
     </div>
@@ -684,7 +695,7 @@
         </div>
         <div class="form-group"><label for="ass-title">Instrument Title</label><input type="text" id="ass-title" class="form-input" placeholder="e.g. Database Design Rubric" required></div>
         <div class="form-group"><label for="ass-competency">Competency Statement</label><textarea id="ass-competency" class="form-textarea" rows="2" placeholder="e.g. Design a normalized database schema to 3NF..." required></textarea></div>
-        <div class="form-group"><label for="ass-file">Instrument File (Link or Path)</label><input type="text" id="ass-file" class="form-input" placeholder="https://drive.google.com/... OR assets/rubric.pdf" style="margin-top: 5px;"></div>
+        <div class="form-group"><label for="ass-file">Instrument File Path</label><input type="text" id="ass-file" class="form-input" placeholder="e.g. assets/rubrics/ict302.pdf"></div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Instrument</button>
       </form>
     </div>
@@ -696,20 +707,33 @@
       <button class="close-btn" onclick="closeCurriculumModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Upload Curriculum</h3>
       <div class="instruction-box" style="background: rgba(14, 165, 233, 0.05); border-left: 3px solid var(--curriculum-color);">
-        <strong><i class="ri-information-line"></i> GitHub Hint:</strong><br>Paste the full URL to the PDF. If it's a GitHub link (e.g. github.com/user/blob/main/file.pdf), I will auto-convert it to a viewable Raw link.
+        <strong><i class="ri-folder-shield-line"></i> File Path Logic:</strong><br>Enter the path relative to this file (e.g., <code>assets/curriculum.pdf</code>). Supports PDF, DOCX, PPTX, Video, Audio.
       </div>
       <form id="curriculumForm">
-        <div class="form-group"><label for="cur-type">Document Type</label><select id="cur-type" class="form-select" required><option value="curriculum">Curriculum</option><option value="standard">Occupational Standard</option></select></div></div>
+        <div class="form-group"><label for="cur-type">Document Type</label><select id="cur-type" class="form-select" required><option value="curriculum">Curriculum</option><option value="standard">Occupational Standard</option></select></div>
         <div class="form-group"><label for="cur-title">Title</label><input type="text" id="cur-title" class="form-input" placeholder="e.g. IT Support Level 4" required></div>
         <div class="form-group"><label for="cur-code">Code / Level</label><input type="text" id="cur-code" class="form-input" placeholder="e.g. ICT-SUP-014 or Diploma"></div>
-        <div class="form-group"><label for="cur-thumb-input">Thumbnail</label>
-            <div class="file-upload-group"><label class="file-upload-btn" for="cur-thumb-input"><i class="ri-image-add-line"></i> Choose</label><input type="file" id="cur-thumb-input" accept="image/*" style="display: none;"><span class="file-name-display" id="cur-thumb-name">No file</span></div>
-            <input type="text" id="cur-thumb" class="form-input" placeholder="assets/thumb.jpg" style="margin-top:5px;">
+        
+        <div class="form-group">
+            <label>Thumbnail Image (Optional)</label>
+            <div class="file-upload-group">
+                <label class="file-upload-btn" for="cur-thumb-input"><i class="ri-image-add-line"></i> Pick File</label>
+                <input type="file" id="cur-thumb-input" accept="image/*" style="display: none;">
+                <span class="file-name-display" id="cur-thumb-name">No file</span>
+            </div>
+            <input type="text" id="cur-thumb" class="form-input" placeholder="e.g. assets/cur-thumb.jpg" style="margin-top:5px;">
         </div>
+
         <div class="form-group"><label for="cur-desc">Description</label><textarea id="cur-desc" class="form-textarea" rows="2" placeholder="Brief overview..."></textarea></div>
-        <div class="form-group"><label for="cur-file-input">Document File</label>
-            <div class="file-upload-group"><label class="file-upload-btn" for="cur-file-input"><i class="ri-file-upload-line"></i> Choose</label><input type="file" id="cur-file-input" accept=".pdf" style="display: none;"><span class="file-name-display" id="cur-link-name">No file</span></div>
-            <input type="text" id="cur-link" class="form-input" placeholder="https://github.../file.pdf OR select file" style="margin-top:5px;">
+        
+        <div class="form-group">
+            <label>Document File Path</label>
+            <div class="file-upload-group">
+                <label class="file-upload-btn" for="cur-file-input"><i class="ri-file-text-line"></i> Pick Filename</label>
+                <input type="file" id="cur-file-input" style="display: none;">
+                <span class="file-name-display" id="cur-link-name">No file</span>
+            </div>
+            <input type="text" id="cur-link" class="form-input" placeholder="e.g. assets/standards.pdf" style="margin-top:5px;" required>
         </div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
       </form>
@@ -722,7 +746,7 @@
       <button class="close-btn" onclick="closeAddArtifactModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add Documentation</h3>
       <div class="instruction-box" style="background: rgba(245, 158, 11, 0.05); border-left: 3px solid var(--plan-color);">
-        <strong><i class="ri-information-line"></i> GitHub Hint:</strong><br>Paste the full URL to the PDF. If it's a GitHub link (e.g. github.com/user/blob/main/file.pdf), I will auto-convert it to a viewable Raw link.
+        <strong><i class="ri-folder-shield-line"></i> File Path Logic:</strong><br>Enter the path relative to this file (e.g., <code>assets/lesson_1.pdf</code>). Supports PDF, DOCX, PPTX, Video, Audio.
       </div>
       <form id="artifactForm">
         <div class="form-group"><label for="art-category">Document Type</label><select id="art-category" class="form-select" required onchange="handleCategoryChange()"><option value="plan">Lesson Plan</option><option value="scheme">Scheme of Work</option><option value="media">Instructional Media</option></select></div>
@@ -751,22 +775,33 @@
             <div class="form-group"><label for="media-type">Format</label><select id="media-type" class="form-select"><option value="image">Image</option><option value="video">Video</option><option value="slides">Slides</option></select></div>
         </div>
 
-        <div class="form-group"><label for="art-thumb-input">Thumbnail</label>
-            <div class="file-upload-group"><label class="file-upload-btn" for="art-thumb-input"><i class="ri-image-add-line"></i> Choose</label><input type="file" id="art-thumb-input" accept="image/*" style="display: none;"><span class="file-name-display" id="art-thumb-name">No file</span></div>
-            <input type="text" id="art-thumb" class="form-input" placeholder="assets/thumb.jpg" style="margin-top:5px;">
+        <div class="form-group">
+            <label>Thumbnail Image (Optional)</label>
+            <div class="file-upload-group">
+                <label class="file-upload-btn" for="art-thumb-input"><i class="ri-image-add-line"></i> Pick File</label>
+                <input type="file" id="art-thumb-input" accept="image/*" style="display: none;">
+                <span class="file-name-display" id="art-thumb-name">No file</span>
+            </div>
+            <input type="text" id="art-thumb" class="form-input" placeholder="e.g. assets/plan-thumb.jpg" style="margin-top:5px;">
         </div>
         
         <div class="form-group"><label for="art-desc">Description</label><textarea id="art-desc" class="form-textarea" rows="2" placeholder="Brief notes..." required></textarea></div>
-        <div class="form-group"><label for="art-file-input">Document File</label>
-            <div class="file-upload-group"><label class="file-upload-btn" for="art-file-input"><i class="ri-file-upload-line"></i> Choose</label><input type="file" id="art-file-input" accept=".pdf,.ppt" style="display: none;"><span class="file-name-display" id="art-link-name">No file</span></div>
-            <input type="text" id="art-link" class="form-input" placeholder="https://github.../file.pdf OR select file" style="margin-top:5px;">
+        
+        <div class="form-group">
+            <label>Document File Path</label>
+            <div class="file-upload-group">
+                <label class="file-upload-btn" for="art-file-input"><i class="ri-file-text-line"></i> Pick Filename</label>
+                <input type="file" id="art-file-input" style="display: none;">
+                <span class="file-name-display" id="art-link-name">No file</span>
+            </div>
+            <input type="text" id="art-link" class="form-input" placeholder="e.g. assets/plan1.pdf" style="margin-top:5px;" required>
         </div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
       </form>
     </div>
   </div>
 
-  <!-- 6. Smart Viewer (Enhanced for GitHub & Downloads) -->
+  <!-- 6. Smart Viewer (Universal) -->
   <div class="modal-overlay" id="smartViewerModal" aria-hidden="true" role="dialog">
     <div class="modal-content wide">
       <button class="close-btn" onclick="closeSmartViewer()" aria-label="Close modal">&times;</button>
@@ -847,24 +882,8 @@
       menuBtn.querySelector('i').className = navLinks.classList.contains('active') ? 'ri-close-line' : 'ri-menu-line';
     });
 
-    // --- HELPER: Convert Image/File to Base64 (Persistent) ---
-    const fileToBase64 = (file) => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
-
     // --- HELPER: Safe Placeholder ---
     const DEFAULT_THUMB = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%2364748b'%3EDocument%3C/text%3E%3C/svg%3E";
-
-    // --- HELPER: GitHub Raw Converter ---
-    function getRawGitHubUrl(url) {
-        if (url && url.includes('github.com') && url.includes('/blob/')) {
-            return url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
-        }
-        return url;
-    }
 
     // --- ADMIN LOGIN ---
     function checkAdminStatus() {
@@ -1086,10 +1105,21 @@
 
       teachingLog.forEach((item) => {
         const tagsHtml = item.tags.map(tag => `<span class="tag">${tag} ${isAdmin ? `<button onclick="removeTag('${item.id}', '${tag}')">&times;</button>` : ''}</span>`).join('');
-        const linksHtml = item.links.map(link => {
-          let icon = link.type === 'pdf' ? 'ri-file-pdf-line' : (link.type === 'image' ? 'ri-image-line' : 'ri-link');
-          return `<button class="btn-sm btn-outline" onclick="openSmartViewer('${link.src}', '${item.title} - ${link.label}', '${link.type}')"><i class="${icon}"></i> ${link.label}</button>`;
-        }).join('');
+        
+        // Detect file type for icon
+        let fileIcon = 'ri-link';
+        let fileType = 'external';
+        if(item.fileLink) {
+            const ext = item.fileLink.split('.').pop().toLowerCase();
+            if(['pdf'].includes(ext)) { fileIcon = 'ri-file-pdf-line'; fileType='pdf'; }
+            else if(['jpg','png','gif','jpeg'].includes(ext)) { fileIcon = 'ri-image-line'; fileType='image'; }
+            else if(['mp4','webm'].includes(ext)) { fileIcon = 'ri-video-line'; fileType='video'; }
+            else if(['mp3','wav'].includes(ext)) { fileIcon = 'ri-music-line'; fileType='audio'; }
+        }
+
+        const linksHtml = item.fileLink ? 
+          `<button class="btn-sm btn-outline" onclick="openSmartViewer('${item.fileLink}', '${item.title}', '${fileType}')"><i class="${fileIcon}"></i> View Resource</button>` : '';
+
         const deleteBtn = isAdmin ? `<button class="delete-btn admin-only" onclick="deleteActivity('${item.id}')"><i class="ri-delete-bin-line"></i></button>` : '';
 
         const html = `
@@ -1120,15 +1150,8 @@
         description: document.getElementById('act-content').value,
         dayLabel: `Day ${dayNum}`,
         tags: [document.getElementById('act-tag').value, 'Activity'], 
-        links: [],
         fileLink: document.getElementById('act-file-link').value
       };
-      if (newActivity.fileLink) {
-        let type = 'external';
-        if(newActivity.fileLink.toLowerCase().includes('.pdf')) type = 'pdf';
-        else if(newActivity.fileLink.match(/\.(jpeg|jpg|png|webp)$/)) type = 'image';
-        newActivity.links.push({ label: 'Resource', src: newActivity.fileLink, type: type });
-      }
       teachingLog.unshift(newActivity);
       saveTeachingLog();
       renderLog();
@@ -1180,7 +1203,7 @@
             <div class="competency-statement">
               <i class="ri-double-quotes-l"></i> ${item.competency}
             </div>
-            <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.file}', '${item.title} - Instrument', 'pdf')">
+            <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.file}', '${item.title}', 'pdf')">
               <i class="ri-file-download-line"></i> Download/View Instrument
             </button>
           </div>
@@ -1253,7 +1276,7 @@
                         </div>
                         <h3>${item.title}</h3>
                         <p>${item.description}</p>
-                        <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.link}', '${item.title}', 'pdf')">
+                        <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.link}', '${item.title}', 'detect')">
                             <i class="ri-file-download-line"></i> View Document
                         </button>
                     </div>
@@ -1274,39 +1297,14 @@
         document.getElementById('cur-link-name').textContent = "No file";
     }
 
-    curriculumForm.addEventListener('submit', async (e) => {
+    curriculumForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const thumbInput = document.getElementById('cur-thumb-input');
-        const linkInput = document.getElementById('cur-file-input');
-        const submitBtn = curriculumForm.querySelector('button[type="submit"]');
         
+        // 1. Thumbnail (Path or Base64) - We keep base64 for thumbs as they are small usually, but prefer path
         let finalThumb = DEFAULT_THUMB;
-        if (thumbInput.files.length > 0) {
-            try { finalThumb = await fileToBase64(thumbInput.files[0]); } catch (err) { console.error(err); }
-        } else if(document.getElementById('cur-thumb').value) {
+        if(document.getElementById('cur-thumb').value) {
             finalThumb = document.getElementById('cur-thumb').value;
         }
-
-        let linkUrlPath = "";
-        if (document.getElementById('cur-link').value.trim() !== "") {
-            linkUrlPath = document.getElementById('cur-link').value.trim();
-        } 
-        else if (linkInput.files.length > 0) {
-            submitBtn.disabled = true;
-            submitBtn.textContent = "Processing File...";
-            try {
-                linkUrlPath = await fileToBase64(linkInput.files[0]);
-            } catch (err) {
-                showToast('Error: File too large for browser storage.', 'error');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="ri-save-line"></i> Save Document';
-                return;
-            }
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="ri-save-line"></i> Save Document';
-        }
-
-        if(linkUrlPath === "") { showToast("Please select a file or enter a link.", "error"); return; }
 
         const newDoc = {
             id: Date.now().toString(),
@@ -1315,13 +1313,13 @@
             code: document.getElementById('cur-code').value,
             description: document.getElementById('cur-desc').value,
             thumb: finalThumb,
-            link: linkUrlPath 
+            link: document.getElementById('cur-link').value 
         };
         curriculumDocs.unshift(newDoc);
         saveCurriculumDocs();
         renderCurriculumDocs();
         closeCurriculumModal();
-        showToast('Document uploaded successfully!');
+        showToast('Document saved successfully!');
     });
 
     function deleteCurriculum(id) {
@@ -1363,22 +1361,28 @@
     }
     handleCategoryChange();
 
-    function handleFileSelect(inputId, displayId, pathInputId) {
-      const input = document.getElementById(inputId);
-      if(!input) return;
-      const display = document.getElementById(displayId);
-      const pathInput = document.getElementById(pathInputId);
-      input.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        if(display) display.textContent = file.name;
-        if(pathInput && pathInput.value === '') pathInput.value = `assets/${file.name}`;
-      });
+    // Helper to auto-fill filename
+    function setupFilePicker(inputId, displayId, pathInputId) {
+        const input = document.getElementById(inputId);
+        if(!input) return;
+        const display = document.getElementById(displayId);
+        const pathInput = document.getElementById(pathInputId);
+        
+        input.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                const name = e.target.files[0].name;
+                if(display) display.textContent = name;
+                if(pathInput && !pathInput.value.includes('/')) {
+                    // Auto-prepend "assets/" if it looks like a plain filename
+                    pathInput.value = "assets/" + name;
+                }
+            }
+        });
     }
-    handleFileSelect('art-thumb-input', 'art-thumb-name', 'art-thumb');
-    handleFileSelect('art-file-input', 'art-link-name', 'art-link');
-    handleFileSelect('cur-thumb-input', 'cur-thumb-name', 'cur-thumb');
-    handleFileSelect('cur-file-input', 'cur-link-name', 'cur-link');
+    setupFilePicker('art-thumb-input', 'art-thumb-name', 'art-thumb');
+    setupFilePicker('art-file-input', 'art-link-name', 'art-link');
+    setupFilePicker('cur-thumb-input', 'cur-thumb-name', 'cur-thumb');
+    setupFilePicker('cur-file-input', 'cur-link-name', 'cur-link');
 
     function renderArtifacts() {
       const container = document.getElementById('artifacts-render');
@@ -1423,7 +1427,7 @@
                ${metaHtml}
                <h3>${item.title}</h3>
                <p>${item.description}</p>
-               <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.link}', '${item.title}', 'pdf')">
+               <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.link}', '${item.title}', 'detect')">
                   <i class="ri-file-download-line"></i> View Document
                </button>
             </div>
@@ -1445,39 +1449,14 @@
       handleCategoryChange();
     }
 
-    artifactForm.addEventListener('submit', async (e) => {
+    artifactForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const thumbInput = document.getElementById('art-thumb-input');
-      const fileInput = document.getElementById('art-file-input');
-      const submitBtn = artifactForm.querySelector('button[type="submit"]');
       
+      // Path Only for Thumbnails now
       let finalThumb = DEFAULT_THUMB;
-      if (thumbInput.files.length > 0) {
-          try { finalThumb = await fileToBase64(thumbInput.files[0]); } catch (err) { showToast('Image too large. Using default.', 'error'); }
-      } else if(document.getElementById('art-thumb').value) {
+      if(document.getElementById('art-thumb').value) {
           finalThumb = document.getElementById('art-thumb').value;
       }
-
-      let linkUrlPath = "";
-      if (document.getElementById('art-link').value.trim() !== "") {
-          linkUrlPath = document.getElementById('art-link').value.trim();
-      } 
-      else if (fileInput.files.length > 0) {
-          submitBtn.disabled = true;
-          submitBtn.textContent = "Processing File...";
-          try {
-              linkUrlPath = await fileToBase64(fileInput.files[0]);
-          } catch (err) {
-              showToast('Error: File too large for browser storage.', 'error');
-              submitBtn.disabled = false;
-              submitBtn.innerHTML = '<i class="ri-save-line"></i> Save Document';
-              return;
-          }
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = '<i class="ri-save-line"></i> Save Document';
-      }
-      
-      if(linkUrlPath === "") { showToast("Please select a file or enter a link.", "error"); return; }
 
       const category = document.getElementById('art-category').value;
       const newArtifact = {
@@ -1486,7 +1465,7 @@
         category: category,
         thumb: finalThumb,
         description: document.getElementById('art-desc').value,
-        link: linkUrlPath,
+        link: document.getElementById('art-link').value,
         planWeek: document.getElementById('plan-week').value,
         planDuration: document.getElementById('plan-duration').value,
         planTopic: document.getElementById('plan-topic').value,
@@ -1530,69 +1509,73 @@
         });
     }
 
-    // --- SMART VIEWER & DOWNLOAD LOGIC ---
+    // --- UNIVERSAL DOCUMENT VIEWER ---
     const viewerModal = document.getElementById('smartViewerModal');
     const viewerTitle = document.getElementById('viewer-title');
     const viewerContainer = document.getElementById('viewer-container');
     const downloadBtn = document.getElementById('download-view-btn');
     const openExtBtn = document.getElementById('open-ext-btn');
 
+    function getExtension(url) {
+        return url.split('.').pop().toLowerCase();
+    }
+
     function openSmartViewer(src, title, type) {
       viewerTitle.innerText = title;
       viewerContainer.innerHTML = ''; 
       downloadBtn.style.display = 'none';
       openExtBtn.style.display = 'none';
-
-      // Check if it's a Base64 string (starts with data:)
-      const isBase64 = src.startsWith('data:');
       
-      // Convert GitHub Blob links to Raw links automatically
-      let processedSrc = isBase64 ? src : getRawGitHubUrl(src);
+      // Reset container classes
+      viewerContainer.className = 'viewer-container';
+
+      // If type is 'detect', guess from extension
+      if(type === 'detect') {
+          type = getExtension(src);
+      }
+
+      // Google Docs Viewer Helper for Office docs
+      const googleViewerUrl = (url) => `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(url)}`;
 
       if (type === 'pdf') { 
-          viewerContainer.innerHTML = `<iframe src="${processedSrc}" frameborder="0"></iframe>`;
-          
-          // If external link, show Open New Tab button (in case of X-Frame-Options blocking)
-          if(!isBase64) {
-              openExtBtn.href = processedSrc;
-              openExtBtn.style.display = 'flex';
-          } else {
-              // Base64: Download
-              downloadBtn.onclick = () => {
-                  const a = document.createElement('a');
-                  a.href = processedSrc;
-                  a.download = title.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.pdf';
-                  document.body.appendChild(a);
-                  a.click();
-                  document.body.removeChild(a);
-              };
-              downloadBtn.style.display = 'flex';
-          }
+          viewerContainer.classList.add('media-pdf');
+          viewerContainer.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`;
+          openExtBtn.href = src;
+          openExtBtn.style.display = 'flex';
       } 
-      else if (type === 'image') { 
-          viewerContainer.innerHTML = `<img src="${processedSrc}" alt="${title}">`;
-          if(isBase64) {
-               downloadBtn.onclick = () => {
-                  const a = document.createElement('a');
-                  a.href = processedSrc;
-                  a.download = title.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.png';
-                  document.body.appendChild(a);
-                  a.click();
-                  document.body.removeChild(a);
-              };
-              downloadBtn.style.display = 'flex';
-          }
+      else if (['jpg','jpeg','png','gif','webp'].includes(type)) { 
+          viewerContainer.classList.add('media-image');
+          viewerContainer.innerHTML = `<img src="${src}" alt="${title}">`;
       }
-      else if (type === 'video') { viewerContainer.innerHTML = `<video controls autoplay><source src="${processedSrc}" type="video/mp4">Your browser does not support video tag.</video>`; }
+      else if (['mp4','webm','ogg'].includes(type)) { 
+          viewerContainer.classList.add('media-video');
+          viewerContainer.innerHTML = `<video controls autoplay><source src="${src}" type="video/${type}">Your browser does not support the video tag.</video>`;
+      }
+      else if (['mp3','wav'].includes(type)) {
+          viewerContainer.classList.add('media-audio');
+          viewerContainer.innerHTML = `<audio controls autoplay><source src="${src}" type="audio/${type}">Your browser does not support audio.</audio>`;
+      }
+      else if (['ppt','pptx'].includes(type)) {
+          viewerContainer.classList.add('media-pdf'); // Use tall container like pdf
+          viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(src)}" frameborder="0"></iframe>`;
+          openExtBtn.href = src;
+          openExtBtn.style.display = 'flex';
+      }
+      else if (['doc','docx'].includes(type)) {
+          viewerContainer.classList.add('media-pdf');
+          viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(src)}" frameborder="0"></iframe>`;
+          openExtBtn.href = src;
+          openExtBtn.style.display = 'flex';
+      }
       else { 
-          // Handle external/broken links gracefully
+          // Fallback
           viewerContainer.innerHTML = `
-            <div style="text-align:center; padding:2rem;">
-                <i class="ri-external-link-line" style="font-size:3rem; margin-bottom:1rem; display:block;"></i>
-                <p style="color:var(--text-muted); margin-bottom:1rem;">This file is hosted externally.</p>
-                <a href="${processedSrc}" target="_blank" style="display:inline-block; background:var(--primary); color:white; padding:0.6rem 1.5rem; border-radius:8px;">Open File in New Tab</a>
+            <div style="text-align:center; padding:2rem; width: 100%;">
+                <i class="ri-file-unknow-line" style="font-size:3rem; margin-bottom:1rem; display:block;"></i>
+                <p style="color:var(--text-muted); margin-bottom:1rem;">Preview not available for this file type.</p>
+                <a href="${src}" target="_blank" style="display:inline-block; background:var(--primary); color:white; padding:0.6rem 1.5rem; border-radius:8px;">Open / Download</a>
             </div>`; 
-          openExtBtn.href = processedSrc;
+          openExtBtn.href = src;
           openExtBtn.style.display = 'flex';
       }
       

@@ -148,7 +148,7 @@
     }
     .page-hero h1 { 
       font-size: 3.5rem; 
-      margin-bottom: 1rem; 
+      margin-bottom:1rem; 
       background: linear-gradient(135deg, var(--text-main) 0%, var(--primary) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -349,7 +349,7 @@
       border-radius: 24px; padding: 2rem; position: relative;
       transform: translateY(30px); transition: var(--transition);
       max-height: 90vh; overflow-y: auto;
-      box-shadow: var(--shadow-lg); border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-lg); border:1px solid var(--border-color);
     }
     .modal-content.wide { max-width: 900px; }
 
@@ -686,7 +686,8 @@
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add Assessment Instrument</h3>
       <div class="instruction-box" style="border-color: var(--assessment); background: rgba(13, 148, 136, 0.05);">
         <strong><i class="ri-cursor-line"></i> CBET Focus:</strong><br>
-        Ensure this tool assesses specific Performance Criteria for chosen competency. Supports GitHub links.
+        Ensure this tool assesses specific Performance Criteria for chosen competency. 
+        <br><em>Files in your repo: <code>Nanjakululu/nanja</code></em>
       </div>
       <form id="assessmentForm">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -695,7 +696,7 @@
         </div>
         <div class="form-group"><label for="ass-title">Instrument Title</label><input type="text" id="ass-title" class="form-input" placeholder="e.g. Database Design Rubric" required></div>
         <div class="form-group"><label for="ass-competency">Competency Statement</label><textarea id="ass-competency" class="form-textarea" rows="2" placeholder="e.g. Design a normalized database schema to 3NF..." required></textarea></div>
-        <div class="form-group"><label for="ass-file">File Path (Local or GitHub)</label><input type="text" id="ass-file" class="form-input" placeholder="e.g. https://github.com/user/repo/blob/main/file.pdf" required></div>
+        <div class="form-group"><label for="ass-file">File Path (GitHub Link)</label><input type="text" id="ass-file" class="form-input" placeholder="https://github.com/Nanjakululu/nanja/blob/main/assessments/file.pdf" required></div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Instrument</button>
       </form>
     </div>
@@ -707,7 +708,7 @@
       <button class="close-btn" onclick="closeCurriculumModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Upload Curriculum</h3>
       <div class="instruction-box" style="background: rgba(14, 165, 233, 0.05); border-left: 3px solid var(--curriculum-color);">
-        <strong><i class="ri-folder-shield-line"></i> File Path Logic:</strong><br>Enter path relative to this file (e.g., <code>assets/curriculum.pdf</code>). Supports PDF, DOCX, PPTX, Video, Audio.
+        <strong><i class="ri-folder-shield-line"></i> File Path Logic:</strong><br>Enter full GitHub link (e.g., <code>https://github.com/Nanjakululu/nanja/blob/main/curriculum/file.pdf</code>).
       </div>
       <form id="curriculumForm">
         <div class="form-group"><label for="cur-type">Document Type</label><select id="cur-type" class="form-select" required><option value="curriculum">Curriculum</option><option value="standard">Occupational Standard</option></select></div>
@@ -721,7 +722,7 @@
                 <input type="file" id="cur-thumb-input" accept="image/*" style="display: none;">
                 <span class="file-name-display" id="cur-thumb-name">No file</span>
             </div>
-            <input type="text" id="cur-thumb" class="form-input" placeholder="e.g. assets/cur-thumb.jpg" style="margin-top:5px;">
+            <input type="text" id="cur-thumb" class="form-input" placeholder="e.g. https://github.com/Nanjakululu/nanja/blob/main/assets/thumb.jpg" style="margin-top:5px;">
         </div>
 
         <div class="form-group"><label for="cur-desc">Description</label><textarea id="cur-desc" class="form-textarea" rows="2" placeholder="Brief overview..."></textarea></div>
@@ -733,7 +734,7 @@
                 <input type="file" id="cur-file-input" style="display: none;">
                 <span class="file-name-display" id="cur-link-name">No file</span>
             </div>
-            <input type="text" id="cur-link" class="form-input" placeholder="e.g. assets/standards.pdf" style="margin-top:5px;" required>
+            <input type="text" id="cur-link" class="form-input" placeholder="https://github.com/Nanjakululu/nanja/blob/main/standards/file.pdf" style="margin-top:5px;" required>
         </div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
       </form>
@@ -746,7 +747,7 @@
       <button class="close-btn" onclick="closeAddArtifactModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add Documentation</h3>
       <div class="instruction-box" style="background: rgba(245, 158, 11, 0.05); border-left: 3px solid var(--plan-color);">
-        <strong><i class="ri-folder-shield-line"></i> File Path Logic:</strong><br>Enter path relative to this file (e.g., <code>assets/lesson_1.pdf</code>). Supports PDF, DOCX, PPTX, Video, Audio.
+        <strong><i class="ri-folder-shield-line"></i> File Path Logic:</strong><br>Enter full GitHub link (e.g., <code>https://github.com/Nanjakululu/nanja/blob/main/plans/lesson.pdf</code>).
       </div>
       <form id="artifactForm">
         <div class="form-group"><label for="art-category">Document Type</label><select id="art-category" class="form-select" required onchange="handleCategoryChange()"><option value="plan">Lesson Plan</option><option value="scheme">Scheme of Work</option><option value="media">Instructional Media</option></select></div>
@@ -782,7 +783,7 @@
                 <input type="file" id="art-thumb-input" accept="image/*" style="display: none;">
                 <span class="file-name-display" id="art-thumb-name">No file</span>
             </div>
-            <input type="text" id="art-thumb" class="form-input" placeholder="e.g. assets/plan-thumb.jpg" style="margin-top:5px;">
+            <input type="text" id="art-thumb" class="form-input" placeholder="https://github.com/Nanjakululu/nanja/blob/main/assets/thumb.jpg" style="margin-top:5px;">
         </div>
         
         <div class="form-group"><label for="art-desc">Description</label><textarea id="art-desc" class="form-textarea" rows="2" placeholder="Brief notes..." required></textarea></div>
@@ -794,7 +795,7 @@
                 <input type="file" id="art-file-input" style="display: none;">
                 <span class="file-name-display" id="art-link-name">No file</span>
             </div>
-            <input type="text" id="art-link" class="form-input" placeholder="e.g. assets/plan1.pdf" style="margin-top:5px;" required>
+            <input type="text" id="art-link" class="form-input" placeholder="https://github.com/Nanjakululu/nanja/blob/main/documents/file.pdf" style="margin-top:5px;" required>
         </div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
       </form>
@@ -913,7 +914,7 @@
     }
 
     // --- SEED DEMO DATA ---
-    // This ensures the user has something to view immediately
+    // This ensures the user has something to view immediately pointing to their repo
     function seedDataIfEmpty() {
         if(!localStorage.getItem('artifacts')) {
             const demoArtifacts = [
@@ -925,7 +926,8 @@
                     planDuration: "90 Mins",
                     planTopic: "Tags & Attributes",
                     description: "A comprehensive lesson plan covering basic HTML structure.",
-                    link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", // Real PDF
+                    // Updated to user's repo
+                    link: "https://github.com/Nanjakululu/nanja/blob/main/plans/html_intro.pdf",
                     thumb: "https://picsum.photos/seed/html/400/200",
                     mediaType: ""
                 },
@@ -934,7 +936,8 @@
                     title: "CSS Grid Presentation",
                     category: "media",
                     description: "Slide deck explaining CSS Grid layout concepts.",
-                    link: "https://slides.com/tuts/web-design-presentation/embed", // Embeddable slide
+                    // Updated to user's repo
+                    link: "https://github.com/Nanjakululu/nanja/blob/main/media/css_grid_slides.pptx",
                     thumb: "https://picsum.photos/seed/css/400/200",
                     mediaType: "slides"
                 }
@@ -942,7 +945,6 @@
             localStorage.setItem('artifacts', JSON.stringify(demoArtifacts));
         }
         if(!localStorage.getItem('assessments')) {
-             // Using a real GitHub Blob link for the assessment demo to prove functionality
              const demoAssessments = [
                  {
                      id: "201",
@@ -950,8 +952,8 @@
                      type: "written",
                      title: "Mid-Term Theory Exam",
                      competency: "Demonstrate knowledge of internet history and protocols.",
-                     // Real GitHub link from Mozilla PDF.js repo
-                     file: "https://github.com/mozilla/pdf.js/blob/master/web/compressed.tracemonkey-pldi-09.pdf"
+                     // Updated to user's repo
+                     file: "https://github.com/Nanjakululu/nanja/blob/main/assessments/mid_term_rubric.pdf"
                  }
              ];
              localStorage.setItem('assessments', JSON.stringify(demoAssessments));

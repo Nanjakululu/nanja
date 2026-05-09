@@ -67,13 +67,13 @@
       background-color: var(--bg-body);
       color: var(--text-main);
       line-height: 1.6;
-      transition: background-color 0.3s, color: 0.3s;
+      transition: background-color 0.3s, color 0.3s;
       padding-bottom: 100px;
       position: relative;
     }
 
     /* --- BACKGROUND BLOBS --- */
-    .bg-blob { position: fixed; border-radius: 50%; filter: (blur80px); z-index: -1; opacity: 0.5; }
+    .bg-blob { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.5; }
     .blob-1 { top: -100px; right: -100px; width: 400px; height: 400px; background: var(--primary); }
     .blob-2 { bottom: 10%; left: -100px; width: 300px; height: 300px; background: var(--secondary); }
 
@@ -134,7 +134,7 @@
     .nav-actions { display: flex; align-items: center; gap: 1rem; }
     .theme-toggle { 
       font-size: 1.2rem; color: var(--text-main); background: transparent; 
-      width: 40px; height:  40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
       transition: var(--transition);
     }
     .theme-toggle:hover { background: var(--primary-light); }
@@ -301,7 +301,7 @@
     .artifact-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
 
     .artifact-thumb { height: 180px; width: 100%; background-color: var(--bg-body); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-    .artifact-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform: 0.6s ease; }
+    .artifact-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
     .artifact-card:hover .artifact-thumb img { transform: scale(1.08); }
     
     .artifact-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
@@ -585,7 +585,8 @@
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
     <!-- SECTION 3: ASSESSMENT INSTRUMENTS -->
     <section class="content-section" aria-labelledby="assessment-heading">
@@ -606,9 +607,9 @@
         </div>
         
         <div class="filter-container" data-aos="fade-up">
-          <button class="filter-btn active" onclick="filterCurriculum('all')">All</button>
-          <button class="filter-btn" onclick="filterCurriculum('curriculum')">Curriculum</button>
-          <button class="filter-btn" onclick="filterCurriculum('standard')">Occupational Standards</button>
+          <button class="filter-btn active" onclick="filterCurriculum(event, 'all')">All</button>
+          <button class="filter-btn" onclick="filterCurriculum(event, 'curriculum')">Curriculum</button>
+          <button class="filter-btn" onclick="filterCurriculum(event, 'standard')">Occupational Standards</button>
         </div>
 
         <div id="curriculum-render" class="doc-grid" role="tabpanel"></div>
@@ -623,10 +624,10 @@
         </div>
         
         <div class="filter-container" data-aos="fade-up">
-          <button class="filter-btn active" onclick="filterArtifacts('all')">All</button>
-          <button class="filter-btn" onclick="filterArtifacts('plan')">Lesson Plans</button>
-          <button class="filter-btn" onclick="filterArtifacts('scheme')">Schemes of Work</button>
-          <button class="filter-btn" onclick="filterArtifacts('media')">Media</button>
+          <button class="filter-btn active" onclick="filterArtifacts(event, 'all')">All</button>
+          <button class="filter-btn" onclick="filterArtifacts(event, 'plan')">Lesson Plans</button>
+          <button class="filter-btn" onclick="filterArtifacts(event, 'scheme')">Schemes of Work</button>
+          <button class="filter-btn" onclick="filterArtifacts(event, 'media')">Media</button>
         </div>
         
         <div id="artifacts-render" class="project-grid" role="tabpanel"></div>
@@ -771,7 +772,7 @@
             <div class="field-group-title">Scheme Details</div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                 <div class="form-group"><label for="scheme-term">Term</label><input type="text" id="scheme-term" class="form-input" placeholder="e.g. Term 2"></div>
-                <div class="form-group"><label for="scheme-weeks">Weeks</label><input type="text" id="scheme-weeks" class="form-input" placeholder="e.g. 14 Weeks</div>
+                <div class="form-group"><label for="scheme-weeks">Weeks</label><input type="text" id="scheme-weeks" class="form-input" placeholder="e.g. 14 Weeks"></div>
             </div>
             <div class="form-group"><label for="scheme-module">Module</label><input type="text" id="scheme-module" class="form-input" placeholder="e.g. ICT 201"></div>
         </div>
@@ -821,12 +822,9 @@
       </div>
       
       <div class="viewer-actions">
-          <button id="download-view-btn" class="btn btn-sm btn-primary" style="display:none; width:auto;">
-              <i class="ri-download-line"></i> Download File
-          </button>
-          <button id="open-ext-btn" class="btn btn-sm btn-outline" style="display:none; width:auto;" target="_blank">
-              <i class="ri-external-link-line"></i> Open in New Tab
-          </button>
+          <a id="download-view-btn" class="btn btn-sm btn-outline" style="display:none; width:auto; text-decoration: none;" target="_blank">
+              <i class="ri-download-line"></i> Download / Open Original
+          </a>
           <button class="btn btn-sm btn-outline" onclick="closeSmartViewer()" style="width:auto; padding: 0.6rem 1.5rem;">
               <i class="ri-close-line"></i> Close
           </button>
@@ -889,18 +887,19 @@
     });
 
     // --- HELPER: Safe Placeholder ---
-    const DEFAULT_THUMB = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%2364748b'%3EDocument%3C/text%3E%3C/svg%3E';
+    const DEFAULT_THUMB = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%2364748b'%3EDocument%3C/text%3E%3C/svg%3E";
     
-    // --- SMART HELPER: ENSURE FULL GITHUB PATH ---
-    // Function to return BLOB URL for PDFs (Google Docs Viewer)
-    const GITHUB_BASE = "https://github.com/Nanjakululu/nanja/blob/main/";
-    const GITHUB_RAW = "https://raw.githubusercontent.com/Nanjakululu/nanja/main/";
+    // --- SMART HELPER: GITHUB URLS ---
+    const GITHUB_BLOB_BASE = "https://github.com/Nanjakululu/nanja/blob/main/";
+    const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/Nanjakululu/nanja/main/";
     
     // EnsureFullGitHubPath checks if input lacks http or slashes
     function ensureFullGitHubPath(input) {
         if (!input) return "";
-        if (!input.includes('http') && !input.includes('/')) {
-            return GITHUB_BASE + input;
+        // If it's just a filename (e.g. "file.pdf") or relative path (e.g. "assets/file.pdf")
+        if (!input.includes('http')) {
+            // Prepend the Blob base URL
+            return GITHUB_BLOB_BASE + (input.startsWith('/') ? input.substring(1) : input);
         }
         return input;
     }
@@ -944,8 +943,7 @@
                     planDuration: "90 Mins",
                     planTopic: "Tags & Attributes",
                     description: "A comprehensive lesson plan covering basic HTML structure.",
-                    // Using Blob URL for demo
-                    link: "https://github.com/Nanjakululu/nanja/blob/main/plans/html_intro.pdf",
+                    link: "plans/html_intro.pdf", // Using relative path for demo
                     thumb: "https://picsum.photos/seed/html/400/200",
                     mediaType: ""
                 },
@@ -954,7 +952,7 @@
                     title: "CSS Grid Presentation",
                     category: "media",
                     description: "Slide deck explaining CSS Grid layout concepts.",
-                    link: "https://github.com/Nanjakululu/nanja/blob/main/media/css_grid_slides.pptx",
+                    link: "media/css_grid_slides.pptx", // Relative path
                     thumb: "https://picsum.photos/seed/css/400/200",
                     mediaType: "slides"
                 }
@@ -969,8 +967,7 @@
                      type: "written",
                      title: "Mid-Term Theory Exam",
                      competency: "Demonstrate knowledge of internet history and protocols.",
-                     // Using Blob URL for demo
-                     file: "https://github.com/Nanjakululu/nanja/blob/main/assessments/mid-term.pdf"
+                     file: "assessments/mid-term.pdf" // Relative path
                  }
              ];
              localStorage.setItem('assessments', JSON.stringify(demoAssessments));
@@ -1240,7 +1237,6 @@
         activityForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        // AUTO-FIX PATH HERE
         let fileLinkInput = document.getElementById('act-file-link').value;
         fileLinkInput = ensureFullGitHubPath(fileLinkInput);
 
@@ -1252,7 +1248,7 @@
             description: document.getElementById('act-content').value,
             dayLabel: `Day ${dayNum}`,
             tags: [document.getElementById('act-tag').value, 'Activity'], 
-            fileLink: fileLinkInput // Use fixed path
+            fileLink: fileLinkInput
         };
         teachingLog.unshift(newActivity);
         saveTeachingLog();
@@ -1338,11 +1334,8 @@
         assessmentForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        // AUTO-FIX PATH HERE
         let fileUrl = document.getElementById('ass-file').value;
-        // NOTE: This uses ensureFullGitHubPath but I will manually construct the Blob URL for the demo data to be safe
-        // Your URL: https://github.com/Nanjakululu/nanja/blob/main/mid-term.pdf
-        // Converted Blob URL: https://github.com/Nanjakululu/nanja/blob/main/mid-term.pdf
+        fileUrl = ensureFullGitHubPath(fileUrl);
         
         const newAssessment = {
             id: Date.now().toString(),
@@ -1350,7 +1343,7 @@
             type: document.getElementById('ass-type').value,
             title: document.getElementById('ass-title').value,
             competency: document.getElementById('ass-competency').value,
-            file: "https://github.com/Nanjakululu/nanja/blob/main/mid-term.pdf" // BLOB URL
+            file: fileUrl
         };
         assessments.unshift(newAssessment);
         saveAssessments();
@@ -1437,7 +1430,6 @@
         curriculumForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // 1. Thumbnail (Path only)
             let finalThumb = DEFAULT_THUMB;
             if(document.getElementById('cur-thumb').value) {
                 finalThumb = document.getElementById('cur-thumb').value;
@@ -1468,10 +1460,10 @@
         }
     }
 
-    function filterCurriculum(filter) {
+    function filterCurriculum(event, filter) {
         const btns = document.querySelectorAll('#curriculum-heading').parentElement.nextElementSibling.querySelectorAll('.filter-btn');
         btns.forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
+        if(event && event.target) event.target.classList.add('active');
         applyCurriculumFilter(filter);
     }
 
@@ -1502,7 +1494,6 @@
     }
     handleCategoryChange();
 
-    // Helper to auto-fill filename
     function setupFilePicker(inputId, displayId, pathInputId) {
         const input = document.getElementById(inputId);
         if(!input) return;
@@ -1513,7 +1504,7 @@
             if (e.target.files.length > 0) {
                 const name = e.target.files[0].name;
                 if(display) display.textContent = name;
-                if(pathInput && !pathInput.value.includes('/')) {
+                if(pathInput && !pathInput.value.includes('http')) {
                     pathInput.value = "assets/" + name;
                 }
             }
@@ -1605,7 +1596,6 @@
         artifactForm.addEventListener('submit', (e) => {
           e.preventDefault();
           
-          // Path Only for Thumbnails now
           let finalThumb = DEFAULT_THUMB;
           if(document.getElementById('art-thumb').value) {
               finalThumb = document.getElementById('art-thumb').value;
@@ -1643,11 +1633,10 @@
       }
     }
 
-    function filterArtifacts(filter) {
+    function filterArtifacts(event, filter) {
         const btns = document.querySelectorAll('#artifacts-heading').parentElement.nextElementSibling.querySelectorAll('.filter-btn');
         btns.forEach(b => b.classList.remove('active'));
-        btns.forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
+        if(event && event.target) event.target.classList.add('active');
         applyArtifactsFilter(filter);
     }
 
@@ -1664,40 +1653,36 @@
         });
     }
 
-    // --- UNIVERSAL DOCUMENT VIEWER (UPDATED FOR GITHUB - FINAL FIX) ---
+    // --- UNIVERSAL DOCUMENT VIEWER (FIXED LOGIC) ---
     const viewerModal = document.getElementById('smartViewerModal');
     const viewerTitle = document.getElementById('viewer-title');
     const viewerContainer = document.getElementById('viewer-container');
     const downloadBtn = document.getElementById('download-view-btn');
-    const openExtBtn = document.getElementById('open-ext-btn');
 
     function getExtension(url) {
         if(!url) return '';
         return url.split('.').pop().toLowerCase();
     }
 
-    // CHANGED: Returns BLOB URL (Standard GitHub URL)
-    // For PDFs, this allows Google Docs Viewer to embed it correctly
-    function getGitHubBlobUrl(url) {
-        if (!url) return "";
-        // Regex matches: github.com/user/repo/blob/branch/filepath
-        const regex = /github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)/;
-        return url.replace(regex, 'github.com/Nanjakululu/nanja/blob/main/$1/$2/$3/$4');
+    // Helper to get clean path from a GitHub Blob URL
+    function getGitHubRawUrl(blobUrl) {
+        // Replaces: https://github.com/User/Repo/blob/branch/path
+        // With:      https://raw.githubusercontent.com/User/Repo/branch/path
+        return blobUrl.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
     }
 
     function openSmartViewer(src, title, type) {
         if(!viewerModal || !viewerTitle || !viewerContainer) return;
 
-        // 1. Ensure src is processed with github helper
-        const processedSrc = ensureFullGitHubPath(src);
+        // 1. Normalize URL to Blob URL
+        const blobUrl = ensureFullGitHubPath(src);
         
-        // 2. Convert to BLOB URL
-        const blobUrl = getGitHubBlobUrl(processedSrc);
-        
+        // 2. Get Raw URL for viewer (works better with Google Docs Viewer)
+        const rawUrl = getGitHubRawUrl(blobUrl);
+
         viewerTitle.innerText = title;
         viewerContainer.innerHTML = ''; 
-        downloadBtn.style.display = 'none'; // Hide download initially (optional logic handles this based on viewer success)
-        openExtBtn.style.display = 'none'; // Hide externally initially
+        downloadBtn.style.display = 'none';
 
         // Reset container classes
         viewerContainer.className = 'viewer-container';
@@ -1707,60 +1692,43 @@
             type = getExtension(blobUrl);
         }
 
-        // STRATEGY: Use Google Docs Viewer for PDF (requires Blob URL)
-        const googleViewerUrl = (url) => `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(blobUrl)}`;
-
-        // Fallback: If Google fails or for non-PDFs, show "Open in New Tab" fallback
-        let fallbackAction = "";
+        // STRATEGY: Use Google Docs Viewer for PDF (requires Raw URL for best compatibility)
+        const googleViewerUrl = (url) => `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(url)}`;
 
         if (type === 'pdf') { 
             viewerContainer.classList.add('media-pdf');
-            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl}" frameborder="0"></iframe>`;
+            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(rawUrl)}" frameborder="0"></iframe>`;
             
-            // Logic to handle Google failure and show fallback
-            const iframe = viewerContainer.querySelector('iframe');
-            iframe.onerror = () => {
-                console.warn("Google Viewer failed. Switching to fallback.");
-                // Fallback: Open in new tab if it fails
-                fallbackAction = `<a href="${blobUrl}" target="_blank" download="${blobUrl}" class="btn btn-sm btn-primary"><i class="ri-file-download-line"></i> Download File</a>`;
-                downloadBtn.style.display = 'none'; // Keep hidden if successful
-                openExtBtn.style.display = 'flex'; // Show fallback button
-                
-                // Add fallback button to modal actions if not already there
-                if(!document.getElementById('fallback-fallback')) {
-                    const fallbackBtn = document.createElement('a');
-                    fallbackBtn.href = blobUrl;
-                    fallbackBtn.className = 'btn btn-sm btn-primary';
-                    fallbackBtn.innerHTML = `<i class="ri-download-line"></i> Download`;
-                    fallbackBtn.style.display = 'inline-flex';
-                    document.getElementById('viewer-actions').prepend(fallbackBtn);
-                }
-            }
+            // Show download button linking to Blob URL
+            downloadBtn.href = blobUrl;
+            downloadBtn.style.display = 'inline-flex';
         } 
         else if (['jpg','jpeg','png','gif','webp'].includes(type)) { 
             viewerContainer.classList.add('media-image');
-            viewerContainer.innerHTML = `<img src="${blobUrl}" alt="${title}" onerror="this.parentElement.innerHTML='<div style=\'padding:2rem;text-align:center\'><i class=\'ri-image-off-line\' style=\'font-size:3rem\'></i><p>Image failed to load.</p></div>'">`;
+            // Use Raw URL for images too to avoid wrapper HTML issues sometimes
+            viewerContainer.innerHTML = `<img src="${rawUrl}" alt="${title}" onerror="this.parentElement.innerHTML='<div style=\'padding:2rem;text-align:center\'><i class=\'ri-image-off-line\' style=\'font-size:3rem\'></i><p>Image failed to load.</p></div>'">`;
+            downloadBtn.href = blobUrl;
+            downloadBtn.style.display = 'inline-flex';
         } 
         else if (['mp4','webm','ogg'].includes(type)) { 
             viewerContainer.classList.add('media-video');
-            viewerContainer.innerHTML = `<video controls autoplay><source src="${blobUrl}" type="video/${type}">Your browser does not support video tag.</video>`;
+            viewerContainer.innerHTML = `<video controls autoplay><source src="${rawUrl}" type="video/${type}">Your browser does not support video tag.</video>`;
         }
         else if (['mp3','wav'].includes(type)) {
             viewerContainer.classList.add('media-audio');
-            viewerContainer.innerHTML = `<audio controls autoplay><source src="${blobUrl}" type="audio/${type}">Your browser does not support audio.</audio>`;
+            viewerContainer.innerHTML = `<audio controls autoplay><source src="${rawUrl}" type="audio/${type}">Your browser does not support audio.</audio>`;
         }
         else if (['ppt','pptx'].includes(type)) {
             viewerContainer.classList.add('media-pdf'); 
-            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(blobUrl)}" frameborder="0"></iframe>`; // Use Blob URL
-            openExtBtn.href = blobUrl;
-            openExtBtn.style.display = 'flex'; // Show fallback button
+            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(rawUrl)}" frameborder="0"></iframe>`;
+            downloadBtn.href = blobUrl;
+            downloadBtn.style.display = 'inline-flex';
         }
         else if (['doc','docx'].includes(type)) {
             viewerContainer.classList.add('media-pdf');
-            const gUrl = `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(blobUrl)}`;
-            viewerContainer.innerHTML = `<iframe src="${gUrl}" frameborder="0"></iframe>`;
-            openExtBtn.href = blobUrl;
-            openExtBtn.style.display = 'flex'; // Show fallback button
+            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(rawUrl)}" frameborder="0"></iframe>`;
+            downloadBtn.href = blobUrl;
+            downloadBtn.style.display = 'inline-flex';
         } 
         else { 
             // Fallback
@@ -1768,13 +1736,11 @@
                 <div style="text-align:center; padding:2rem; width: 100%;">
                     <i class="ri-file-unknown-line" style="font-size:3rem; margin-bottom:1rem; display:block;"></i>
                     <p style="color:var(--text-muted); margin-bottom:1rem;">Preview not available for this file type.</p>
-                    <a href="${blobUrl}" target="_blank" style="display:inline-block; background:var(--primary); color:white; padding:0.6rem 1.5rem; border-radius:8px;">Open / Download</a>
+                    <a href="${blobUrl}" target="_blank" class="btn btn-sm btn-primary" style="display:inline-block; text-decoration:none;">Open / Download</a>
                 </div>`; 
-            openExtBtn.href = blobUrl;
-            openExtBtn.style.display = 'flex';
+            downloadBtn.style.display = 'none';
         }
         
-        // Always show modal
         viewerModal.classList.add('active');
         viewerModal.setAttribute('aria-hidden', 'false');
     }

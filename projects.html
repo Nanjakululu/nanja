@@ -27,7 +27,7 @@
       --plan-color: #f59e0b;
       --plan-bg: rgba(245, 158, 11, 0.1);
       
-      /* New: Curriculum & Standards Colors */
+      /* Curriculum & Standards Colors */
       --curriculum-color: #0ea5e9; 
       --curriculum-bg: rgba(14, 165, 233, 0.1);
       --standard-color: #d946ef; 
@@ -361,13 +361,13 @@
     }
     .close-btn:hover { background: var(--bg-body); color: var(--text-main); }
     
+    /* SMART VIEWER STYLES */
     .viewer-container { 
       width: 100%; 
       background: var(--bg-body); 
       display: flex; align-items: center; justify-content: center; 
       border-radius: 16px; margin-bottom: 1rem; overflow: hidden; position: relative; border: 1px solid var(--border-color); 
     }
-    /* Dynamic heights based on content */
     .viewer-container.media-pdf { height: 65vh; }
     .viewer-container.media-video { height: 50vh; }
     .viewer-container.media-audio { padding: 2rem; }
@@ -472,13 +472,13 @@
   <!-- Navigation -->
   <header>
     <nav class="navbar">
-      <a href="index.html" class="logo">Alex<span style="color: var(--primary)">.</span>N</a>
+      <a href="#" class="logo">Alex<span style="color: var(--primary)">.</span>N</a>
       <ul class="nav-links" id="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="projects.html" class="active">Portfolio</a></li>
-        <li><a href="reflections.html">Reflections</a></li>
-        <li><a href="skills.html">Skills</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#" class="active">Portfolio</a></li>
+        <li><a href="#">Reflections</a></li>
+        <li><a href="#">Skills</a></li>
+        <li><a href="#">Contact</a></li>
       </ul>
       <div class="nav-actions">
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><i class="ri-moon-line"></i></button>
@@ -495,7 +495,7 @@
         Systematic documentation of pedagogical activities in Department of Computing and Informatics.
       </p>
       <div class="breadcrumb" data-aos="fade-up" data-aos-delay="200">
-        <a href="index.html">Home</a> <span>/</span> <span>Portfolio</span>
+        <a href="#">Home</a> <span>/</span> <span>Portfolio</span>
       </div>
     </div>
   </section>
@@ -912,6 +912,51 @@
         }
     }
 
+    // --- SEED DEMO DATA ---
+    // This ensures the user has something to view immediately
+    function seedDataIfEmpty() {
+        if(!localStorage.getItem('artifacts')) {
+            const demoArtifacts = [
+                {
+                    id: "101",
+                    title: "Introduction to HTML5",
+                    category: "plan",
+                    planWeek: "1",
+                    planDuration: "90 Mins",
+                    planTopic: "Tags & Attributes",
+                    description: "A comprehensive lesson plan covering basic HTML structure.",
+                    link: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", // Real PDF
+                    thumb: "https://picsum.photos/seed/html/400/200",
+                    mediaType: ""
+                },
+                {
+                    id: "102",
+                    title: "CSS Grid Presentation",
+                    category: "media",
+                    description: "Slide deck explaining CSS Grid layout concepts.",
+                    link: "https://slides.com/tuts/web-design-presentation/embed", // Embeddable slide
+                    thumb: "https://picsum.photos/seed/css/400/200",
+                    mediaType: "slides"
+                }
+            ];
+            localStorage.setItem('artifacts', JSON.stringify(demoArtifacts));
+        }
+        if(!localStorage.getItem('assessments')) {
+             const demoAssessments = [
+                 {
+                     id: "201",
+                     unitCode: "ICT 101",
+                     type: "written",
+                     title: "Mid-Term Theory Exam",
+                     competency: "Demonstrate knowledge of internet history and protocols.",
+                     file: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+                 }
+             ];
+             localStorage.setItem('assessments', JSON.stringify(demoAssessments));
+        }
+    }
+    seedDataIfEmpty();
+
     // --- TIMETABLE & RECORD OF WORK ---
     let timetable = JSON.parse(localStorage.getItem('timetable')) || [];
     let currentWeek = 1;
@@ -1315,7 +1360,7 @@
                     <div class="artifact-card" data-type="${item.type}" data-aos="zoom-in">
                         <div class="artifact-thumb">
                             ${deleteBtn}
-                            <img src="${item.thumb || DEFAULT_THUMB}" alt="${item.title}">
+                            <img src="${item.thumb || DEFAULT_THUMB}" alt="${item.title}" onerror="this.src='${DEFAULT_THUMB}'">
                         </div>
                         <div class="artifact-content">
                             <div class="artifact-meta-row" style="margin-top:0;">
@@ -1485,7 +1530,7 @@
               <div class="artifact-card" data-category="${item.category}" data-aos="zoom-in">
                 <div class="artifact-thumb">
                     ${deleteBtn}
-                    <img src="${item.thumb || DEFAULT_THUMB}" alt="${item.title}">
+                    <img src="${item.thumb || DEFAULT_THUMB}" alt="${item.title}" onerror="this.src='${DEFAULT_THUMB}'">
                 </div>
                 <div class="artifact-content">
                    <div class="artifact-meta-row" style="margin-top:0;">${categoryLabel}</div>
@@ -1587,7 +1632,7 @@
         });
     }
 
-    // --- UNIVERSAL DOCUMENT VIEWER ---
+    // --- UNIVERSAL DOCUMENT VIEWER (UPDATED) ---
     const viewerModal = document.getElementById('smartViewerModal');
     const viewerTitle = document.getElementById('viewer-title');
     const viewerContainer = document.getElementById('viewer-container');
@@ -1599,76 +1644,82 @@
         return url.split('.').pop().toLowerCase();
     }
 
+    // Convert GitHub Blob links to Raw links for iframes
+    function getRawGitHubUrl(url) {
+        if (!url) return url;
+        // Match pattern: github.com/user/repo/blob/branch/filepath
+        const regex = /github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)/;
+        return url.replace(regex, 'raw.githubusercontent.com/$1/$2/$3/$4');
+    }
+
     function openSmartViewer(src, title, type) {
-  if(!viewerModal || !viewerTitle || !viewerContainer) return;
+        if(!viewerModal || !viewerTitle || !viewerContainer) return;
 
-  // 1. Convert GitHub Blob link to Raw link immediately
-  // This fixes the 404 error when embedding GitHub files
-  const processedSrc = getRawGitHubUrl(src);
+        // 1. Process URL
+        const processedSrc = getRawGitHubUrl(src);
 
-  viewerTitle.innerText = title;
-  viewerContainer.innerHTML = ''; 
-  downloadBtn.style.display = 'none';
-  openExtBtn.style.display = 'none';
-  
-  // Reset container classes
-  viewerContainer.className = 'viewer-container';
+        viewerTitle.innerText = title;
+        viewerContainer.innerHTML = ''; 
+        downloadBtn.style.display = 'none';
+        openExtBtn.style.display = 'none';
+        
+        // Reset container classes
+        viewerContainer.className = 'viewer-container';
 
-  // If type is 'detect', guess from extension
-  if(type === 'detect') {
-      type = getExtension(processedSrc);
-  }
+        // If type is 'detect', guess from extension
+        if(type === 'detect') {
+            type = getExtension(processedSrc);
+        }
 
-  // Google Docs Viewer Helper (for Office docs)
-  const googleViewerUrl = (url) => `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(url)}`;
+        // Google Docs Viewer Helper (for Office docs)
+        const googleViewerUrl = (url) => `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(url)}`;
 
-  if (type === 'pdf') { 
-      viewerContainer.classList.add('media-pdf');
-      viewerContainer.innerHTML = `<iframe src="${processedSrc}" frameborder="0"></iframe>`;
-      openExtBtn.href = processedSrc;
-      openExtBtn.style.display = 'flex';
-  } 
-  else if (['jpg','jpeg','png','gif','webp'].includes(type)) { 
-      viewerContainer.classList.add('media-image');
-      viewerContainer.innerHTML = `<img src="${processedSrc}" alt="${title}">`;
-  }
-  else if (['mp4','webm','ogg'].includes(type)) { 
-      viewerContainer.classList.add('media-video');
-      viewerContainer.innerHTML = `<video controls autoplay><source src="${processedSrc}" type="video/${type}">Your browser does not support video tag.</video>`;
-  }
-  else if (['mp3','wav'].includes(type)) {
-      viewerContainer.classList.add('media-audio');
-      viewerContainer.innerHTML = `<audio controls autoplay><source src="${processedSrc}" type="audio/${type}">Your browser does not support audio.</audio>`;
-  }
-  else if (['ppt','pptx'].includes(type)) {
-      // IMPORTANT: Pass the PROCESSED (Raw) URL to Google Docs
-      viewerContainer.classList.add('media-pdf'); 
-      viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(processedSrc)}" frameborder="0"></iframe>`;
-      openExtBtn.href = processedSrc;
-      openExtBtn.style.display = 'flex';
-  }
-  else if (['doc','docx'].includes(type)) {
-      // IMPORTANT: Pass the PROCESSED (Raw) URL to Google Docs
-      viewerContainer.classList.add('media-pdf');
-      viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(processedSrc)}" frameborder="0"></iframe>`;
-      openExtBtn.href = processedSrc;
-      openExtBtn.style.display = 'flex';
-  }
-  else { 
-      // Fallback for other types
-      viewerContainer.innerHTML = `
-        <div style="text-align:center; padding:2rem; width: 100%;">
-            <i class="ri-file-unknow-line" style="font-size:3rem; margin-bottom:1rem; display:block;"></i>
-            <p style="color:var(--text-muted); margin-bottom:1rem;">Preview not available for this file type.</p>
-            <a href="${processedSrc}" target="_blank" style="display:inline-block; background:var(--primary); color:white; padding:0.6rem 1.5rem; border-radius:8px;">Open / Download</a>
-        </div>`; 
-      openExtBtn.href = processedSrc;
-      openExtBtn.style.display = 'flex';
-  }
-  
-  viewerModal.classList.add('active');
-  viewerModal.setAttribute('aria-hidden', 'false');
-}
+        if (type === 'pdf') { 
+            viewerContainer.classList.add('media-pdf');
+            viewerContainer.innerHTML = `<iframe src="${processedSrc}" frameborder="0"></iframe>`;
+            openExtBtn.href = processedSrc;
+            openExtBtn.style.display = 'flex';
+        } 
+        else if (['jpg','jpeg','png','gif','webp'].includes(type)) { 
+            viewerContainer.classList.add('media-image');
+            // Add onerror to handle broken images inside viewer
+            viewerContainer.innerHTML = `<img src="${processedSrc}" alt="${title}" onerror="this.parentElement.innerHTML='<div style=\'padding:2rem;text-align:center\'><i class=\'ri-image-off-line\' style=\'font-size:3rem\'></i><p>Image failed to load.</p></div>'">`;
+        }
+        else if (['mp4','webm','ogg'].includes(type)) { 
+            viewerContainer.classList.add('media-video');
+            viewerContainer.innerHTML = `<video controls autoplay><source src="${processedSrc}" type="video/${type}">Your browser does not support video tag.</video>`;
+        }
+        else if (['mp3','wav'].includes(type)) {
+            viewerContainer.classList.add('media-audio');
+            viewerContainer.innerHTML = `<audio controls autoplay><source src="${processedSrc}" type="audio/${type}">Your browser does not support audio.</audio>`;
+        }
+        else if (['ppt','pptx'].includes(type)) {
+            viewerContainer.classList.add('media-pdf'); 
+            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(processedSrc)}" frameborder="0"></iframe>`;
+            openExtBtn.href = processedSrc;
+            openExtBtn.style.display = 'flex';
+        }
+        else if (['doc','docx'].includes(type)) {
+            viewerContainer.classList.add('media-pdf');
+            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(processedSrc)}" frameborder="0"></iframe>`;
+            openExtBtn.href = processedSrc;
+            openExtBtn.style.display = 'flex';
+        }
+        else { 
+            // Fallback for other types or unknown
+            viewerContainer.innerHTML = `
+                <div style="text-align:center; padding:2rem; width: 100%;">
+                    <i class="ri-file-unknown-line" style="font-size:3rem; margin-bottom:1rem; display:block;"></i>
+                    <p style="color:var(--text-muted); margin-bottom:1rem;">Preview not available for this file type.</p>
+                    <a href="${processedSrc}" target="_blank" style="display:inline-block; background:var(--primary); color:white; padding:0.6rem 1.5rem; border-radius:8px;">Open / Download</a>
+                </div>`; 
+            openExtBtn.href = processedSrc;
+            openExtBtn.style.display = 'flex';
+        }
+        
+        viewerModal.classList.add('active');
+        viewerModal.setAttribute('aria-hidden', 'false');
+    }
 
     function closeSmartViewer() {
         if(viewerModal) {

@@ -148,7 +148,7 @@
     }
     .page-hero h1 { 
       font-size: 3.5rem; 
-      margin-bottom:1rem; 
+      margin-bottom: 1rem; 
       background: linear-gradient(135deg, var(--text-main) 0%, var(--primary) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -349,7 +349,7 @@
       border-radius: 24px; padding: 2rem; position: relative;
       transform: translateY(30px); transition: var(--transition);
       max-height: 90vh; overflow-y: auto;
-      box-shadow: var(--shadow-lg); border:1px solid var(--border-color);
+      box-shadow: var(--shadow-lg); border: 1px solid var(--border-color);
     }
     .modal-content.wide { max-width: 900px; }
 
@@ -652,7 +652,7 @@
           <div class="form-group"><label for="act-tag">Tag/Category</label><input type="text" id="act-tag" class="form-input" placeholder="e.g. Theory" required></div>
         </div>
         <div class="form-group"><label for="act-content">Description</label><textarea id="act-content" class="form-textarea" rows="3" placeholder="What was covered..." required></textarea></div>
-        <div class="form-group"><label for="act-file-link">File / Resource Link (Optional)</label><input type="text" id="act-file-link" class="form-input" placeholder="e.g. assets/notes.pdf"></div>
+        <div class="form-group"><label for="act-file-link">File / Resource Link (Optional)</label><input type="text" id="act-file-link" class="form-input" placeholder="e.g. mid-term.pdf" required title="Type just the filename (e.g. mid-term.pdf) or full GitHub URL"></div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Activity</button>
       </form>
     </div>
@@ -686,8 +686,7 @@
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add Assessment Instrument</h3>
       <div class="instruction-box" style="border-color: var(--assessment); background: rgba(13, 148, 136, 0.05);">
         <strong><i class="ri-cursor-line"></i> CBET Focus:</strong><br>
-        Ensure this tool assesses specific Performance Criteria for chosen competency. 
-        <br><em>Files in your repo: <code>Nanjakululu/nanja</code></em>
+        Ensure this tool assesses specific Performance Criteria for chosen competency.
       </div>
       <form id="assessmentForm">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -696,7 +695,14 @@
         </div>
         <div class="form-group"><label for="ass-title">Instrument Title</label><input type="text" id="ass-title" class="form-input" placeholder="e.g. Database Design Rubric" required></div>
         <div class="form-group"><label for="ass-competency">Competency Statement</label><textarea id="ass-competency" class="form-textarea" rows="2" placeholder="e.g. Design a normalized database schema to 3NF..." required></textarea></div>
-        <div class="form-group"><label for="ass-file">File Path (GitHub Link)</label><input type="text" id="ass-file" class="form-input" placeholder="https://github.com/Nanjakululu/nanja/blob/main/assessments/file.pdf" required></div>
+        <div class="form-group"><label for="ass-file">File Path</label>
+            <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-size: 0.85rem; color: var(--primary);">Shortcut: Type</span>
+                <code style="background: var(--bg-body); padding: 2px 5px; border-radius: 4px; font-size: 0.85rem;">mid-term.pdf</code>
+                <span style="font-size: 0.85rem; color: var(--text-muted);">and the code will add the GitHub path for you!</span>
+            </div>
+            <input type="text" id="ass-file" class="form-input" placeholder="mid-term.pdf" required>
+        </div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Instrument</button>
       </form>
     </div>
@@ -708,7 +714,7 @@
       <button class="close-btn" onclick="closeCurriculumModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Upload Curriculum</h3>
       <div class="instruction-box" style="background: rgba(14, 165, 233, 0.05); border-left: 3px solid var(--curriculum-color);">
-        <strong><i class="ri-folder-shield-line"></i> File Path Logic:</strong><br>Enter full GitHub link (e.g., <code>https://github.com/Nanjakululu/nanja/blob/main/curriculum/file.pdf</code>).
+        <strong><i class="ri-folder-shield-line"></i> File Path Logic:</strong><br>Enter path relative to this file (e.g., <code>assets/curriculum.pdf</code>). Supports PDF, DOCX, PPTX, Video, Audio.
       </div>
       <form id="curriculumForm">
         <div class="form-group"><label for="cur-type">Document Type</label><select id="cur-type" class="form-select" required><option value="curriculum">Curriculum</option><option value="standard">Occupational Standard</option></select></div>
@@ -729,12 +735,7 @@
         
         <div class="form-group">
             <label>Document File Path</label>
-            <div class="file-upload-group">
-                <label class="file-upload-btn" for="cur-file-input"><i class="ri-file-text-line"></i> Pick Filename</label>
-                <input type="file" id="cur-file-input" style="display: none;">
-                <span class="file-name-display" id="cur-link-name">No file</span>
-            </div>
-            <input type="text" id="cur-link" class="form-input" placeholder="https://github.com/Nanjakululu/nanja/blob/main/standards/file.pdf" style="margin-top:5px;" required>
+            <input type="text" id="cur-link" class="form-input" placeholder="standards.pdf" required title="Type just the filename (e.g. standards.pdf) and the code will fix the path">
         </div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
       </form>
@@ -747,7 +748,7 @@
       <button class="close-btn" onclick="closeAddArtifactModal()">&times;</button>
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add Documentation</h3>
       <div class="instruction-box" style="background: rgba(245, 158, 11, 0.05); border-left: 3px solid var(--plan-color);">
-        <strong><i class="ri-folder-shield-line"></i> File Path Logic:</strong><br>Enter full GitHub link (e.g., <code>https://github.com/Nanjakululu/nanja/blob/main/plans/lesson.pdf</code>).
+        <strong><i class="ri-folder-shield-line"></i> File Path Logic:</strong><br>Enter path relative to this file (e.g., <code>assets/lesson_1.pdf</code>). Supports PDF, DOCX, PPTX, Video, Audio.
       </div>
       <form id="artifactForm">
         <div class="form-group"><label for="art-category">Document Type</label><select id="art-category" class="form-select" required onchange="handleCategoryChange()"><option value="plan">Lesson Plan</option><option value="scheme">Scheme of Work</option><option value="media">Instructional Media</option></select></div>
@@ -790,12 +791,7 @@
         
         <div class="form-group">
             <label>Document File Path</label>
-            <div class="file-upload-group">
-                <label class="file-upload-btn" for="art-file-input"><i class="ri-file-text-line"></i> Pick Filename</label>
-                <input type="file" id="art-file-input" style="display: none;">
-                <span class="file-name-display" id="art-link-name">No file</span>
-            </div>
-            <input type="text" id="art-link" class="form-input" placeholder="https://github.com/Nanjakululu/nanja/blob/main/documents/file.pdf" style="margin-top:5px;" required>
+            <input type="text" id="art-link" class="form-input" placeholder="plan.pdf" required title="Type just the filename (e.g. plan.pdf) and the code will fix the path">
         </div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
       </form>
@@ -886,6 +882,19 @@
     // --- HELPER: Safe Placeholder ---
     const DEFAULT_THUMB = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%2364748b'%3EDocument%3C/text%3E%3C/svg%3E";
 
+    // --- SMART HELPER: ENSURE FULL GITHUB PATH ---
+    // If user types 'mid-term.pdf', this converts it to 'https://github.com/Nanjakululu/nanja/blob/main/mid-term.pdf'
+    const GITHUB_BASE = "https://github.com/Nanjakululu/nanja/blob/main/";
+    
+    function ensureFullGitHubPath(input) {
+        if (!input) return "";
+        // Check if input looks like a simple filename (no slashes, no http)
+        if (!input.includes('http') && !input.includes('/')) {
+            return GITHUB_BASE + input;
+        }
+        return input;
+    }
+
     // --- ADMIN LOGIN ---
     function checkAdminStatus() {
       if(localStorage.getItem('isAdmin') === 'true') document.body.classList.add('is-admin');
@@ -912,54 +921,6 @@
             location.reload();
         }
     }
-
-    // --- SEED DEMO DATA ---
-    // This ensures the user has something to view immediately pointing to their repo
-    function seedDataIfEmpty() {
-        if(!localStorage.getItem('artifacts')) {
-            const demoArtifacts = [
-                {
-                    id: "101",
-                    title: "Introduction to HTML5",
-                    category: "plan",
-                    planWeek: "1",
-                    planDuration: "90 Mins",
-                    planTopic: "Tags & Attributes",
-                    description: "A comprehensive lesson plan covering basic HTML structure.",
-                    // Updated to user's repo
-                    link: "https://github.com/Nanjakululu/nanja/blob/main/plans/html_intro.pdf",
-                    thumb: "https://picsum.photos/seed/html/400/200",
-                    mediaType: ""
-                },
-                {
-                    id: "102",
-                    title: "CSS Grid Presentation",
-                    category: "media",
-                    description: "Slide deck explaining CSS Grid layout concepts.",
-                    // Updated to user's repo
-                    link: "https://github.com/Nanjakululu/nanja/blob/main/media/css_grid_slides.pptx",
-                    thumb: "https://picsum.photos/seed/css/400/200",
-                    mediaType: "slides"
-                }
-            ];
-            localStorage.setItem('artifacts', JSON.stringify(demoArtifacts));
-        }
-        if(!localStorage.getItem('assessments')) {
-             const demoAssessments = [
-                 {
-                     id: "201",
-                     unitCode: "ICT 101",
-                     type: "written",
-                     title: "Mid-Term Theory Exam",
-                     competency: "Demonstrate knowledge of internet history and protocols.",
-                     // Updated to user's repo
-                     file: "https://github.com/Nanjakululu/nanja/blob/main/assessments/mid_term_rubric.pdf"
-                 }
-             ];
-             localStorage.setItem('assessments', JSON.stringify(demoAssessments));
-        }
-    }
-    seedDataIfEmpty();
 
     // --- TIMETABLE & RECORD OF WORK ---
     let timetable = JSON.parse(localStorage.getItem('timetable')) || [];
@@ -1222,6 +1183,11 @@
     if(activityForm) {
         activityForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        
+        // AUTO-FIX PATH HERE
+        let fileLinkInput = document.getElementById('act-file-link').value;
+        fileLinkInput = ensureFullGitHubPath(fileLinkInput);
+
         const dayNum = teachingLog.length + 1;
         const newActivity = {
             id: Date.now().toString(),
@@ -1230,7 +1196,7 @@
             description: document.getElementById('act-content').value,
             dayLabel: `Day ${dayNum}`,
             tags: [document.getElementById('act-tag').value, 'Activity'], 
-            fileLink: document.getElementById('act-file-link').value
+            fileLink: fileLinkInput // Use the fixed path
         };
         teachingLog.unshift(newActivity);
         saveTeachingLog();
@@ -1285,7 +1251,6 @@
                 <div class="competency-statement">
                   <i class="ri-double-quotes-l"></i> ${item.competency}
                 </div>
-                <!-- Changed 'pdf' to 'detect' to handle different file types automatically -->
                 <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.file}', '${item.title}', 'detect')">
                   <i class="ri-file-download-line"></i> Download/View Instrument
                 </button>
@@ -1316,14 +1281,18 @@
     if(assessmentForm) {
         assessmentForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const fileUrl = document.getElementById('ass-file').value;
+        
+        // AUTO-FIX PATH HERE
+        let fileUrl = document.getElementById('ass-file').value;
+        fileUrl = ensureFullGitHubPath(fileUrl);
+        
         const newAssessment = {
             id: Date.now().toString(),
             unitCode: document.getElementById('ass-unit').value,
             type: document.getElementById('ass-type').value,
             title: document.getElementById('ass-title').value,
             competency: document.getElementById('ass-competency').value,
-            file: fileUrl
+            file: fileUrl // Use fixed path
         };
         assessments.unshift(newAssessment);
         saveAssessments();
@@ -1410,6 +1379,10 @@
         curriculumForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
+            // AUTO-FIX PATH HERE
+            let linkInput = document.getElementById('cur-link').value;
+            linkInput = ensureFullGitHubPath(linkInput);
+
             // 1. Thumbnail (Path only)
             let finalThumb = DEFAULT_THUMB;
             if(document.getElementById('cur-thumb').value) {
@@ -1423,7 +1396,7 @@
                 code: document.getElementById('cur-code').value,
                 description: document.getElementById('cur-desc').value,
                 thumb: finalThumb,
-                link: document.getElementById('cur-link').value 
+                link: linkInput // Use fixed path
             };
             curriculumDocs.unshift(newDoc);
             saveCurriculumDocs();
@@ -1579,6 +1552,10 @@
         artifactForm.addEventListener('submit', (e) => {
           e.preventDefault();
           
+          // AUTO-FIX PATH HERE
+          let linkInput = document.getElementById('art-link').value;
+          linkInput = ensureFullGitHubPath(linkInput);
+
           // Path Only for Thumbnails now
           let finalThumb = DEFAULT_THUMB;
           if(document.getElementById('art-thumb').value) {
@@ -1592,7 +1569,7 @@
             category: category,
             thumb: finalThumb,
             description: document.getElementById('art-desc').value,
-            link: document.getElementById('art-link').value,
+            link: linkInput, // Use fixed path
             planWeek: document.getElementById('plan-week').value,
             planDuration: document.getElementById('plan-duration').value,
             planTopic: document.getElementById('plan-topic').value,
@@ -1660,8 +1637,9 @@
     function openSmartViewer(src, title, type) {
         if(!viewerModal || !viewerTitle || !viewerContainer) return;
 
-        // 1. Convert GitHub Blob to Raw immediately
-        const processedSrc = getRawGitHubUrl(src);
+        // 1. Ensure the src is processed with the github helper before rendering
+        const processedSrc = ensureFullGitHubPath(src);
+        const rawSrc = getRawGitHubUrl(processedSrc);
 
         viewerTitle.innerText = title;
         viewerContainer.innerHTML = ''; 
@@ -1677,37 +1655,36 @@
         }
 
         // Google Docs Viewer Helper
-        // Using Google Viewer allows us to embed files that might otherwise block X-Frame (like some PDFs)
         const googleViewerUrl = (url) => `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(url)}`;
 
         if (type === 'pdf') { 
             viewerContainer.classList.add('media-pdf');
             // STRATEGY: Use Google Viewer wrapper for PDFs to handle GitHub Raw links securely
-            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(processedSrc)}" frameborder="0"></iframe>`;
+            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(rawSrc)}" frameborder="0"></iframe>`;
             openExtBtn.href = processedSrc;
             openExtBtn.style.display = 'flex';
         } 
         else if (['jpg','jpeg','png','gif','webp'].includes(type)) { 
             viewerContainer.classList.add('media-image');
-            viewerContainer.innerHTML = `<img src="${processedSrc}" alt="${title}" onerror="this.parentElement.innerHTML='<div style=\'padding:2rem;text-align:center\'><i class=\'ri-image-off-line\' style=\'font-size:3rem\'></i><p>Image failed to load.</p></div>'">`;
+            viewerContainer.innerHTML = `<img src="${rawSrc}" alt="${title}" onerror="this.parentElement.innerHTML='<div style=\'padding:2rem;text-align:center\'><i class=\'ri-image-off-line\' style=\'font-size:3rem\'></i><p>Image failed to load.</p></div>'">`;
         }
         else if (['mp4','webm','ogg'].includes(type)) { 
             viewerContainer.classList.add('media-video');
-            viewerContainer.innerHTML = `<video controls autoplay><source src="${processedSrc}" type="video/${type}">Your browser does not support video tag.</video>`;
+            viewerContainer.innerHTML = `<video controls autoplay><source src="${rawSrc}" type="video/${type}">Your browser does not support video tag.</video>`;
         }
         else if (['mp3','wav'].includes(type)) {
             viewerContainer.classList.add('media-audio');
-            viewerContainer.innerHTML = `<audio controls autoplay><source src="${processedSrc}" type="audio/${type}">Your browser does not support audio.</audio>`;
+            viewerContainer.innerHTML = `<audio controls autoplay><source src="${rawSrc}" type="audio/${type}">Your browser does not support audio.</audio>`;
         }
         else if (['ppt','pptx'].includes(type)) {
             viewerContainer.classList.add('media-pdf'); 
-            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(processedSrc)}" frameborder="0"></iframe>`;
+            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(rawSrc)}" frameborder="0"></iframe>`;
             openExtBtn.href = processedSrc;
             openExtBtn.style.display = 'flex';
         }
         else if (['doc','docx'].includes(type)) {
             viewerContainer.classList.add('media-pdf');
-            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(processedSrc)}" frameborder="0"></iframe>`;
+            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(rawSrc)}" frameborder="0"></iframe>`;
             openExtBtn.href = processedSrc;
             openExtBtn.style.display = 'flex';
         }
@@ -1717,9 +1694,9 @@
                 <div style="text-align:center; padding:2rem; width: 100%;">
                     <i class="ri-file-unknown-line" style="font-size:3rem; margin-bottom:1rem; display:block;"></i>
                     <p style="color:var(--text-muted); margin-bottom:1rem;">Preview not available for this file type.</p>
-                    <a href="${processedSrc}" target="_blank" style="display:inline-block; background:var(--primary); color:white; padding:0.6rem 1.5rem; border-radius:8px;">Open / Download</a>
+                    <a href="${rawSrc}" target="_blank" style="display:inline-block; background:var(--primary); color:white; padding:0.6rem 1.5rem; border-radius:8px;">Open / Download</a>
                 </div>`; 
-            openExtBtn.href = processedSrc;
+            openExtBtn.href = rawSrc;
             openExtBtn.style.display = 'flex';
         }
         

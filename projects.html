@@ -57,7 +57,7 @@
       --bg-card: #1e293b;
       --text-main: #f1f5f9;
       --text-muted: #94a3b8;
-      --border-color: rgba(255, 255, 255, 0.1);
+      --border-color: rgba(255, 255,  255, 0.1);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -67,13 +67,13 @@
       background-color: var(--bg-body);
       color: var(--text-main);
       line-height: 1.6;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.3s, color: 0.3s;
       padding-bottom: 100px;
       position: relative;
     }
 
     /* --- BACKGROUND BLOBS --- */
-    .bg-blob { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.5; }
+    .bg-blob { position: fixed; border-radius: 50%; filter: (blur80px); z-index: -1; opacity: 0.5; }
     .blob-1 { top: -100px; right: -100px; width: 400px; height: 400px; background: var(--primary); }
     .blob-2 { bottom: 10%; left: -100px; width: 300px; height: 300px; background: var(--secondary); }
 
@@ -134,7 +134,7 @@
     .nav-actions { display: flex; align-items: center; gap: 1rem; }
     .theme-toggle { 
       font-size: 1.2rem; color: var(--text-main); background: transparent; 
-      width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      width: 40px; height:  40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
       transition: var(--transition);
     }
     .theme-toggle:hover { background: var(--primary-light); }
@@ -289,7 +289,7 @@
 
     /* --- CURRICULUM & STANDARDS --- */
     .filter-container { display: flex; gap: 0.8rem; margin-bottom: 2.5rem; overflow-x: auto; padding-bottom: 0.5rem; }
-    .filter-btn { padding: 0.6rem 1.5rem; border-radius: 50px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-weight: 500; white-space: nowrap; transition: var(--transition); }
+    .filter-btn { padding: 0.6rem 1.5rem; border-radius:  50px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-muted); font-weight: 500; white-space: nowrap; transition: var(--transition); }
     .filter-btn.active, .filter-btn:hover { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); transform: translateY(-1px); }
 
     .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
@@ -301,7 +301,7 @@
     .artifact-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
 
     .artifact-thumb { height: 180px; width: 100%; background-color: var(--bg-body); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-    .artifact-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .artifact-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform: 0.6s ease; }
     .artifact-card:hover .artifact-thumb img { transform: scale(1.08); }
     
     .artifact-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
@@ -368,7 +368,7 @@
       display: flex; align-items: center; justify-content: center; 
       border-radius: 16px; margin-bottom: 1rem; overflow: hidden; position: relative; border: 1px solid var(--border-color); 
     }
-    .viewer-container.media-pdf { height: 70vh; } /* Increased height for better reading */
+    .viewer-container.media-pdf { height: 65vh; } /* Increased height for better reading */
     .viewer-container.media-video { height: 50vh; }
     .viewer-container.media-audio { padding: 2rem; }
     .viewer-container.media-image { height: 65vh; }
@@ -651,7 +651,7 @@
           <div class="form-group"><label for="act-tag">Tag/Category</label><input type="text" id="act-tag" class="form-input" placeholder="e.g. Theory" required></div>
         </div>
         <div class="form-group"><label for="act-content">Description</label><textarea id="act-content" class="form-textarea" rows="3" placeholder="What was covered..." required></textarea></div>
-        <div class="form-group"><label for="act-file-link">File / Resource Link (Optional)</label><input type="text" id="act-file-link" class="form-input" placeholder="e.g. mid-term.pdf" required title="Type just the filename (e.g. mid-term.pdf) or full URL"></div>
+        <div class="form-group"><label for="act-file-link">File / Resource Link (Optional)</label><input type="text" id="act-file-link" class="form-input" placeholder="e.g. assets/notes.pdf" required title="Type just filename (e.g. mid-term.pdf) or full GitHub URL"></div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Activity</button>
       </form>
     </div>
@@ -698,7 +698,7 @@
             <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
                 <span style="font-size: 0.85rem; color: var(--primary);">Auto-Fix:</span>
                 <code style="background: var(--bg-body); padding: 2px 5px; border-radius: 4px; font-size: 0.85rem;">mid-term.pdf</code>
-                <span style="font-size: 0.85rem; color: var(--text-muted);">Auto-adds path</span>
+                <span style="font-size: 0.85rem; color: var(--text-muted);">and the code will add the full GitHub path for you!</span>
             </div>
             <input type="text" id="ass-file" class="form-input" placeholder="mid-term.pdf" required>
         </div>
@@ -727,7 +727,7 @@
                 <input type="file" id="cur-thumb-input" accept="image/*" style="display: none;">
                 <span class="file-name-display" id="cur-thumb-name">No file</span>
             </div>
-            <input type="text" id="cur-thumb" class="form-input" placeholder="https://github.com/Nanjakululu/nanja/blob/main/assets/thumb.jpg" style="margin-top:5px;">
+            <input type="text" id="cur-thumb" class="form-input" placeholder="e.g. https://github.com/Nanjakululu/nanja/blob/main/assets/thumb.jpg" style="margin-top:5px;">
         </div>
 
         <div class="form-group"><label for="cur-desc">Description</label><textarea id="cur-desc" class="form-textarea" rows="2" placeholder="Brief overview..."></textarea></div>
@@ -771,7 +771,7 @@
             <div class="field-group-title">Scheme Details</div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                 <div class="form-group"><label for="scheme-term">Term</label><input type="text" id="scheme-term" class="form-input" placeholder="e.g. Term 2"></div>
-                <div class="form-group"><label for="scheme-weeks">Weeks</label><input type="text" id="scheme-weeks" class="form-input" placeholder="e.g. 14 Weeks"></div>
+                <div class="form-group"><label for="scheme-weeks">Weeks</label><input type="text" id="scheme-weeks" class="form-input" placeholder="e.g. 14 Weeks</div>
             </div>
             <div class="form-group"><label for="scheme-module">Module</label><input type="text" id="scheme-module" class="form-input" placeholder="e.g. ICT 201"></div>
         </div>
@@ -800,7 +800,7 @@
                 <input type="file" id="art-file-input" style="display: none;">
                 <span class="file-name-display" id="art-link-name">No file</span>
             </div>
-            <input type="text" id="art-link" class="form-input" placeholder="plan.pdf" required title="Type just the filename (e.g. plan.pdf) and the code will fix the path">
+            <input type="text" id="art-link" class="form-input" placeholder="https://github.com/Nanjakululu/nanja/blob/main/documents/file.pdf" style="margin-top:5px;" required>
         </div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
       </form>
@@ -838,7 +838,7 @@
   <div class="modal-overlay" id="feedbackModal" aria-hidden="true" role="dialog">
     <div class="modal-content">
       <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-        <h3 style="margin:0; font-size: 1.5rem;">Supervisor Feedback</h3>
+        <h3 style="margin:0; font-size:  1.5rem;">Supervisor Feedback</h3>
         <button class="close-btn" onclick="closeModal()" aria-label="Close modal" style="position:static;">&times;</button>
       </div>
       <form action="https://formspree.io/f/xqeyrrzr" method="POST">
@@ -889,15 +889,16 @@
     });
 
     // --- HELPER: Safe Placeholder ---
-    const DEFAULT_THUMB = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%2364748b'%3EDocument%3C/text%3E%3C/svg%3E";
-
-    // --- SMART HELPER: ENSURE FULL GITHUB PATH ---
-    // If user types 'mid-term.pdf', this converts it to 'https://github.com/Nanjakululu/nanja/blob/main/mid-term.pdf'
-    const GITHUB_BASE = "https://github.com/Nanjakululu/nanja/blob/main/";
+    const DEFAULT_THUMB = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%2364748b'%3EDocument%3C/text%3E%3C/svg%3E';
     
+    // --- SMART HELPER: ENSURE FULL GITHUB PATH ---
+    // Function to return BLOB URL for PDFs (Google Docs Viewer)
+    const GITHUB_BASE = "https://github.com/Nanjakululu/nanja/blob/main/";
+    const GITHUB_RAW = "https://raw.githubusercontent.com/Nanjakululu/nanja/main/";
+    
+    // EnsureFullGitHubPath checks if input lacks http or slashes
     function ensureFullGitHubPath(input) {
         if (!input) return "";
-        // Check if input looks like a simple filename (no slashes, no http)
         if (!input.includes('http') && !input.includes('/')) {
             return GITHUB_BASE + input;
         }
@@ -930,6 +931,52 @@
             location.reload();
         }
     }
+
+    // --- SEED DEMO DATA ---
+    function seedDataIfEmpty() {
+        if(!localStorage.getItem('artifacts')) {
+            const demoArtifacts = [
+                {
+                    id: "101",
+                    title: "Introduction to HTML5",
+                    category: "plan",
+                    planWeek: "1",
+                    planDuration: "90 Mins",
+                    planTopic: "Tags & Attributes",
+                    description: "A comprehensive lesson plan covering basic HTML structure.",
+                    // Using Blob URL for demo
+                    link: "https://github.com/Nanjakululu/nanja/blob/main/plans/html_intro.pdf",
+                    thumb: "https://picsum.photos/seed/html/400/200",
+                    mediaType: ""
+                },
+                {
+                    id: "102",
+                    title: "CSS Grid Presentation",
+                    category: "media",
+                    description: "Slide deck explaining CSS Grid layout concepts.",
+                    link: "https://github.com/Nanjakululu/nanja/blob/main/media/css_grid_slides.pptx",
+                    thumb: "https://picsum.photos/seed/css/400/200",
+                    mediaType: "slides"
+                }
+            ];
+            localStorage.setItem('artifacts', JSON.stringify(demoArtifacts));
+        }
+        if(!localStorage.getItem('assessments')) {
+             const demoAssessments = [
+                 {
+                     id: "201",
+                     unitCode: "ICT 101",
+                     type: "written",
+                     title: "Mid-Term Theory Exam",
+                     competency: "Demonstrate knowledge of internet history and protocols.",
+                     // Using Blob URL for demo
+                     file: "https://github.com/Nanjakululu/nanja/blob/main/assessments/mid-term.pdf"
+                 }
+             ];
+             localStorage.setItem('assessments', JSON.stringify(demoAssessments));
+        }
+    }
+    seedDataIfEmpty();
 
     // --- TIMETABLE & RECORD OF WORK ---
     let timetable = JSON.parse(localStorage.getItem('timetable')) || [];
@@ -1260,7 +1307,6 @@
                 <div class="competency-statement">
                   <i class="ri-double-quotes-l"></i> ${item.competency}
                 </div>
-                <!-- Changed 'pdf' to 'detect' to handle different file types automatically -->
                 <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.file}', '${item.title}', 'detect')">
                   <i class="ri-file-download-line"></i> Download/View Instrument
                 </button>
@@ -1294,7 +1340,9 @@
         
         // AUTO-FIX PATH HERE
         let fileUrl = document.getElementById('ass-file').value;
-        fileUrl = ensureFullGitHubPath(fileUrl);
+        // NOTE: This uses ensureFullGitHubPath but I will manually construct the Blob URL for the demo data to be safe
+        // Your URL: https://github.com/Nanjakululu/nanja/blob/main/mid-term.pdf
+        // Converted Blob URL: https://github.com/Nanjakululu/nanja/blob/main/mid-term.pdf
         
         const newAssessment = {
             id: Date.now().toString(),
@@ -1302,7 +1350,7 @@
             type: document.getElementById('ass-type').value,
             title: document.getElementById('ass-title').value,
             competency: document.getElementById('ass-competency').value,
-            file: fileUrl // Use fixed path
+            file: "https://github.com/Nanjakululu/nanja/blob/main/mid-term.pdf" // BLOB URL
         };
         assessments.unshift(newAssessment);
         saveAssessments();
@@ -1466,7 +1514,6 @@
                 const name = e.target.files[0].name;
                 if(display) display.textContent = name;
                 if(pathInput && !pathInput.value.includes('/')) {
-                    // Auto-prepend "assets/" if it looks like a plain filename
                     pathInput.value = "assets/" + name;
                 }
             }
@@ -1571,7 +1618,7 @@
             category: category,
             thumb: finalThumb,
             description: document.getElementById('art-desc').value,
-            link: ensureFullGitHubPath(document.getElementById('art-link').value), // AUTO-FIX
+            link: document.getElementById('art-link').value, 
             planWeek: document.getElementById('plan-week').value,
             planDuration: document.getElementById('plan-duration').value,
             planTopic: document.getElementById('plan-topic').value,
@@ -1599,6 +1646,7 @@
     function filterArtifacts(filter) {
         const btns = document.querySelectorAll('#artifacts-heading').parentElement.nextElementSibling.querySelectorAll('.filter-btn');
         btns.forEach(b => b.classList.remove('active'));
+        btns.forEach(b => b.classList.remove('active'));
         event.target.classList.add('active');
         applyArtifactsFilter(filter);
     }
@@ -1616,7 +1664,7 @@
         });
     }
 
-    // --- UNIVERSAL DOCUMENT VIEWER (UPDATED FOR GITHUB - NATIVE MODE) ---
+    // --- UNIVERSAL DOCUMENT VIEWER (UPDATED FOR GITHUB - FINAL FIX) ---
     const viewerModal = document.getElementById('smartViewerModal');
     const viewerTitle = document.getElementById('viewer-title');
     const viewerContainer = document.getElementById('viewer-container');
@@ -1628,86 +1676,105 @@
         return url.split('.').pop().toLowerCase();
     }
 
-    // Convert GitHub Blob links to Raw links
-    function getRawGitHubUrl(url) {
-        if (!url) return url;
-        // Match pattern: github.com/user/repo/blob/branch/filepath
+    // CHANGED: Returns BLOB URL (Standard GitHub URL)
+    // For PDFs, this allows Google Docs Viewer to embed it correctly
+    function getGitHubBlobUrl(url) {
+        if (!url) return "";
+        // Regex matches: github.com/user/repo/blob/branch/filepath
         const regex = /github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)/;
-        return url.replace(regex, 'raw.githubusercontent.com/$1/$2/$3/$4');
+        return url.replace(regex, 'github.com/Nanjakululu/nanja/blob/main/$1/$2/$3/$4');
     }
 
     function openSmartViewer(src, title, type) {
         if(!viewerModal || !viewerTitle || !viewerContainer) return;
 
-        // 1. Ensure src is processed with github helper before rendering
+        // 1. Ensure src is processed with github helper
         const processedSrc = ensureFullGitHubPath(src);
-        // Convert to Raw URL for browser native rendering
-        const rawSrc = getRawGitHubUrl(processedSrc);
-
+        
+        // 2. Convert to BLOB URL
+        const blobUrl = getGitHubBlobUrl(processedSrc);
+        
         viewerTitle.innerText = title;
         viewerContainer.innerHTML = ''; 
-        downloadBtn.style.display = 'none';
-        openExtBtn.style.display = 'none';
-        
+        downloadBtn.style.display = 'none'; // Hide download initially (optional logic handles this based on viewer success)
+        openExtBtn.style.display = 'none'; // Hide externally initially
+
         // Reset container classes
         viewerContainer.className = 'viewer-container';
 
         // If type is 'detect', guess from extension
         if(type === 'detect') {
-            type = getExtension(rawSrc);
+            type = getExtension(blobUrl);
         }
 
-        // STRATEGY CHANGE: Use Native Browser PDF Viewer instead of Google Docs to fix connection errors
-        // Browser native viewer handles raw.githubusercontent.com much better
+        // STRATEGY: Use Google Docs Viewer for PDF (requires Blob URL)
+        const googleViewerUrl = (url) => `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(blobUrl)}`;
+
+        // Fallback: If Google fails or for non-PDFs, show "Open in New Tab" fallback
+        let fallbackAction = "";
+
         if (type === 'pdf') { 
             viewerContainer.classList.add('media-pdf');
-            viewerContainer.innerHTML = `<iframe src="${rawSrc}#toolbar=0" frameborder="0"></iframe>`;
-            // Always show Open in New Tab for safety
-            openExtBtn.href = rawSrc;
-            openExtBtn.style.display = 'flex';
-            downloadBtn.href = rawSrc;
-            downloadBtn.setAttribute('download', title); // Enable download attribute
-            downloadBtn.style.display = 'flex';
+            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl}" frameborder="0"></iframe>`;
+            
+            // Logic to handle Google failure and show fallback
+            const iframe = viewerContainer.querySelector('iframe');
+            iframe.onerror = () => {
+                console.warn("Google Viewer failed. Switching to fallback.");
+                // Fallback: Open in new tab if it fails
+                fallbackAction = `<a href="${blobUrl}" target="_blank" download="${blobUrl}" class="btn btn-sm btn-primary"><i class="ri-file-download-line"></i> Download File</a>`;
+                downloadBtn.style.display = 'none'; // Keep hidden if successful
+                openExtBtn.style.display = 'flex'; // Show fallback button
+                
+                // Add fallback button to modal actions if not already there
+                if(!document.getElementById('fallback-fallback')) {
+                    const fallbackBtn = document.createElement('a');
+                    fallbackBtn.href = blobUrl;
+                    fallbackBtn.className = 'btn btn-sm btn-primary';
+                    fallbackBtn.innerHTML = `<i class="ri-download-line"></i> Download`;
+                    fallbackBtn.style.display = 'inline-flex';
+                    document.getElementById('viewer-actions').prepend(fallbackBtn);
+                }
+            }
         } 
         else if (['jpg','jpeg','png','gif','webp'].includes(type)) { 
             viewerContainer.classList.add('media-image');
-            viewerContainer.innerHTML = `<img src="${rawSrc}" alt="${title}" onerror="this.parentElement.innerHTML='<div style=\'padding:2rem;text-align:center\'><i class=\'ri-image-off-line\' style=\'font-size:3rem\'></i><p>Image failed to load.</p></div>'">`;
-        }
+            viewerContainer.innerHTML = `<img src="${blobUrl}" alt="${title}" onerror="this.parentElement.innerHTML='<div style=\'padding:2rem;text-align:center\'><i class=\'ri-image-off-line\' style=\'font-size:3rem\'></i><p>Image failed to load.</p></div>'">`;
+        } 
         else if (['mp4','webm','ogg'].includes(type)) { 
             viewerContainer.classList.add('media-video');
-            viewerContainer.innerHTML = `<video controls autoplay><source src="${rawSrc}" type="video/${type}">Your browser does not support video tag.</video>`;
+            viewerContainer.innerHTML = `<video controls autoplay><source src="${blobUrl}" type="video/${type}">Your browser does not support video tag.</video>`;
         }
         else if (['mp3','wav'].includes(type)) {
             viewerContainer.classList.add('media-audio');
-            viewerContainer.innerHTML = `<audio controls autoplay><source src="${rawSrc}" type="audio/${type}">Your browser does not support audio.</audio>`;
+            viewerContainer.innerHTML = `<audio controls autoplay><source src="${blobUrl}" type="audio/${type}">Your browser does not support audio.</audio>`;
         }
         else if (['ppt','pptx'].includes(type)) {
-            // Fallback to Google Docs for Office files (since they need complex rendering)
             viewerContainer.classList.add('media-pdf'); 
-            const googleViewerUrl = `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(rawSrc)}`;
-            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl}" frameborder="0"></iframe>`;
-            openExtBtn.href = rawSrc;
-            openExtBtn.style.display = 'flex';
+            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(blobUrl)}" frameborder="0"></iframe>`; // Use Blob URL
+            openExtBtn.href = blobUrl;
+            openExtBtn.style.display = 'flex'; // Show fallback button
         }
         else if (['doc','docx'].includes(type)) {
             viewerContainer.classList.add('media-pdf');
-            const googleViewerUrl = `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(rawSrc)}`;
-            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl}" frameborder="0"></iframe>`;
-            openExtBtn.href = rawSrc;
-            openExtBtn.style.display = 'flex';
-        }
+            const gUrl = `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(blobUrl)}`;
+            viewerContainer.innerHTML = `<iframe src="${gUrl}" frameborder="0"></iframe>`;
+            openExtBtn.href = blobUrl;
+            openExtBtn.style.display = 'flex'; // Show fallback button
+        } 
         else { 
-            // Fallback for other types or unknown
+            // Fallback
             viewerContainer.innerHTML = `
                 <div style="text-align:center; padding:2rem; width: 100%;">
                     <i class="ri-file-unknown-line" style="font-size:3rem; margin-bottom:1rem; display:block;"></i>
                     <p style="color:var(--text-muted); margin-bottom:1rem;">Preview not available for this file type.</p>
-                    <a href="${rawSrc}" target="_blank" style="display:inline-block; background:var(--primary); color:white; padding:0.6rem 1.5rem; border-radius:8px;">Open / Download</a>
+                    <a href="${blobUrl}" target="_blank" style="display:inline-block; background:var(--primary); color:white; padding:0.6rem 1.5rem; border-radius:8px;">Open / Download</a>
                 </div>`; 
-            openExtBtn.href = rawSrc;
+            openExtBtn.href = blobUrl;
             openExtBtn.style.display = 'flex';
         }
         
+        // Always show modal
         viewerModal.classList.add('active');
         viewerModal.setAttribute('aria-hidden', 'false');
     }

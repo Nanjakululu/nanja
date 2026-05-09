@@ -368,12 +368,11 @@
       display: flex; align-items: center; justify-content: center; 
       border-radius: 16px; margin-bottom: 1rem; overflow: hidden; position: relative; border: 1px solid var(--border-color); 
     }
-    .viewer-container.media-pdf { height: 65vh; }
+    .viewer-container.media-pdf { height: 70vh; } /* Increased height for better reading */
     .viewer-container.media-video { height: 50vh; }
     .viewer-container.media-audio { padding: 2rem; }
     .viewer-container.media-image { height: 65vh; }
 
-    .viewer-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
     .viewer-container iframe { width: 100%; height: 100%; border: none; }
     .viewer-container video { width: 100%; height: 100%; outline: none; background: black; }
     .viewer-container audio { width: 100%; }
@@ -652,7 +651,7 @@
           <div class="form-group"><label for="act-tag">Tag/Category</label><input type="text" id="act-tag" class="form-input" placeholder="e.g. Theory" required></div>
         </div>
         <div class="form-group"><label for="act-content">Description</label><textarea id="act-content" class="form-textarea" rows="3" placeholder="What was covered..." required></textarea></div>
-        <div class="form-group"><label for="act-file-link">File / Resource Link (Optional)</label><input type="text" id="act-file-link" class="form-input" placeholder="e.g. mid-term.pdf" required title="Type just the filename (e.g. mid-term.pdf) or full GitHub URL"></div>
+        <div class="form-group"><label for="act-file-link">File / Resource Link (Optional)</label><input type="text" id="act-file-link" class="form-input" placeholder="e.g. mid-term.pdf" required title="Type just the filename (e.g. mid-term.pdf) or full URL"></div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Activity</button>
       </form>
     </div>
@@ -697,9 +696,9 @@
         <div class="form-group"><label for="ass-competency">Competency Statement</label><textarea id="ass-competency" class="form-textarea" rows="2" placeholder="e.g. Design a normalized database schema to 3NF..." required></textarea></div>
         <div class="form-group"><label for="ass-file">File Path</label>
             <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
-                <span style="font-size: 0.85rem; color: var(--primary);">Shortcut: Type</span>
+                <span style="font-size: 0.85rem; color: var(--primary);">Auto-Fix:</span>
                 <code style="background: var(--bg-body); padding: 2px 5px; border-radius: 4px; font-size: 0.85rem;">mid-term.pdf</code>
-                <span style="font-size: 0.85rem; color: var(--text-muted);">and the code will add the GitHub path for you!</span>
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Auto-adds path</span>
             </div>
             <input type="text" id="ass-file" class="form-input" placeholder="mid-term.pdf" required>
         </div>
@@ -728,14 +727,19 @@
                 <input type="file" id="cur-thumb-input" accept="image/*" style="display: none;">
                 <span class="file-name-display" id="cur-thumb-name">No file</span>
             </div>
-            <input type="text" id="cur-thumb" class="form-input" placeholder="e.g. https://github.com/Nanjakululu/nanja/blob/main/assets/thumb.jpg" style="margin-top:5px;">
+            <input type="text" id="cur-thumb" class="form-input" placeholder="https://github.com/Nanjakululu/nanja/blob/main/assets/thumb.jpg" style="margin-top:5px;">
         </div>
 
         <div class="form-group"><label for="cur-desc">Description</label><textarea id="cur-desc" class="form-textarea" rows="2" placeholder="Brief overview..."></textarea></div>
         
         <div class="form-group">
             <label>Document File Path</label>
-            <input type="text" id="cur-link" class="form-input" placeholder="standards.pdf" required title="Type just the filename (e.g. standards.pdf) and the code will fix the path">
+            <div class="file-upload-group">
+                <label class="file-upload-btn" for="cur-file-input"><i class="ri-file-text-line"></i> Pick Filename</label>
+                <input type="file" id="cur-file-input" style="display: none;">
+                <span class="file-name-display" id="cur-link-name">No file</span>
+            </div>
+            <input type="text" id="cur-link" class="form-input" placeholder="https://github.com/Nanjakululu/nanja/blob/main/standards.pdf" style="margin-top:5px;" required>
         </div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
       </form>
@@ -791,6 +795,11 @@
         
         <div class="form-group">
             <label>Document File Path</label>
+            <div class="file-upload-group">
+                <label class="file-upload-btn" for="art-file-input"><i class="ri-file-text-line"></i> Pick Filename</label>
+                <input type="file" id="art-file-input" style="display: none;">
+                <span class="file-name-display" id="art-link-name">No file</span>
+            </div>
             <input type="text" id="art-link" class="form-input" placeholder="plan.pdf" required title="Type just the filename (e.g. plan.pdf) and the code will fix the path">
         </div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Document</button>
@@ -1196,7 +1205,7 @@
             description: document.getElementById('act-content').value,
             dayLabel: `Day ${dayNum}`,
             tags: [document.getElementById('act-tag').value, 'Activity'], 
-            fileLink: fileLinkInput // Use the fixed path
+            fileLink: fileLinkInput // Use fixed path
         };
         teachingLog.unshift(newActivity);
         saveTeachingLog();
@@ -1251,6 +1260,7 @@
                 <div class="competency-statement">
                   <i class="ri-double-quotes-l"></i> ${item.competency}
                 </div>
+                <!-- Changed 'pdf' to 'detect' to handle different file types automatically -->
                 <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.file}', '${item.title}', 'detect')">
                   <i class="ri-file-download-line"></i> Download/View Instrument
                 </button>
@@ -1379,10 +1389,6 @@
         curriculumForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // AUTO-FIX PATH HERE
-            let linkInput = document.getElementById('cur-link').value;
-            linkInput = ensureFullGitHubPath(linkInput);
-
             // 1. Thumbnail (Path only)
             let finalThumb = DEFAULT_THUMB;
             if(document.getElementById('cur-thumb').value) {
@@ -1396,7 +1402,7 @@
                 code: document.getElementById('cur-code').value,
                 description: document.getElementById('cur-desc').value,
                 thumb: finalThumb,
-                link: linkInput // Use fixed path
+                link: document.getElementById('cur-link').value 
             };
             curriculumDocs.unshift(newDoc);
             saveCurriculumDocs();
@@ -1552,10 +1558,6 @@
         artifactForm.addEventListener('submit', (e) => {
           e.preventDefault();
           
-          // AUTO-FIX PATH HERE
-          let linkInput = document.getElementById('art-link').value;
-          linkInput = ensureFullGitHubPath(linkInput);
-
           // Path Only for Thumbnails now
           let finalThumb = DEFAULT_THUMB;
           if(document.getElementById('art-thumb').value) {
@@ -1569,7 +1571,7 @@
             category: category,
             thumb: finalThumb,
             description: document.getElementById('art-desc').value,
-            link: linkInput, // Use fixed path
+            link: ensureFullGitHubPath(document.getElementById('art-link').value), // AUTO-FIX
             planWeek: document.getElementById('plan-week').value,
             planDuration: document.getElementById('plan-duration').value,
             planTopic: document.getElementById('plan-topic').value,
@@ -1614,7 +1616,7 @@
         });
     }
 
-    // --- UNIVERSAL DOCUMENT VIEWER (UPDATED FOR GITHUB) ---
+    // --- UNIVERSAL DOCUMENT VIEWER (UPDATED FOR GITHUB - NATIVE MODE) ---
     const viewerModal = document.getElementById('smartViewerModal');
     const viewerTitle = document.getElementById('viewer-title');
     const viewerContainer = document.getElementById('viewer-container');
@@ -1637,8 +1639,9 @@
     function openSmartViewer(src, title, type) {
         if(!viewerModal || !viewerTitle || !viewerContainer) return;
 
-        // 1. Ensure the src is processed with the github helper before rendering
+        // 1. Ensure src is processed with github helper before rendering
         const processedSrc = ensureFullGitHubPath(src);
+        // Convert to Raw URL for browser native rendering
         const rawSrc = getRawGitHubUrl(processedSrc);
 
         viewerTitle.innerText = title;
@@ -1651,18 +1654,20 @@
 
         // If type is 'detect', guess from extension
         if(type === 'detect') {
-            type = getExtension(processedSrc);
+            type = getExtension(rawSrc);
         }
 
-        // Google Docs Viewer Helper
-        const googleViewerUrl = (url) => `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(url)}`;
-
+        // STRATEGY CHANGE: Use Native Browser PDF Viewer instead of Google Docs to fix connection errors
+        // Browser native viewer handles raw.githubusercontent.com much better
         if (type === 'pdf') { 
             viewerContainer.classList.add('media-pdf');
-            // STRATEGY: Use Google Viewer wrapper for PDFs to handle GitHub Raw links securely
-            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(rawSrc)}" frameborder="0"></iframe>`;
-            openExtBtn.href = processedSrc;
+            viewerContainer.innerHTML = `<iframe src="${rawSrc}#toolbar=0" frameborder="0"></iframe>`;
+            // Always show Open in New Tab for safety
+            openExtBtn.href = rawSrc;
             openExtBtn.style.display = 'flex';
+            downloadBtn.href = rawSrc;
+            downloadBtn.setAttribute('download', title); // Enable download attribute
+            downloadBtn.style.display = 'flex';
         } 
         else if (['jpg','jpeg','png','gif','webp'].includes(type)) { 
             viewerContainer.classList.add('media-image');
@@ -1677,15 +1682,18 @@
             viewerContainer.innerHTML = `<audio controls autoplay><source src="${rawSrc}" type="audio/${type}">Your browser does not support audio.</audio>`;
         }
         else if (['ppt','pptx'].includes(type)) {
+            // Fallback to Google Docs for Office files (since they need complex rendering)
             viewerContainer.classList.add('media-pdf'); 
-            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(rawSrc)}" frameborder="0"></iframe>`;
-            openExtBtn.href = processedSrc;
+            const googleViewerUrl = `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(rawSrc)}`;
+            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl}" frameborder="0"></iframe>`;
+            openExtBtn.href = rawSrc;
             openExtBtn.style.display = 'flex';
         }
         else if (['doc','docx'].includes(type)) {
             viewerContainer.classList.add('media-pdf');
-            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(rawSrc)}" frameborder="0"></iframe>`;
-            openExtBtn.href = processedSrc;
+            const googleViewerUrl = `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(rawSrc)}`;
+            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl}" frameborder="0"></iframe>`;
+            openExtBtn.href = rawSrc;
             openExtBtn.style.display = 'flex';
         }
         else { 

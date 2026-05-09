@@ -686,7 +686,7 @@
       <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Add Assessment Instrument</h3>
       <div class="instruction-box" style="border-color: var(--assessment); background: rgba(13, 148, 136, 0.05);">
         <strong><i class="ri-cursor-line"></i> CBET Focus:</strong><br>
-        Ensure this tool assesses specific Performance Criteria for chosen competency.
+        Ensure this tool assesses specific Performance Criteria for chosen competency. Supports GitHub links.
       </div>
       <form id="assessmentForm">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -695,7 +695,7 @@
         </div>
         <div class="form-group"><label for="ass-title">Instrument Title</label><input type="text" id="ass-title" class="form-input" placeholder="e.g. Database Design Rubric" required></div>
         <div class="form-group"><label for="ass-competency">Competency Statement</label><textarea id="ass-competency" class="form-textarea" rows="2" placeholder="e.g. Design a normalized database schema to 3NF..." required></textarea></div>
-        <div class="form-group"><label for="ass-file">Instrument File Path</label><input type="text" id="ass-file" class="form-input" placeholder="e.g. assets/rubrics/ict302.pdf"></div>
+        <div class="form-group"><label for="ass-file">File Path (Local or GitHub)</label><input type="text" id="ass-file" class="form-input" placeholder="e.g. https://github.com/user/repo/blob/main/file.pdf" required></div>
         <button type="submit" class="btn-primary"><i class="ri-save-line"></i> Save Instrument</button>
       </form>
     </div>
@@ -942,6 +942,7 @@
             localStorage.setItem('artifacts', JSON.stringify(demoArtifacts));
         }
         if(!localStorage.getItem('assessments')) {
+             // Using a real GitHub Blob link for the assessment demo to prove functionality
              const demoAssessments = [
                  {
                      id: "201",
@@ -949,7 +950,8 @@
                      type: "written",
                      title: "Mid-Term Theory Exam",
                      competency: "Demonstrate knowledge of internet history and protocols.",
-                     file: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+                     // Real GitHub link from Mozilla PDF.js repo
+                     file: "https://github.com/mozilla/pdf.js/blob/master/web/compressed.tracemonkey-pldi-09.pdf"
                  }
              ];
              localStorage.setItem('assessments', JSON.stringify(demoAssessments));
@@ -1281,7 +1283,8 @@
                 <div class="competency-statement">
                   <i class="ri-double-quotes-l"></i> ${item.competency}
                 </div>
-                <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.file}', '${item.title}', 'pdf')">
+                <!-- Changed 'pdf' to 'detect' to handle different file types automatically -->
+                <button class="btn btn-sm btn-outline" style="width:100%; justify-content:center; margin-top:auto;" onclick="openSmartViewer('${item.file}', '${item.title}', 'detect')">
                   <i class="ri-file-download-line"></i> Download/View Instrument
                 </button>
               </div>
@@ -1632,7 +1635,7 @@
         });
     }
 
-    // --- UNIVERSAL DOCUMENT VIEWER (UPDATED) ---
+    // --- UNIVERSAL DOCUMENT VIEWER (UPDATED FOR GITHUB) ---
     const viewerModal = document.getElementById('smartViewerModal');
     const viewerTitle = document.getElementById('viewer-title');
     const viewerContainer = document.getElementById('viewer-container');
@@ -1644,7 +1647,7 @@
         return url.split('.').pop().toLowerCase();
     }
 
-    // Convert GitHub Blob links to Raw links for iframes
+    // Convert GitHub Blob links to Raw links
     function getRawGitHubUrl(url) {
         if (!url) return url;
         // Match pattern: github.com/user/repo/blob/branch/filepath
@@ -1655,7 +1658,7 @@
     function openSmartViewer(src, title, type) {
         if(!viewerModal || !viewerTitle || !viewerContainer) return;
 
-        // 1. Process URL
+        // 1. Convert GitHub Blob to Raw immediately
         const processedSrc = getRawGitHubUrl(src);
 
         viewerTitle.innerText = title;
@@ -1671,18 +1674,19 @@
             type = getExtension(processedSrc);
         }
 
-        // Google Docs Viewer Helper (for Office docs)
+        // Google Docs Viewer Helper
+        // Using Google Viewer allows us to embed files that might otherwise block X-Frame (like some PDFs)
         const googleViewerUrl = (url) => `https://docs.google.com/viewer?embedded=1&url=${encodeURIComponent(url)}`;
 
         if (type === 'pdf') { 
             viewerContainer.classList.add('media-pdf');
-            viewerContainer.innerHTML = `<iframe src="${processedSrc}" frameborder="0"></iframe>`;
+            // STRATEGY: Use Google Viewer wrapper for PDFs to handle GitHub Raw links securely
+            viewerContainer.innerHTML = `<iframe src="${googleViewerUrl(processedSrc)}" frameborder="0"></iframe>`;
             openExtBtn.href = processedSrc;
             openExtBtn.style.display = 'flex';
         } 
         else if (['jpg','jpeg','png','gif','webp'].includes(type)) { 
             viewerContainer.classList.add('media-image');
-            // Add onerror to handle broken images inside viewer
             viewerContainer.innerHTML = `<img src="${processedSrc}" alt="${title}" onerror="this.parentElement.innerHTML='<div style=\'padding:2rem;text-align:center\'><i class=\'ri-image-off-line\' style=\'font-size:3rem\'></i><p>Image failed to load.</p></div>'">`;
         }
         else if (['mp4','webm','ogg'].includes(type)) { 
